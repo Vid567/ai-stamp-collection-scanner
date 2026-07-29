@@ -41,6 +41,10 @@ Use: **AI-assisted**, **suggested identification**, **confidence level**, **need
 
 Do not claim guaranteed identification, rarity, valuation or selling price.
 
+## Content Creator
+
+Use the [AI Stamp Scanner Content Creator](https://vid567.github.io/ai-stamp-collection-scanner/content-creator.html) to plan, copy and track the 25 prepared Threads posts. Planning data stays in the browser; the tool does not automatically publish to Threads.
+
 ## Licence
 
 The downloadable toolkit is licensed for personal use. See `LICENSE.txt` inside the release package.
