@@ -4,7 +4,7 @@
 
 Turn photos of a stamp collection into a structured inventory and identify which items may need further research.
 
-![AI Stamp Collection Scanner](assets/marketing/thumbnail-600x600.png)
+![AI Stamp Collection Scanner](assets/marketing/premium/README-Banner-1600x500.jpg)
 
 ## What it does
 
