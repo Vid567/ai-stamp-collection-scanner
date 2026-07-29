@@ -1,1 +1,129 @@
-PLACEHOLDER
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AI Stamp Scanner Content Creator</title>
+  <meta name="description" content="Plan, copy and track AI Stamp Collection Scanner Threads posts.">
+  <meta name="theme-color" content="#14365e">
+  <link rel="icon" href="assets/branding/favicon.svg" type="image/svg+xml">
+  <style>
+    :root{--navy:#14365e;--blue:#245c91;--cream:#f7f2e8;--paper:#fffdf8;--ink:#17212b;--muted:#566472;--line:#d8d2c6;--green:#247047;--amber:#a65d00;--red:#a13b35;--shadow:0 8px 24px rgba(20,54,94,.10)}
+    *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}a{color:var(--blue)}
+    .wrap{width:min(1180px,calc(100% - 32px));margin:auto}.top{background:var(--navy);color:white;padding:28px 0}.top a{color:white}.top-row{display:flex;justify-content:space-between;gap:20px;align-items:start}.eyebrow{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;opacity:.8}h1{font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.12;margin:.35rem 0}.subtitle{margin:0;opacity:.86}.back{font-weight:700;white-space:nowrap}
+    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}.stat{background:rgba(255,255,255,.1);padding:13px;border:1px solid rgba(255,255,255,.18);border-radius:12px}.stat b{display:block;font-size:1.45rem}.notice{font-size:.94rem;opacity:.78}
+    main{padding:24px 0 56px}.panel,.card{background:var(--paper);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}.panel{padding:18px;margin-bottom:20px}h2{margin:0 0 14px;font-size:1.35rem}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-weight:700;font-size:.9rem}.field.wide{grid-column:span 2}input,select,textarea{width:100%;min-height:46px;border:1px solid #9aa6b1;border-radius:9px;padding:9px 11px;background:white;color:var(--ink)}textarea{min-height:76px;resize:vertical}:focus-visible{outline:3px solid #65a9ee;outline-offset:2px}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.btn{border:0;border-radius:9px;min-height:46px;padding:10px 15px;background:var(--blue);color:white;font-weight:750;cursor:pointer}.btn.secondary{background:white;color:var(--navy);border:1px solid var(--navy)}.btn.danger{background:var(--red)}.btn:hover{filter:brightness(.95)}
+    .calendar-list{display:grid;gap:8px}.calendar-item{border-left:5px solid var(--blue);background:white;border-radius:8px;padding:10px 12px;display:grid;grid-template-columns:105px 65px 1fr auto;gap:10px;align-items:center}.calendar-item.today{border-color:var(--green)}.calendar-item.overdue{border-color:var(--red)}.calendar-item.next{background:#eef6ff}.empty{color:var(--muted);margin:0}
+    .list-head{display:flex;justify-content:space-between;align-items:center;margin:24px 0 12px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{padding:18px;border-top:6px solid var(--blue)}.card[data-status="Posted"]{border-top-color:var(--green)}.card[data-status="Planned"]{border-top-color:var(--amber)}.card[data-status="Skipped"]{border-top-color:#777}.card-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.number{font-size:1.15rem;font-weight:800}.badge{border-radius:999px;padding:4px 9px;font-size:.78rem;font-weight:800;background:#e6edf5;color:var(--navy)}.post{white-space:pre-wrap;background:#f8f6f0;border-radius:10px;padding:14px;margin:12px 0;min-height:190px}.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.88rem}.card-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.card-fields .notes{grid-column:1/-1}.posted-at{font-size:.87rem;color:var(--muted);margin-top:8px}.hidden{display:none!important}
+    dialog{border:0;border-radius:14px;padding:0;max-width:520px;width:calc(100% - 32px);box-shadow:0 20px 70px #0008}dialog::backdrop{background:#10233a99}.dialog-body{padding:22px}.days{display:flex;flex-wrap:wrap;gap:8px}.day{display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:8px;padding:7px 9px}.day input{min-height:auto;width:auto}
+    @media(max-width:850px){.cards{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.calendar-item{grid-template-columns:90px 55px 1fr}.calendar-item .badge{display:none}}
+    @media(max-width:560px){body{font-size:16px}.wrap{width:min(100% - 20px,1180px)}.top-row{display:block}.back{display:inline-block;margin-top:12px}.stats{grid-template-columns:1fr 1fr}.grid,.card-fields{grid-template-columns:1fr}.field.wide,.card-fields .notes{grid-column:auto}.post{min-height:0}.calendar-item{grid-template-columns:1fr 48px}.calendar-item span:nth-child(3){grid-column:1/-1}.actions .btn{flex:1 1 145px}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap">
+      <div class="top-row"><div><div class="eyebrow">Owner content tool</div><h1>AI Stamp Scanner Content Creator</h1><p class="subtitle">Plan, copy and track your Threads posts.</p></div><a class="back" href="./">← Main website</a></div>
+      <div class="stats"><div class="stat"><b id="totalStat">25</b>Total posts</div><div class="stat"><b id="plannedStat">0</b>Planned</div><div class="stat"><b id="postedStat">0</b>Posted</div><div class="stat"><b id="availableStat">25</b>Available</div></div>
+      <div class="notice">Planning data is stored only in this browser. This tool does not post automatically to Threads.</div>
+    </div>
+  </header>
+  <main class="wrap">
+    <section class="panel" aria-labelledby="filterTitle">
+      <h2 id="filterTitle">Find and manage posts</h2>
+      <div class="grid">
+        <div class="field wide"><label for="search">Search</label><input id="search" type="search" placeholder="Search post text or notes"></div>
+        <div class="field"><label for="category">Category</label><select id="category"><option>All</option><option>Collection Problems</option><option>AI as an Assistant</option><option>Practical Tips</option><option>Conversation and Feedback</option></select></div>
+        <div class="field"><label for="statusFilter">Status</label><select id="statusFilter"><option>All</option><option>Available</option><option>Planned</option><option>Posted</option><option>Skipped</option></select></div>
+        <div class="field"><label for="sort">Sort</label><select id="sort"><option value="number">Post number</option><option value="date">Planned date</option></select></div>
+        <div class="field"><label for="undated">Date filter</label><select id="undated"><option value="all">All posts</option><option value="undated">Without planned date</option></select></div>
+      </div>
+      <div class="actions"><button class="btn secondary" id="clearFilters">Clear filters</button><button class="btn" id="scheduleOpen">Create schedule</button><button class="btn secondary" id="csv">Download CSV</button><button class="btn secondary" id="jsonExport">Export JSON</button><button class="btn secondary" id="jsonImport">Import JSON</button><button class="btn danger" id="reset">Reset planning</button><input class="hidden" id="jsonFile" type="file" accept="application/json,.json"></div>
+    </section>
+    <section class="panel" aria-labelledby="calendarTitle"><h2 id="calendarTitle">Upcoming plan</h2><div id="calendar" class="calendar-list"></div></section>
+    <div class="list-head"><h2>Threads posts</h2><span id="shown">25 shown</span></div>
+    <section id="cards" class="cards" aria-live="polite"></section>
+  </main>
+  <dialog id="scheduleDialog">
+    <form method="dialog" class="dialog-body" id="scheduleForm">
+      <h2>Create schedule</h2>
+      <div class="grid">
+        <div class="field"><label for="startDate">Starting date</label><input id="startDate" type="date" required></div>
+        <div class="field"><label for="perWeek">Posts per week</label><input id="perWeek" type="number" min="1" max="7" value="5" required></div>
+        <div class="field"><label for="postTime">Default time</label><input id="postTime" type="time" value="10:00"></div>
+        <div class="field wide"><label>Preferred days</label><div class="days" id="days"></div></div>
+      </div>
+      <p class="notice" style="color:var(--muted)">Only posts without a planned date are scheduled. Existing dates are preserved.</p>
+      <div class="actions"><button class="btn" value="default" id="scheduleApply">Apply schedule</button><button class="btn secondary" value="cancel">Cancel</button></div>
+    </form>
+  </dialog>
+  <script>
+    const URL='https://bit.ly/AIstampscanner', MARKETING_URL=URL, KEY='aiStampScannerContentCreatorV1';
+    const raw=[
+      ["Collection Problems",`Most stamp collectors enjoy collecting.\n\nNot cataloging.\n\n→ Hours of sorting\n→ Looking up catalog numbers\n→ Wondering what needs a closer look\n\nLet AI help with the first step.\n\nTry it free:\n${MARKETING_URL}`],
+      ["Collection Problems",`Ever inherited a stamp collection?\n\nThe first question is usually:\n\nWhat do I have?\n\nA clear inventory is the best place to start.\n\nTry it free:\n${MARKETING_URL}`],
+      ["Collection Problems",`Many stamp tools expect you to enter every stamp manually.\n\nHundreds of stamps.\n\nSometimes thousands.\n\nThere has to be an easier first step.\n\nTry it free:\n${MARKETING_URL}`],
+      ["Collection Problems",`A collection is difficult to study when you do not know what is inside.\n\n→ Albums\n→ Boxes\n→ Envelopes\n→ Loose stamps\n\nStart with an inventory.\n\n${URL}`],
+      ["Collection Problems",`Most collectors do not need AI to make every decision.\n\nThey need an assistant.\n\n→ Scan collection photos\n→ Create a first inventory\n→ Flag stamps for more research\n\nYou stay in control.\n\n${URL}`],
+      ["Collection Problems",`Have you ever thought:\n\nI know I already own this stamp.\n\nBut you could not remember where it was?\n\nA searchable inventory can help.\n\n${URL}`],
+      ["Collection Problems",`Collectors can spend years building a collection.\n\nBut the inventory may still live on paper.\n\nOr only in memory.\n\nYour collection deserves a clearer overview.\n\n${URL}`],
+      ["Collection Problems",`One of the hardest questions is:\n\nWhere do I start?\n\nBegin with clear photos.\n\nLet AI create the first draft.\n\nReview it from there.\n\n${URL}`],
+      ["Collection Problems",`Not every stamp will be rare.\n\nBut every collection benefits from a clear inventory.\n\nAI can make that first step faster.\n\n${URL}`],
+      ["Collection Problems",`Researching every stamp first can take hours.\n\nTry this order:\n\n→ Scan the collection\n→ Create an inventory\n→ Focus on interesting stamps\n\n${URL}`],
+      ["AI as an Assistant",`AI is not replacing stamp collectors.\n\nIt can reduce repetitive work.\n\nMore time for collecting.\n\nLess time typing.\n\n${URL}`],
+      ["AI as an Assistant",`Imagine photographing an album page instead of entering every stamp manually.\n\nThat is where AI becomes useful.\n\n${URL}`],
+      ["AI as an Assistant",`Good AI does not replace experience.\n\nIt supports the first stage of the work.\n\nThe collector still reviews the results.\n\n${URL}`],
+      ["AI as an Assistant",`Your stamps remain the focus.\n\nAI simply helps you organize and review them faster.\n\n${URL}`],
+      ["AI as an Assistant",`Some collections contain hundreds of stamps.\n\nOthers contain thousands.\n\nThe first challenge is still the same:\n\nGetting organized.\n\n${URL}`],
+      ["AI as an Assistant",`Instead of starting with:\n\nWhat is my rarest stamp?\n\nStart with:\n\nWhat exactly is in my collection?\n\nEverything begins with an overview.\n\n${URL}`],
+      ["AI as an Assistant",`An organized collection is easier to:\n\n→ Study\n→ Share\n→ Insure\n→ Sell\n→ Pass on\n\nInventory comes first.\n\n${URL}`],
+      ["AI as an Assistant",`AI should not promise an exact value for every stamp.\n\nIt should help identify which stamps deserve further research.\n\nThat is the smarter starting point.\n\n${URL}`],
+      ["Practical Tips",`Photo quality matters.\n\nSharp, well-lit images can improve identification.\n\nNatural daylight often works better than a dark room.\n\n${URL}`],
+      ["Practical Tips",`You may not need to photograph every stamp separately.\n\nStart with a clear photo of the complete album page.\n\nThat can save a lot of time.\n\n${URL}`],
+      ["Practical Tips",`Before checking prices for individual stamps, create an overview of the collection.\n\nA good inventory can save hours later.\n\n${URL}`],
+      ["Practical Tips",`Many inherited collections remain untouched for years.\n\nNot because people are uninterested.\n\nThey simply do not know where to begin.\n\nStart with photos.\n\n${URL}`],
+      ["Practical Tips",`Stamp catalogues remain valuable.\n\nAI can help you decide where to look first.\n\nUse both tools for the best result.\n\n${URL}`],
+      ["Conversation and Feedback",`I am building an AI-assisted tool for stamp collectors.\n\nIt scans collection photos and creates a first inventory.\n\nWhich feature would save you the most time?\n\n${URL}`],
+      ["Conversation and Feedback",`Question for stamp collectors:\n\nWhat is the most frustrating part of organizing a collection?\n\n→ Identification\n→ Catalogue numbers\n→ Inventory\n→ Something else\n\nShare your experience:\n\n${URL}`]
+    ];
+    const posts=raw.map((p,i)=>({id:i+1,category:p[0],text:p[1]}));
+    let data=load();
+    const $=s=>document.querySelector(s), esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    function defaults(){return {posts:{},prefs:{days:[1,2,3,4,5],perWeek:5,time:"10:00"}}}
+    function load(){try{return Object.assign(defaults(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch{return defaults()}}
+    function item(id){return data.posts[id]||(data.posts[id]={status:"Available",planned:"",posted:"",notes:""})}
+    function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+    function card(p){const d=item(p.id);return `<article class="card" data-id="${p.id}" data-status="${d.status}"><div class="card-head"><span class="number">Post ${p.id}</span><span class="badge">${esc(p.category)}</span></div><div class="post">${esc(p.text)}</div><div class="meta"><span>${[...p.text].length} characters</span><span>${esc(d.status)}</span></div><div class="actions"><button class="btn copy" data-copy="${p.id}">Copy post</button></div><div class="card-fields"><div class="field"><label>Status<select data-field="status"><option${d.status==="Available"?" selected":""}>Available</option><option${d.status==="Planned"?" selected":""}>Planned</option><option${d.status==="Posted"?" selected":""}>Posted</option><option${d.status==="Skipped"?" selected":""}>Skipped</option></select></label></div><div class="field"><label>Planned date<input data-field="planned" type="datetime-local" value="${esc(d.planned)}"></label></div><div class="field notes"><label>Notes<textarea data-field="notes" placeholder="Optional notes">${esc(d.notes)}</textarea></label></div></div>${d.posted?`<div class="posted-at">Posted: ${esc(new Date(d.posted).toLocaleString())}</div>`:""}</article>`}
+    function render(){
+      const q=$("#search").value.toLowerCase(),cat=$("#category").value,st=$("#statusFilter").value,undated=$("#undated").value;
+      let shown=posts.filter(p=>{const d=item(p.id);return(!q||(p.text+" "+d.notes).toLowerCase().includes(q))&&(cat==="All"||p.category===cat)&&(st==="All"||d.status===st)&&(undated==="all"||!d.planned)});
+      shown.sort($("#sort").value==="date"?(a,b)=>(item(a.id).planned||"9999").localeCompare(item(b.id).planned||"9999"):(a,b)=>a.id-b.id);
+      $("#cards").innerHTML=shown.map(card).join("");$("#shown").textContent=`${shown.length} shown`;
+      const counts={Available:0,Planned:0,Posted:0,Skipped:0};posts.forEach(p=>counts[item(p.id).status]++);
+      $("#plannedStat").textContent=counts.Planned;$("#postedStat").textContent=counts.Posted;$("#availableStat").textContent=counts.Available;
+      renderCalendar();
+    }
+    function renderCalendar(){
+      const now=new Date(), today=now.toISOString().slice(0,10);
+      const planned=posts.filter(p=>item(p.id).planned&&item(p.id).status!=="Posted"&&item(p.id).status!=="Skipped").sort((a,b)=>item(a.id).planned.localeCompare(item(b.id).planned));
+      $("#calendar").innerHTML=planned.length?planned.slice(0,10).map((p,i)=>{const d=item(p.id),day=d.planned.slice(0,10),cls=day<today?"overdue":day===today?"today":i===0?"next":"";return `<div class="calendar-item ${cls}"><strong>${esc(new Date(d.planned).toLocaleString([], {dateStyle:"medium",timeStyle:"short"}))}</strong><span>#${p.id}</span><span>${esc(p.text.slice(0,90))}…</span><span class="badge">${day<today?"Overdue":day===today?"Today":i===0?"Next":esc(d.status)}</span></div>`}).join(""):'<p class="empty">No posts are planned yet.</p>';
+    }
+    $("#cards").addEventListener("click",async e=>{const b=e.target.closest(".copy");if(!b)return;const p=posts.find(x=>x.id===+b.dataset.copy);try{await navigator.clipboard.writeText(p.text)}catch{const t=document.createElement("textarea");t.value=p.text;document.body.append(t);t.select();document.execCommand("copy");t.remove()}b.textContent="Copied";setTimeout(()=>b.textContent="Copy post",1200)});
+    $("#cards").addEventListener("change",e=>{const f=e.target.dataset.field;if(!f)return;const id=+e.target.closest(".card").dataset.id,d=item(id),old=d.status;d[f]=e.target.value;if(f==="planned"&&d.planned&&d.status==="Available")d.status="Planned";if(f==="status"&&d.status==="Posted"&&old!=="Posted")d.posted=new Date().toISOString();if(f==="status"&&d.status!=="Posted")d.posted="";save()});
+    $("#cards").addEventListener("input",e=>{if(e.target.dataset.field!=="notes")return;item(+e.target.closest(".card").dataset.id).notes=e.target.value;localStorage.setItem(KEY,JSON.stringify(data))});
+    ["search","category","statusFilter","sort","undated"].forEach(id=>$("#"+id).addEventListener(id==="search"?"input":"change",render));
+    $("#clearFilters").onclick=()=>{$("#search").value="";$("#category").value=$("#statusFilter").value="All";$("#sort").value="number";$("#undated").value="all";render()};
+    const download=(name,type,text)=>{const a=document.createElement("a");a.href=globalThis.URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>globalThis.URL.revokeObjectURL(a.href),1000)};
+    const csvCell=v=>`"${String(v??"").replace(/"/g,'""')}"`;
+    $("#csv").onclick=()=>{const rows=[["Post Number","Category","Post Text","Character Count","Status","Planned Date","Posted Date","Notes","Marketing URL"],...posts.map(p=>{const d=item(p.id);return[p.id,p.category,p.text,[...p.text].length,d.status,d.planned,d.posted,d.notes,URL]})];download("AI-Stamp-Scanner-Threads-Content.csv","text/csv;charset=utf-8","\ufeff"+rows.map(r=>r.map(csvCell).join(",")).join("\r\n"))};
+    $("#jsonExport").onclick=()=>download("AI-Stamp-Scanner-Planning.json","application/json",JSON.stringify({version:1,exported:new Date().toISOString(),data},null,2));
+    $("#jsonImport").onclick=()=>$("#jsonFile").click();$("#jsonFile").onchange=async e=>{try{const parsed=JSON.parse(await e.target.files[0].text());if(!parsed.data||!parsed.data.posts)throw Error();data=parsed.data;save();alert("Planning data imported.")}catch{alert("This is not a valid planning backup.")}e.target.value=""};
+    $("#reset").onclick=()=>{if(confirm("Reset all statuses, dates and notes? This cannot be undone.")){data=defaults();localStorage.removeItem(KEY);save()}};
+    const dlg=$("#scheduleDialog"),dayNames=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];$("#days").innerHTML=dayNames.map((n,i)=>`<label class="day"><input type="checkbox" value="${i}" ${i>0&&i<6?"checked":""}>${n}</label>`).join("");
+    $("#scheduleOpen").onclick=()=>{$("#startDate").value=new Date().toISOString().slice(0,10);dlg.showModal()};
+    $("#scheduleApply").onclick=e=>{e.preventDefault();const chosen=[...$("#days input:checked")].map(x=>+x.value),limit=Math.min(+$("#perWeek").value,chosen.length);if(!chosen.length||!limit)return alert("Select at least one posting day.");const available=posts.filter(p=>!item(p.id).planned&&item(p.id).status!=="Posted"&&item(p.id).status!=="Skipped");let date=new Date($("#startDate").value+"T12:00:00"),weekKey="",used=0;for(const p of available){while(true){const monday=new Date(date);monday.setDate(date.getDate()-((date.getDay()+6)%7));const key=monday.toISOString().slice(0,10);if(key!==weekKey){weekKey=key;used=0}if(chosen.includes(date.getDay())&&used<limit)break;date.setDate(date.getDate()+1)}const d=item(p.id);d.planned=date.toISOString().slice(0,10)+"T"+($("#postTime").value||"10:00");d.status="Planned";used++;date.setDate(date.getDate()+1)}data.prefs={days:chosen,perWeek:limit,time:$("#postTime").value};save();dlg.close()};
+    render();
+  </script>
+</body>
+</html>
