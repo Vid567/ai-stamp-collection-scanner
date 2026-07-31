@@ -10,6 +10,8 @@ Turn photos of a stamp collection into a structured inventory and identify which
 
 - Uses a photo-first workflow for album and stockbook pages.
 - Produces structured, paste-ready Inventory rows with an AI helper prompt.
+- Keeps every populated row linked through a static Record ID, Photo Number and Original Filename.
+- Includes an Images worksheet for a stamp crop or source-photo thumbnail, with a clear filename fallback when no image can be embedded.
 - Records suggested identification and confidence level.
 - Reconciles visible photo counts against captured quantities.
 - Flags classics, overprints, uncertain IDs and physical checks for research.
@@ -19,13 +21,14 @@ AI output is a starting point—not authentication, guaranteed identification or
 
 ## Download
 
-[Download the complete Version 2.0 toolkit](downloads/AI-Stamp-Collection-Scanner-v2.0.zip)
+[Download the complete Version 2.1 toolkit](downloads/AI-Stamp-Collection-Scanner-v2.1.zip)
 
 ## Included
 
 - Reusable Excel inventory workbook
 - Filled sample workbook
 - AI Photo-ID prompt
+- Photo Linking & Images addendum
 - User Guide
 - Country and inscription cheat-sheet
 - Quick Start Card
@@ -34,6 +37,8 @@ AI output is a starting point—not authentication, guaranteed identification or
 ## Website
 
 The repository is ready for GitHub Pages. Publish from the `main` branch and repository root.
+
+Version 2.1 is still a static Excel-and-prompt toolkit. It prepares stable photo links and space for visual references, but it does not automatically transfer image crops from an AI chat into Excel; the crop or thumbnail is supplied by the AI tool or pasted manually.
 
 ## Product language
 
