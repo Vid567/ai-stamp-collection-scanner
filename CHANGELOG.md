@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.2 - 2026-07-31
+
+- Added conservative AI-assisted identification and independent field confidence columns.
+- Added deterministic crop-quality scoring and rescan recommendations.
+- Added perceptual duplicate-candidate reporting without automatic merging.
+- Added a Collection Summary worksheet and JSON collection statistics.
+- Added conditional confidence, review and duplicate indicators.
+- Preserved the existing external vision-AI, crop, thumbnail, traceability and Excel workflows.
+
 ## 2.1 - 2026-07-31
 
 - Added static `record_id`, `photo_number`, `original_filename`, `photo_references`, and `stamp_image_reference` fields to Inventory.

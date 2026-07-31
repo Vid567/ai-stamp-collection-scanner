@@ -23,7 +23,7 @@ AI output is a starting point—not authentication, guaranteed identification or
 
 ## Download
 
-[Download the complete Version 2.1 toolkit](downloads/AI-Stamp-Collection-Scanner-v2.1.zip)
+[Download the complete Version 2.2 toolkit](downloads/AI-Stamp-Collection-Scanner-v2.2.zip)
 
 ## Included
 
@@ -37,12 +37,19 @@ AI output is a starting point—not authentication, guaranteed identification or
 - Google Sheets notes
 - Optional local Phase 1 traceability processor
 - Crop, thumbnail and Excel-image validation
+- AI-assisted research fields with independent confidence scores
+- Local image-quality analysis and duplicate candidates
+- Collection Summary worksheet
 
 ## Optional traceability workflow
 
 Version 2.1 keeps the original prompt-to-Excel workflow and adds an optional local processor. The Phase 1 prompt requests normalized stamp boxes. The processor then retains source photos locally, creates lossless crops and 256 x 256 thumbnails, embeds one thumbnail per Inventory row and writes a validation report.
 
 See [the Phase 1 guide](docs/PHASE-1-GUIDE.md). This feature requires Python and Pillow; it does not add or replace an AI model.
+
+## Optional research workflow
+
+Phase 2 builds on the same processor and workbook. The external vision-AI supplies cautious identification suggestions; local code measures crop quality, reports visually similar candidates, applies conservative recommendations and produces collection statistics. See [the Phase 2 guide](docs/PHASE-2-GUIDE.md).
 
 ## Website
 

@@ -23,6 +23,11 @@ HEADERS = [
     "id_confidence", "notes", "record_id", "photo_number", "original_filename",
     "photo_references", "stamp_image_reference", "bbox_x", "bbox_y", "bbox_width", "bbox_height",
     "bbox_normalized", "confidence_score",
+    "ai_country", "confidence_country", "ai_year", "confidence_year",
+    "ai_theme", "confidence_theme", "ai_category", "confidence_category",
+    "ai_series", "confidence_series", "ai_denomination", "confidence_denomination",
+    "visible_text", "language", "ai_purpose", "visual_traits", "estimated_period",
+    "dominant_colour", "rare_characteristics", "research_recommendation",
 ]
 
 
@@ -47,6 +52,9 @@ class TraceabilityIntegrationTests(unittest.TestCase):
             "record_id": stamp_id, "original_filename": photo,
             "country_as_printed": "TEST", "country_normalized": "Testland",
             "stamp_type": "commemorative", "quantity": "1", "id_confidence": "medium",
+            "ai_country": "Testland", "confidence_country": "82%",
+            "ai_theme": "Test design", "confidence_theme": "0.9",
+            "ai_category": "Commemorative", "confidence_category": "0.8",
             "bbox_x": str(x), "bbox_y": str(y), "bbox_width": str(w),
             "bbox_height": str(h), "bbox_normalized": "yes", "confidence_score": "0.8",
         })
@@ -78,6 +86,7 @@ class TraceabilityIntegrationTests(unittest.TestCase):
         report = json.loads((output / "validation-report.json").read_text())
         self.assertEqual(report["status"], "PASS")
         self.assertEqual(report["embedded_thumbnails"], 2)
+        self.assertEqual(report["research_results"], 2)
         self.assertEqual(len(list((output / "Crops").glob("*.png"))), 2)
         self.assertEqual(len(list((output / "Thumbnails").glob("*.png"))), 2)
         with Image.open(output / "Thumbnails" / "photo-a-001_thumb.png") as image:
@@ -104,6 +113,12 @@ class TraceabilityIntegrationTests(unittest.TestCase):
             self.assertEqual(len(anchors), 3)
         self.assertTrue((output / "Photos" / "wide.jpg").is_file())
         self.assertTrue((output / "Photos" / "portrait.png").is_file())
+        with zipfile.ZipFile(workbook) as archive:
+            workbook_xml = archive.read("xl/workbook.xml").decode("utf-8")
+            self.assertIn("Collection Summary", workbook_xml)
+            inventory = archive.read("xl/worksheets/sheet2.xml").decode("utf-8")
+            self.assertIn("research_recommendation", inventory)
+            self.assertIn("overall_confidence", inventory)
 
     def test_large_collection(self):
         rows = []
@@ -119,6 +134,44 @@ class TraceabilityIntegrationTests(unittest.TestCase):
         report = json.loads((output / "validation-report.json").read_text())
         self.assertEqual(report["detected_stamps"], 50)
         self.assertEqual(report["embedded_thumbnails"], 50)
+        self.assertEqual(report["collection_summary"]["detected_stamps"], 50)
+
+    def test_duplicate_detection_reports_without_merging(self):
+        rows = [
+            self.base_row("same-001", "same-a.png", .1, .1, .8, .8),
+            self.base_row("same-002", "same-b.png", .1, .1, .8, .8),
+        ]
+        photos = {
+            "same-a.png": ((500, 500), [(50, 50, 450, 450)]),
+            "same-b.png": ((500, 500), [(50, 50, 450, 450)]),
+        }
+        temp, output, result = self.run_tool(rows, photos)
+        self.addCleanup(temp.cleanup)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        research = json.loads((output / "research-results.json").read_text())
+        self.assertIn("duplicate", research["same-001"]["duplicate_candidate"].lower())
+        self.assertEqual(json.loads((output / "validation-report.json").read_text())["excel_rows"], 2)
+
+    def test_low_quality_and_unsafe_value_language_are_handled_conservatively(self):
+        row = self.base_row("poor-001", "poor.png", 0, 0, 1, 1)
+        row["research_recommendation"] = "Potentially Valuable"
+        row["confidence_country"] = "10%"
+        temp, output, result = self.run_tool([row], {"poor.png": ((80, 80), [])})
+        self.addCleanup(temp.cleanup)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        research = json.loads((output / "research-results.json").read_text())["poor-001"]
+        self.assertIn(research["research_recommendation"], {"Image Quality Too Low", "Low Confidence"})
+        self.assertEqual(research["rescan_recommended"], "yes")
+
+    def test_independent_confidence_scores_are_preserved(self):
+        row = self.base_row("scores-001", "scores.jpg", .1, .1, .8, .8)
+        row.update({"confidence_year": "74%", "confidence_series": "0.63", "ai_year": "1950s", "ai_series": "Possible test series"})
+        temp, output, result = self.run_tool([row], {"scores.jpg": ((800, 800), [(80, 80, 720, 720)])})
+        self.addCleanup(temp.cleanup)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        research = json.loads((output / "research-results.json").read_text())["scores-001"]
+        self.assertEqual(research["confidence_year"], .74)
+        self.assertEqual(research["confidence_series"], .63)
 
     def test_exif_rotated_photo_uses_oriented_dimensions(self):
         temp = tempfile.TemporaryDirectory()

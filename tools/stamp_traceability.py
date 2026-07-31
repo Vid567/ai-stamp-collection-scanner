@@ -15,6 +15,7 @@ import math
 import shutil
 import sys
 import tempfile
+import time
 import zipfile
 from collections import defaultdict
 from dataclasses import dataclass
@@ -24,6 +25,8 @@ from typing import Iterable
 from xml.etree import ElementTree as ET
 
 from PIL import Image, ImageOps
+
+from stamp_research import ResearchResult, analyse_crop, collection_summary, mark_duplicates
 
 
 MAIN_NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
@@ -53,6 +56,21 @@ TRACE_HEADERS = [
     "thumbnail", "confidence_score", "bounding_box", "coordinates",
     "crop_filename", "thumbnail_filename",
 ]
+RESEARCH_HEADERS = [
+    "ai_country", "confidence_country", "ai_year", "confidence_year",
+    "ai_theme", "confidence_theme", "ai_category", "confidence_category",
+    "ai_series", "confidence_series", "ai_denomination",
+    "confidence_denomination", "visible_text", "language", "ai_purpose",
+    "visual_traits", "estimated_period", "dominant_colour",
+    "image_quality_score", "image_quality", "quality_flags",
+    "rescan_recommended", "research_recommendation", "duplicate_candidate",
+    "duplicate_similarity", "overall_confidence", "research_notes",
+]
+CONFIDENCE_HEADERS = {
+    "confidence_country", "confidence_year", "confidence_theme",
+    "confidence_category", "confidence_series", "confidence_denomination",
+    "image_quality_score", "duplicate_similarity", "overall_confidence",
+}
 INPUT_COORDINATE_HEADERS = ["bbox_x", "bbox_y", "bbox_width", "bbox_height"]
 SUPPORTED_IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff"}
 
@@ -114,6 +132,7 @@ class Detection:
     image_width: int = 0
     image_height: int = 0
     crop_box: tuple[int, int, int, int] | None = None
+    research: ResearchResult | None = None
 
 
 def _safe_float(value: str, field: str) -> float:
@@ -242,6 +261,28 @@ def generate_images(
                 canvas.save(thumbs_dir / detection.thumbnail_filename, format="PNG", optimize=True)
 
 
+def enrich_research(detections: list[Detection], output_dir: Path) -> list[ResearchResult]:
+    """Attach conservative Phase 2 research and local quality metadata."""
+    results: list[ResearchResult] = []
+    for detection in detections:
+        if detection.crop_box is None:
+            raise TraceabilityError(f"{detection.record_id}: crop box was not generated")
+        left, top, right, bottom = detection.crop_box
+        touches_edge = left == 0 or top == 0 or right == detection.image_width or bottom == detection.image_height
+        result = analyse_crop(
+            detection.record_id,
+            detection.row,
+            output_dir / "Crops" / detection.crop_filename,
+            touches_edge,
+        )
+        detection.research = result
+        results.append(result)
+    mark_duplicates(results)
+    cache = {result.record_id: result.excel_values() for result in results}
+    (output_dir / "research-results.json").write_text(json.dumps(cache, indent=2), encoding="utf-8")
+    return results
+
+
 def _column_name(index: int) -> str:
     result = ""
     while index:
@@ -285,7 +326,89 @@ def _workbook_sheet_path(entries: dict[str, bytes], sheet_name: str) -> str:
     raise TraceabilityError(f"Workbook does not contain sheet {sheet_name!r}")
 
 
-def build_workbook(template_path: Path, detections: list[Detection], output_dir: Path) -> Path:
+def _write_collection_summary(entries: dict[str, bytes], summary: dict[str, object]) -> None:
+    """Populate or add the Phase 2 Collection Summary worksheet."""
+    existing_summary = True
+    try:
+        sheet_path = _workbook_sheet_path(entries, "Collection Summary")
+    except TraceabilityError:
+        existing_summary = False
+        workbook = ET.fromstring(entries["xl/workbook.xml"])
+        relationships = ET.fromstring(entries["xl/_rels/workbook.xml.rels"])
+        sheets = workbook.find(f"{{{MAIN_NS}}}sheets")
+        if sheets is None:
+            raise TraceabilityError("Workbook has no sheets collection")
+        next_sheet_id = max(int(sheet.attrib.get("sheetId", "0")) for sheet in sheets) + 1
+        existing_paths = [name for name in entries if name.startswith("xl/worksheets/sheet") and name.endswith(".xml")]
+        next_file_id = max(int(Path(path).stem.removeprefix("sheet")) for path in existing_paths) + 1
+        rel_id = "rIdPhase2Summary"
+        ET.SubElement(sheets, f"{{{MAIN_NS}}}sheet", {
+            "name": "Collection Summary", "sheetId": str(next_sheet_id), f"{{{REL_NS}}}id": rel_id,
+        })
+        ET.SubElement(relationships, f"{{{PKG_REL_NS}}}Relationship", {
+            "Id": rel_id,
+            "Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet",
+            "Target": f"worksheets/sheet{next_file_id}.xml",
+        })
+        entries["xl/workbook.xml"] = ET.tostring(workbook, encoding="utf-8", xml_declaration=True)
+        entries["xl/_rels/workbook.xml.rels"] = ET.tostring(relationships, encoding="utf-8", xml_declaration=True)
+        sheet_path = f"xl/worksheets/sheet{next_file_id}.xml"
+        content_types = entries["[Content_Types].xml"].decode("utf-8")
+        override = (
+            f'<Override PartName="/{sheet_path}" '
+            'ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>'
+        )
+        entries["[Content_Types].xml"] = content_types.replace("</Types>", override + "</Types>").encode()
+
+    if existing_summary:
+        worksheet = ET.fromstring(entries[sheet_path])
+        data = worksheet.find(f"{{{MAIN_NS}}}sheetData")
+        if data is None:
+            data = ET.SubElement(worksheet, f"{{{MAIN_NS}}}sheetData")
+        styles = {
+            cell.attrib.get("r", ""): cell.attrib.get("s")
+            for cell in data.iter(f"{{{MAIN_NS}}}c")
+        }
+        for row in list(data):
+            data.remove(row)
+    else:
+        worksheet = ET.Element(f"{{{MAIN_NS}}}worksheet")
+        ET.SubElement(worksheet, f"{{{MAIN_NS}}}dimension", {"ref": "A1:B16"})
+        views = ET.SubElement(worksheet, f"{{{MAIN_NS}}}sheetViews")
+        ET.SubElement(views, f"{{{MAIN_NS}}}sheetView", {"workbookViewId": "0", "showGridLines": "0"})
+        cols = ET.SubElement(worksheet, f"{{{MAIN_NS}}}cols")
+        ET.SubElement(cols, f"{{{MAIN_NS}}}col", {"min": "1", "max": "1", "width": "30", "customWidth": "1"})
+        ET.SubElement(cols, f"{{{MAIN_NS}}}col", {"min": "2", "max": "2", "width": "45", "customWidth": "1"})
+        data = ET.SubElement(worksheet, f"{{{MAIN_NS}}}sheetData")
+        styles = {}
+    title_row = ET.SubElement(data, f"{{{MAIN_NS}}}row", {"r": "1", "ht": "28", "customHeight": "1"})
+    title_row.append(_inline_cell("A1", "Collection Summary", styles.get("A1")))
+    title_row.append(_inline_cell("B1", "AI-assisted findings; verify important identifications", styles.get("B1")))
+    labels = [
+        ("Uploaded photographs", "uploaded_photographs"), ("Detected stamps", "detected_stamps"),
+        ("Average confidence", "average_confidence"), ("Countries detected", "countries_detected"),
+        ("Top countries", "top_countries"), ("Themes detected", "themes_detected"),
+        ("Top themes", "top_themes"), ("Duplicate candidates", "duplicate_candidates"),
+        ("Unknown stamps", "unknown_stamps"), ("Low-quality images", "low_quality_images"),
+        ("Manual review count", "manual_review_count"), ("Research candidates", "research_candidates"),
+        ("Average image quality", "average_image_quality"),
+        ("Top recommendations", "top_recommendations"), ("Processing time (seconds)", "processing_seconds"),
+    ]
+    numeric = {"uploaded_photographs", "detected_stamps", "average_confidence", "countries_detected", "themes_detected", "duplicate_candidates", "unknown_stamps", "low_quality_images", "manual_review_count", "research_candidates", "average_image_quality", "processing_seconds"}
+    for row_number, (label, key) in enumerate(labels, start=2):
+        row = ET.SubElement(data, f"{{{MAIN_NS}}}row", {"r": str(row_number)})
+        row.append(_inline_cell(f"A{row_number}", label, styles.get(f"A{row_number}")))
+        value = summary.get(key, "")
+        if key in numeric:
+            row.append(_number_cell(f"B{row_number}", float(value or 0), styles.get(f"B{row_number}")))
+        else:
+            display = ", ".join(f"{name} ({count})" for name, count in value) if isinstance(value, list) else str(value)
+            row.append(_inline_cell(f"B{row_number}", display, styles.get(f"B{row_number}")))
+    entries[sheet_path] = ET.tostring(worksheet, encoding="utf-8", xml_declaration=True)
+
+
+def build_workbook(template_path: Path, detections: list[Detection], output_dir: Path,
+                   summary: dict[str, object]) -> Path:
     """Populate either the v2.0 or photo-linked v2.1 workbook and embed thumbnails."""
 
     output_path = output_dir / "Stamp Inventory.xlsx"
@@ -329,7 +452,7 @@ def build_workbook(template_path: Path, detections: list[Detection], output_dir:
     old_header_cells = header_row.findall(f"{{{MAIN_NS}}}c")
     header_style = old_header_cells[-1].attrib.get("s") if old_header_cells else None
     next_column = max(header_map.values()) + 1
-    for header in [*LINK_HEADERS, *TRACE_HEADERS]:
+    for header in [*LINK_HEADERS, *TRACE_HEADERS, *RESEARCH_HEADERS]:
         if header not in header_map:
             header_map[header] = next_column
             header_row.append(_inline_cell(f"{_column_name(next_column)}1", header, header_style))
@@ -372,6 +495,8 @@ def build_workbook(template_path: Path, detections: list[Detection], output_dir:
             "crop_filename": detection.crop_filename,
             "thumbnail_filename": detection.thumbnail_filename,
         })
+        if detection.research is not None:
+            row_values.update(detection.research.excel_values())
         for child in list(row_element):
             reference = child.attrib.get("r", "")
             letters = "".join(character for character in reference if character.isalpha())
@@ -382,7 +507,7 @@ def build_workbook(template_path: Path, detections: list[Detection], output_dir:
                 continue
             value = row_values.get(header, detection.row.get(header, ""))
             reference = f"{_column_name(column_index)}{excel_row}"
-            if header in {"year", "face_value", "quantity", "est_unit_value"} and value not in {"", None}:
+            if header in {"year", "face_value", "quantity", "est_unit_value", *CONFIDENCE_HEADERS} and value not in {"", None}:
                 try:
                     row_element.append(_number_cell(reference, float(value)))
                     continue
@@ -404,6 +529,13 @@ def build_workbook(template_path: Path, detections: list[Detection], output_dir:
         "stamp_image_reference": 24, "confidence_score": 14,
         "bounding_box": 28, "coordinates": 28, "crop_filename": 24,
         "thumbnail_filename": 28,
+        "ai_country": 20, "ai_year": 12, "ai_theme": 20,
+        "ai_category": 18, "ai_series": 24, "ai_denomination": 18,
+        "visible_text": 28, "language": 14, "ai_purpose": 18,
+        "visual_traits": 28, "estimated_period": 18, "dominant_colour": 18,
+        "image_quality": 16, "quality_flags": 30, "rescan_recommended": 18,
+        "research_recommendation": 28, "duplicate_candidate": 28,
+        "research_notes": 34,
     }
     for header, width in widths.items():
         column_index = header_map[header]
@@ -477,6 +609,7 @@ def build_workbook(template_path: Path, detections: list[Detection], output_dir:
         content_types = content_types.replace("</Types>", "".join(additions) + "</Types>")
     entries["[Content_Types].xml"] = content_types.encode("utf-8")
 
+    _write_collection_summary(entries, summary)
     with zipfile.ZipFile(output_path, "w", zipfile.ZIP_DEFLATED) as output_zip:
         for name, data in entries.items():
             output_zip.writestr(name, data)
@@ -502,12 +635,19 @@ def validate_output(detections: list[Detection], output_dir: Path, workbook_path
         for label, path in expected.items():
             if not path.is_file():
                 errors.append(f"{detection.stamp_id}: {label} missing: {path}")
+        if detection.research is None:
+            errors.append(f"{detection.stamp_id}: Phase 2 research result missing")
+        elif not 0 <= detection.research.overall_confidence <= 1:
+            errors.append(f"{detection.stamp_id}: overall confidence is outside 0..1")
     if not workbook_path.is_file():
         errors.append("Excel workbook is missing")
         image_count = 0
     else:
         with zipfile.ZipFile(workbook_path) as workbook_zip:
             image_count = len([name for name in workbook_zip.namelist() if name.startswith("xl/media/")])
+            workbook_xml = workbook_zip.read("xl/workbook.xml").decode("utf-8")
+            if "Collection Summary" not in workbook_xml:
+                errors.append("Workbook is missing the Collection Summary worksheet")
         if image_count != len(detections):
             errors.append(f"Workbook contains {image_count} images for {len(detections)} stamps")
     report = {
@@ -527,13 +667,20 @@ def validate_output(detections: list[Detection], output_dir: Path, workbook_path
 
 def process(tsv_path: Path, photos_dir: Path, template_path: Path, output_dir: Path,
             margin: float = 0.04, thumbnail_size: int = 256) -> dict[str, object]:
-    """Run the complete, deterministic Phase 1 post-processing pipeline."""
+    """Run the backward-compatible Phase 1 pipeline plus Phase 2 enrichment."""
 
+    started = time.perf_counter()
     output_dir.mkdir(parents=True, exist_ok=True)
     detections = read_detections(tsv_path, photos_dir)
     generate_images(detections, output_dir, margin, thumbnail_size)
-    workbook_path = build_workbook(template_path, detections, output_dir)
+    research = enrich_research(detections, output_dir)
+    summary = collection_summary(research, len({item.photo_filename for item in detections}), time.perf_counter() - started)
+    (output_dir / "collection-summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    workbook_path = build_workbook(template_path, detections, output_dir, summary)
     report = validate_output(detections, output_dir, workbook_path)
+    report["research_results"] = len(research)
+    report["collection_summary"] = summary
+    (output_dir / "validation-report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     if report["status"] != "PASS":
         raise TraceabilityError("Output validation failed; see validation-report.json")
     return report
