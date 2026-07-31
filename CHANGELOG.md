@@ -8,6 +8,10 @@
 - Updated the AI Photo-ID prompt for 27-column tab-separated output and stable numbering across 20 or more uploads.
 - Added guidance for multiple stamps per photo and one stamp shown in multiple photos.
 - Updated website and package documentation without changing analytics configuration.
+- Added an optional local traceability processor that preserves the existing 27-column workflow.
+- Added lossless crops, centered 256 x 256 thumbnails and one embedded thumbnail per Inventory row.
+- Added normalized bounding-box and numeric confidence fields without replacing the existing AI helper.
+- Added automatic integrity validation for photos, crops, thumbnails, unique IDs and workbook row counts.
 
 ## 2.0 - 2026-07-29
 

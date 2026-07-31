@@ -14,6 +14,8 @@ Turn photos of a stamp collection into a structured inventory and identify which
 - Includes an Images worksheet for a stamp crop or source-photo thumbnail, with a clear filename fallback when no image can be embedded.
 - Records suggested identification and confidence level.
 - Reconciles visible photo counts against captured quantities.
+- Optionally creates traceable crops and embedded Excel thumbnails locally.
+- Keeps every enriched row linked to its numbered source photograph and filename.
 - Flags classics, overprints, uncertain IDs and physical checks for research.
 - Calculates collection totals from estimated per-stamp values.
 
@@ -33,12 +35,20 @@ AI output is a starting point—not authentication, guaranteed identification or
 - Country and inscription cheat-sheet
 - Quick Start Card
 - Google Sheets notes
+- Optional local Phase 1 traceability processor
+- Crop, thumbnail and Excel-image validation
+
+## Optional traceability workflow
+
+Version 2.1 keeps the original prompt-to-Excel workflow and adds an optional local processor. The Phase 1 prompt requests normalized stamp boxes. The processor then retains source photos locally, creates lossless crops and 256 x 256 thumbnails, embeds one thumbnail per Inventory row and writes a validation report.
+
+See [the Phase 1 guide](docs/PHASE-1-GUIDE.md). This feature requires Python and Pillow; it does not add or replace an AI model.
 
 ## Website
 
 The repository is ready for GitHub Pages. Publish from the `main` branch and repository root.
 
-Version 2.1 is still a static Excel-and-prompt toolkit. It prepares stable photo links and space for visual references, but it does not automatically transfer image crops from an AI chat into Excel; the crop or thumbnail is supplied by the AI tool or pasted manually.
+The core workflow remains a static Excel-and-prompt toolkit. Visual references can still be supplied by the AI tool or pasted manually. The optional local processor automates crops, thumbnails and workbook embedding when normalized bounding boxes are available.
 
 ## Product language
 
@@ -53,4 +63,3 @@ Use the [AI Stamp Scanner Content Creator](https://vid567.github.io/ai-stamp-col
 ## Licence
 
 The downloadable toolkit is licensed for personal use. See `LICENSE.txt` inside the release package.
-

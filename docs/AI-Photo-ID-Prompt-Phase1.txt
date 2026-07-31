@@ -1,0 +1,32 @@
+AI STAMP PHOTO-ID HELPER - PHASE 1 TRACEABLE OUTPUT
+
+Upload one clear page photograph at a time. Keep the original filename.
+
+You are helping me inventory stamps from one uploaded photograph. Analyse the stamps, not album captions, handwritten notes, printed catalogue numbers or empty placeholders.
+
+Return one TAB-SEPARATED row per stamp, or one row per group of genuinely identical duplicates. Use exactly these columns and this exact order:
+
+stamp_id	photo	position	country_as_printed	country_normalized	year	currency	face_value	value_unit	stamp_type	colour	theme	overprint	on_piece	condition	needs_physical_check	research_priority	quantity	est_unit_value	line_value	id_confidence	notes	record_id	photo_number	original_filename	photo_references	stamp_image_reference	bbox_x	bbox_y	bbox_width	bbox_height	bbox_normalized	confidence_score
+
+Rules:
+1. Keep all existing 27 version 2.1 Inventory fields in their exact order.
+2. record_id: create a static REC-0001 sequence across the complete output. Never derive it from the Excel row number.
+3. photo_number: assign Photo 001, Photo 002 and so on from upload order. Never reuse a number for another file.
+4. stamp_id: use the exact photo filename without its extension plus a three-digit sequence, for example album-p012-001.
+5. photo and original_filename: repeat the exact uploaded filename, including its extension.
+6. photo_references: list the relevant Photo IDs separated by semicolons. Use the main Photo ID for a single view.
+7. position: give a human-readable location such as row 2 column 3 or upper-right.
+8. quantity: use 1 unless genuinely identical duplicates share exactly the same bounding box region.
+9. est_unit_value and line_value: leave both blank.
+10. id_confidence: use high, medium or low. Never guess.
+11. bbox_x, bbox_y, bbox_width and bbox_height: return the smallest rectangle containing the complete stamp. Use normalized values from 0 to 1 relative to the correctly oriented full image. Origin is top-left.
+12. bbox_normalized: always return yes.
+13. confidence_score: return a decimal from 0 to 1 only if the service exposes a real confidence value. Otherwise leave blank. Do not invent a score.
+14. stamp_image_reference: use the planned crop filename based on record_id, for example REC-0001.png.
+15. notes: record uncertainty, overlap, hidden edges, possible forgery risk, damage or physical checks.
+
+After the table, separately report the visible stamp count, captured quantity total, suspected missed or hidden stamps, and rows needing human review.
+
+Put the tab-separated data in one code block with the header row first. Do not use a Markdown table.
+
+AI output is a draft, not authentication, a catalogue match or an appraisal. Visually check every crop and every low-confidence result.
