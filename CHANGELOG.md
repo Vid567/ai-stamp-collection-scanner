@@ -25,3 +25,13 @@
 ## 2.0 - 2026-07-29
 
 - Released the cleaned reusable workbook, filled sample, five-tab workflow and matching AI prompt.
+# Beta v1.0 — browser restoration
+
+- Added a directly usable browser inventory at `scanner.html`.
+- Added one- and multi-photo selection, camera input, previews and stable photo numbering.
+- Added editable, source-linked inventory records with add, duplicate and delete controls.
+- Added local draft recovery through browser storage.
+- Added Excel and CSV exports without requiring Python.
+- Repositioned the homepage and documentation around the commercial browser Beta.
+- Preserved the Python/Excel toolkit as an optional historical offline workflow.
+- Kept automatic AI analysis disconnected until a secure server-side adapter is available.

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://vid567.github.io/ai-stamp-collection-scanner/sitemap.xml
+
