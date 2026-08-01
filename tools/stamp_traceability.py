@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import math
 import shutil
@@ -65,11 +66,16 @@ RESEARCH_HEADERS = [
     "image_quality_score", "image_quality", "quality_flags",
     "rescan_recommended", "research_recommendation", "duplicate_candidate",
     "duplicate_similarity", "overall_confidence", "research_notes",
+    "identification_confidence", "period_confidence", "research_confidence",
+    "country_reasoning", "interest_score", "interest_label", "research_priority",
+    "possible_features", "interest_reasons", "research_checklist", "duplicate_group",
+    "grouping", "collector_notes", "decision_path", "decision_source",
 ]
 CONFIDENCE_HEADERS = {
     "confidence_country", "confidence_year", "confidence_theme",
     "confidence_category", "confidence_series", "confidence_denomination",
     "image_quality_score", "duplicate_similarity", "overall_confidence",
+    "identification_confidence", "period_confidence", "research_confidence",
 }
 INPUT_COORDINATE_HEADERS = ["bbox_x", "bbox_y", "bbox_width", "bbox_height"]
 SUPPORTED_IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".webp", ".tif", ".tiff"}
@@ -222,14 +228,21 @@ def read_detections(tsv_path: Path, photos_dir: Path) -> list[Detection]:
 def generate_images(
     detections: Iterable[Detection], output_dir: Path, margin: float = 0.04,
     thumbnail_size: int = 256,
-) -> None:
-    """Generate lossless crops and non-upscaled centered PNG thumbnails."""
+) -> int:
+    """Generate images once and reuse unchanged crop/thumbnail results."""
 
     crops_dir, thumbs_dir, photos_output = (
         output_dir / "Crops", output_dir / "Thumbnails", output_dir / "Photos"
     )
     for folder in (crops_dir, thumbs_dir, photos_output):
         folder.mkdir(parents=True, exist_ok=True)
+    cache_path = output_dir / "processing-cache.json"
+    try:
+        old_cache = json.loads(cache_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        old_cache = {}
+    new_cache: dict[str, str] = {}
+    cache_hits = 0
 
     grouped: defaultdict[Path, list[Detection]] = defaultdict(list)
     for detection in detections:
@@ -237,6 +250,7 @@ def generate_images(
 
     for source_path, photo_detections in grouped.items():
         shutil.copy2(source_path, photos_output / source_path.name)
+        source_digest = hashlib.sha256(source_path.read_bytes()).hexdigest()
         with Image.open(source_path) as raw:
             image = ImageOps.exif_transpose(raw)
             image.load()
@@ -245,8 +259,17 @@ def generate_images(
                 detection.image_width, detection.image_height = width, height
                 box = detection.bbox.pixels(width, height, margin)
                 detection.crop_box = box
+                fingerprint = hashlib.sha256(json.dumps({
+                    "source": source_digest, "box": box, "thumbnail_size": thumbnail_size,
+                }, sort_keys=True).encode()).hexdigest()
+                new_cache[detection.record_id] = fingerprint
+                crop_path = crops_dir / detection.crop_filename
+                thumb_path = thumbs_dir / detection.thumbnail_filename
+                if old_cache.get(detection.record_id) == fingerprint and crop_path.is_file() and thumb_path.is_file():
+                    cache_hits += 1
+                    continue
                 crop = image.crop(box)
-                crop.save(crops_dir / detection.crop_filename, format="PNG", optimize=True)
+                crop.save(crop_path, format="PNG", optimize=True)
 
                 thumb = crop.copy()
                 thumb.thumbnail((thumbnail_size, thumbnail_size), Image.Resampling.LANCZOS)
@@ -258,11 +281,13 @@ def generate_images(
                     canvas.paste(thumb, offset, thumb)
                 else:
                     canvas.paste(thumb.convert(background_mode), offset)
-                canvas.save(thumbs_dir / detection.thumbnail_filename, format="PNG", optimize=True)
+                canvas.save(thumb_path, format="PNG", optimize=True)
+    cache_path.write_text(json.dumps(new_cache, indent=2), encoding="utf-8")
+    return cache_hits
 
 
 def enrich_research(detections: list[Detection], output_dir: Path) -> list[ResearchResult]:
-    """Attach conservative Phase 2 research and local quality metadata."""
+    """Attach conservative Phase 2/3 research and write an auditable decision log."""
     results: list[ResearchResult] = []
     for detection in detections:
         if detection.crop_box is None:
@@ -280,6 +305,15 @@ def enrich_research(detections: list[Detection], output_dir: Path) -> list[Resea
     mark_duplicates(results)
     cache = {result.record_id: result.excel_values() for result in results}
     (output_dir / "research-results.json").write_text(json.dumps(cache, indent=2), encoding="utf-8")
+    decisions = [
+        {"record_id": result.record_id, "reason": result.interest_reasons,
+         "confidence": result.research_confidence, "decision_path": result.decision_path,
+         "source": result.decision_source}
+        for result in results
+    ]
+    (output_dir / "ai-decision-log.jsonl").write_text(
+        "".join(json.dumps(item, ensure_ascii=False) + "\n" for item in decisions), encoding="utf-8"
+    )
     return results
 
 
@@ -327,7 +361,7 @@ def _workbook_sheet_path(entries: dict[str, bytes], sheet_name: str) -> str:
 
 
 def _write_collection_summary(entries: dict[str, bytes], summary: dict[str, object]) -> None:
-    """Populate or add the Phase 2 Collection Summary worksheet."""
+    """Populate or add the collection-insights worksheet."""
     existing_summary = True
     try:
         sheet_path = _workbook_sheet_path(entries, "Collection Summary")
@@ -393,8 +427,12 @@ def _write_collection_summary(entries: dict[str, bytes], summary: dict[str, obje
         ("Manual review count", "manual_review_count"), ("Research candidates", "research_candidates"),
         ("Average image quality", "average_image_quality"),
         ("Top recommendations", "top_recommendations"), ("Processing time (seconds)", "processing_seconds"),
+        ("Estimated periods", "estimated_periods"), ("Interest levels", "interest_levels"),
+        ("High-interest candidates", "high_interest_candidates"),
+        ("Exceptional research candidates", "exceptional_research_candidates"),
+        ("Duplicate groups", "duplicate_groups"),
     ]
-    numeric = {"uploaded_photographs", "detected_stamps", "average_confidence", "countries_detected", "themes_detected", "duplicate_candidates", "unknown_stamps", "low_quality_images", "manual_review_count", "research_candidates", "average_image_quality", "processing_seconds"}
+    numeric = {"uploaded_photographs", "detected_stamps", "average_confidence", "countries_detected", "themes_detected", "duplicate_candidates", "unknown_stamps", "low_quality_images", "manual_review_count", "research_candidates", "average_image_quality", "processing_seconds", "high_interest_candidates", "exceptional_research_candidates", "duplicate_groups"}
     for row_number, (label, key) in enumerate(labels, start=2):
         row = ET.SubElement(data, f"{{{MAIN_NS}}}row", {"r": str(row_number)})
         row.append(_inline_cell(f"A{row_number}", label, styles.get(f"A{row_number}")))
@@ -536,6 +574,10 @@ def build_workbook(template_path: Path, detections: list[Detection], output_dir:
         "image_quality": 16, "quality_flags": 30, "rescan_recommended": 18,
         "research_recommendation": 28, "duplicate_candidate": 28,
         "research_notes": 34,
+        "country_reasoning": 36, "interest_label": 30, "research_priority": 18,
+        "possible_features": 34, "interest_reasons": 42, "research_checklist": 52,
+        "duplicate_group": 16, "grouping": 14, "collector_notes": 34,
+        "decision_path": 45, "decision_source": 34,
     }
     for header, width in widths.items():
         column_index = header_map[header]
@@ -639,6 +681,8 @@ def validate_output(detections: list[Detection], output_dir: Path, workbook_path
             errors.append(f"{detection.stamp_id}: Phase 2 research result missing")
         elif not 0 <= detection.research.overall_confidence <= 1:
             errors.append(f"{detection.stamp_id}: overall confidence is outside 0..1")
+        elif not 0 <= detection.research.interest_score <= 100:
+            errors.append(f"{detection.stamp_id}: interest score is outside 0..100")
     if not workbook_path.is_file():
         errors.append("Excel workbook is missing")
         image_count = 0
@@ -665,21 +709,37 @@ def validate_output(detections: list[Detection], output_dir: Path, workbook_path
     return report
 
 
+def write_research_dashboard(results: list[ResearchResult], summary: dict[str, object], output_dir: Path) -> None:
+    """Write a portable, read-only Research UI; all data remains local."""
+    data = json.dumps([result.excel_values() for result in results], ensure_ascii=False).replace("</", "<\\/")
+    summary_json = json.dumps(summary, ensure_ascii=False).replace("</", "<\\/")
+    html = """<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>Stamp Research</title><style>
+body{font:15px system-ui;margin:0;background:#f5f7fa;color:#172033}header,main{max-width:1200px;margin:auto;padding:20px}.tabs,.filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}button,select{padding:10px;border:1px solid #ccd5e0;border-radius:9px;background:white}.active{background:#14365e;color:white}.stats,.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.stat,.card{background:white;border:1px solid #dce3eb;border-radius:14px;padding:16px}.score{font-size:28px;font-weight:800}.muted{color:#617086}.tag{display:inline-block;background:#e7eef7;padding:4px 8px;border-radius:99px;margin:2px}ul{padding-left:20px}.hidden{display:none}</style></head><body><header><h1>Research</h1><p class='muted'>AI-assisted research priorities. Scores are not rarity or value estimates.</p><div class='tabs'><button class='active'>Research</button><button onclick='showStats()'>Collection statistics</button></div><div class='filters'><select id='mode'><option value='interest'>Highest Interest</option><option value='confidence'>Highest Confidence</option><option value='unknown'>Unknown</option><option value='research'>Needs Research</option><option value='duplicates'>Duplicates</option></select><select id='country'><option value=''>All countries</option></select><select id='period'><option value=''>All periods</option></select></div></header><main><section id='stats' class='stats hidden'></section><section id='cards' class='cards'></section></main><script>
+const rows=__DATA__,summary=__SUMMARY__;const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const country=document.querySelector('#country'),period=document.querySelector('#period');for(const [el,key] of [[country,'ai_country'],[period,'estimated_period']]){[...new Set(rows.map(r=>r[key]).filter(Boolean))].sort().forEach(v=>el.insertAdjacentHTML('beforeend',`<option>${esc(v)}</option>`))}
+function render(){document.querySelector('#stats').classList.add('hidden');let list=[...rows],m=document.querySelector('#mode').value;if(m==='unknown')list=list.filter(r=>!r.ai_country);if(m==='research')list=list.filter(r=>r.interest_score>=25);if(m==='duplicates')list=list.filter(r=>r.duplicate_group);if(country.value)list=list.filter(r=>r.ai_country===country.value);if(period.value)list=list.filter(r=>r.estimated_period===period.value);list.sort((a,b)=>m==='confidence'?b.overall_confidence-a.overall_confidence:b.interest_score-a.interest_score);document.querySelector('#cards').innerHTML=list.map(r=>`<article class='card'><div class='score'>${r.interest_score}/100</div><strong>${esc(r.interest_label)}</strong><p>${esc(r.record_id)} · ${esc(r.ai_country||'Unknown')} · ${esc(r.estimated_period||r.ai_year||'Unknown period')}</p><span class='tag'>ID ${Math.round(r.identification_confidence*100)}%</span><span class='tag'>Country ${Math.round((r.confidence_country||0)*100)}%</span><span class='tag'>Period ${Math.round(r.period_confidence*100)}%</span><span class='tag'>Research ${Math.round(r.research_confidence*100)}%</span><h3>Why</h3><p>${esc(r.interest_reasons)}</p><h3>Checklist</h3><p>${esc(r.research_checklist)}</p><p class='muted'>${esc(r.duplicate_group||'')} ${esc(r.grouping)}</p></article>`).join('')||'<p>No matching stamps.</p>'}
+function showStats(){document.querySelector('#cards').innerHTML='';let s=document.querySelector('#stats');s.classList.remove('hidden');s.innerHTML=Object.entries(summary).filter(([,v])=>!Array.isArray(v)).map(([k,v])=>`<div class='stat'><strong>${esc(k.replaceAll('_',' '))}</strong><div class='score'>${esc(v)}</div></div>`).join('')}document.querySelectorAll('select').forEach(e=>e.onchange=render);render();
+</script></body></html>""".replace("__DATA__", data).replace("__SUMMARY__", summary_json)
+    (output_dir / "research-dashboard.html").write_text(html, encoding="utf-8")
+
+
 def process(tsv_path: Path, photos_dir: Path, template_path: Path, output_dir: Path,
             margin: float = 0.04, thumbnail_size: int = 256) -> dict[str, object]:
-    """Run the backward-compatible Phase 1 pipeline plus Phase 2 enrichment."""
+    """Run the backward-compatible Phase 1 pipeline plus Phase 2/3 enrichment."""
 
     started = time.perf_counter()
     output_dir.mkdir(parents=True, exist_ok=True)
     detections = read_detections(tsv_path, photos_dir)
-    generate_images(detections, output_dir, margin, thumbnail_size)
+    cache_hits = generate_images(detections, output_dir, margin, thumbnail_size)
     research = enrich_research(detections, output_dir)
     summary = collection_summary(research, len({item.photo_filename for item in detections}), time.perf_counter() - started)
     (output_dir / "collection-summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    write_research_dashboard(research, summary, output_dir)
     workbook_path = build_workbook(template_path, detections, output_dir, summary)
     report = validate_output(detections, output_dir, workbook_path)
     report["research_results"] = len(research)
     report["collection_summary"] = summary
+    report["cache_hits"] = cache_hits
     (output_dir / "validation-report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
     if report["status"] != "PASS":
         raise TraceabilityError("Output validation failed; see validation-report.json")
