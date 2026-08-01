@@ -10,6 +10,7 @@ It never invents catalogue numbers, rarity or monetary values.
 from __future__ import annotations
 
 import math
+import re
 from collections import Counter
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -105,6 +106,21 @@ class ResearchResult:
     research_recommendation: str = "Unknown"
     overall_confidence: float = 0.0
     research_notes: str = ""
+    identification_confidence: float = 0.0
+    period_confidence: float = 0.0
+    research_confidence: float = 0.0
+    country_reasoning: str = ""
+    interest_score: int = 0
+    interest_label: str = "Low Interest"
+    research_priority: str = "Low"
+    possible_features: str = ""
+    interest_reasons: str = ""
+    research_checklist: str = ""
+    duplicate_group: str = ""
+    grouping: str = "single"
+    collector_notes: str = ""
+    decision_path: str = ""
+    decision_source: str = "local rules + supplied AI observations"
     perceptual_hash: int = field(default=0, repr=False)
 
     def excel_values(self) -> dict[str, Any]:
@@ -195,11 +211,96 @@ def analyse_crop(record_id: str, row: dict[str, str], crop_path: Path, touches_e
     if rare:
         notes.append(f"AI-reported characteristic requiring verification: {rare}")
     result.research_notes = "; ".join(notes)
+    result.identification_confidence = result.overall_confidence
+    result.period_confidence = result.confidence_year or parse_confidence(row.get("confidence_period")) or 0.0
+    evidence = []
+    for field, label in (("visible_text", "visible text"), ("language", "language"),
+                         ("currency", "currency"), ("symbols", "symbols"),
+                         ("coat_of_arms", "coat of arms"), ("monarch", "monarch"),
+                         ("visual_traits", "design/style")):
+        if (row.get(field) or "").strip():
+            evidence.append(label)
+    result.country_reasoning = (
+        "Country suggestion based on " + ", ".join(evidence) if evidence
+        else "No independent country evidence supplied; manual verification required"
+    )
+    _apply_collector_insights(result, row)
     return result
+
+
+def _year_floor(*values: str) -> int | None:
+    for value in values:
+        match = re.search(r"\b(1[5-9]\d{2}|20\d{2})\b", value or "")
+        if match:
+            return int(match.group(1))
+    return None
+
+
+def _apply_collector_insights(result: ResearchResult, row: dict[str, str]) -> None:
+    """Create a transparent research score from observable/supplied indicators only."""
+    text = " ".join(str(row.get(key, "")) for key in row).lower()
+    reasons: list[str] = []
+    features: list[str] = []
+    checklist = {"Compare with a trusted catalogue", "Verify issue date"}
+    score = 0
+    year = _year_floor(result.ai_year, result.estimated_period, row.get("year", ""))
+    if year and year < 1900:
+        score += 24; reasons.append("appears to pre-date 1900; date needs verification")
+    elif year and year < 1945:
+        score += 12; reasons.append("appears to be an earlier issue")
+    indicators = [
+        (("overprint", "overprinted"), 18, "possible overprint", "Inspect overprint typography and ink"),
+        (("surcharge",), 16, "possible surcharge", "Verify surcharge against catalogue varieties"),
+        (("occupation",), 18, "possible occupation issue", "Verify issuing authority and period"),
+        (("colony", "colonial"), 12, "possible colonial issue", "Check issuing territory and parent administration"),
+        (("official", "service stamp"), 11, "possible official/service stamp", "Confirm official or service markings"),
+        (("airmail", "air mail"), 9, "possible airmail issue", "Compare airmail inscription and issue date"),
+        (("postage due",), 11, "possible postage-due issue", "Confirm postage-due purpose"),
+        (("commemorative",), 5, "commemorative design reported", "Confirm commemorative event and date"),
+        (("watermark",), 8, "watermark may distinguish varieties", "Verify watermark"),
+        (("perforation", "imperforate"), 8, "perforation characteristic reported", "Measure perforation"),
+        (("colour variation", "color variation", "shade"), 8, "possible colour or shade variation", "Compare colour shade under neutral light"),
+        (("unusual cancellation", "uncommon cancellation", "special cancellation"), 10, "cancellation may deserve inspection", "Inspect cancellation"),
+        (("variety", "error", "misprint"), 14, "possible visible variety; specialist confirmation required", "Compare reported variety with specialist reference"),
+        (("complete set",), 10, "possible complete set", "Verify set completeness"),
+    ]
+    for needles, weight, reason, action in indicators:
+        if any(needle in text for needle in needles):
+            score += weight; reasons.append(reason); features.append(reason.split(";", 1)[0]); checklist.add(action)
+    quantity = str(row.get("quantity", "1")).strip()
+    grouping = (row.get("grouping") or row.get("format") or "").strip().lower()
+    if "block" in grouping or "block" in text:
+        result.grouping = "block"; score += 10; reasons.append("multiple appears to be a block"); checklist.add("Verify block layout and selvage")
+    elif "strip" in grouping or "strip" in text:
+        result.grouping = "strip"; score += 7; reasons.append("multiple appears to be a strip")
+    elif "pair" in grouping or quantity == "2":
+        result.grouping = "pair"; score += 5; reasons.append("appears to be a pair")
+    condition = (row.get("condition") or "").lower()
+    if any(term in condition for term in ("fault", "tear", "thin", "crease", "damaged")):
+        reasons.append("condition issue visible or reported"); checklist.add("Inspect condition, repairs and faults")
+    if "used" not in condition:
+        checklist.add("Check gum and hinge condition if accessible")
+    checklist.add("Check paper type")
+    if result.image_quality == "Poor":
+        score = min(score, 39); reasons.insert(0, "image quality limits reliable research"); checklist.add("Retake a sharper, evenly lit photograph")
+    confidence_factor = 0.55 + 0.45 * result.overall_confidence
+    result.interest_score = max(0, min(100, round(score * confidence_factor)))
+    result.interest_label = ("Exceptional Research Candidate" if result.interest_score >= 75 else
+                             "High Interest" if result.interest_score >= 50 else
+                             "Medium Interest" if result.interest_score >= 25 else "Low Interest")
+    result.research_priority = "Exceptional" if result.interest_score >= 75 else "High" if result.interest_score >= 50 else "Medium" if result.interest_score >= 25 else "Low"
+    result.possible_features = "; ".join(dict.fromkeys(features))
+    result.interest_reasons = "; ".join(dict.fromkeys(reasons)) or "no supported research indicators detected"
+    result.research_checklist = " | ".join(f"□ {item}" for item in sorted(checklist))
+    evidence_count = len(reasons)
+    result.research_confidence = round(min(1.0, (0.35 + 0.08 * evidence_count) * (0.65 + 0.35 * result.image_quality_score)), 3)
+    result.collector_notes = (row.get("collector_notes") or row.get("notes") or "").strip()
+    result.decision_path = f"observable indicators={evidence_count}; quality={result.image_quality_score:.3f}; identification={result.overall_confidence:.3f}; score={result.interest_score}"
 
 
 def mark_duplicates(results: list[ResearchResult]) -> None:
     """Report perceptual similarity without merging or asserting identity."""
+    links: list[tuple[str, str]] = []
     for index, left in enumerate(results):
         best: tuple[int, ResearchResult] | None = None
         for right in results[index + 1:]:
@@ -215,6 +316,23 @@ def mark_duplicates(results: list[ResearchResult]) -> None:
             if not right.duplicate_candidate:
                 right.duplicate_candidate = f"{label}: {left.record_id}"
                 right.duplicate_similarity = similarity
+            links.append((left.record_id, right.record_id))
+    parent = {result.record_id: result.record_id for result in results}
+    def find(item: str) -> str:
+        while parent[item] != item:
+            parent[item] = parent[parent[item]]; item = parent[item]
+        return item
+    for left, right in links:
+        a, b = find(left), find(right)
+        if a != b: parent[b] = a
+    groups: dict[str, list[ResearchResult]] = {}
+    for result in results:
+        if result.duplicate_candidate:
+            groups.setdefault(find(result.record_id), []).append(result)
+    for number, members in enumerate(groups.values(), start=1):
+        for result in members:
+            result.duplicate_group = f"DUP-{number:03d}"
+            if result.grouping == "single": result.grouping = "duplicate"
 
 
 def collection_summary(results: Iterable[ResearchResult], photo_count: int, processing_seconds: float) -> dict[str, Any]:
@@ -238,5 +356,10 @@ def collection_summary(results: Iterable[ResearchResult], photo_count: int, proc
         "research_candidates": sum(r.research_recommendation in {"Worth Checking", "Interesting", "Rare Characteristics Detected"} for r in results),
         "average_image_quality": round(sum(r.image_quality_score for r in results) / len(results), 3),
         "top_recommendations": recommendations.most_common(5),
+        "estimated_periods": Counter(r.estimated_period or r.ai_year for r in results if r.estimated_period or r.ai_year).most_common(10),
+        "interest_levels": Counter(r.interest_label for r in results).most_common(),
+        "high_interest_candidates": sum(r.interest_score >= 50 for r in results),
+        "exceptional_research_candidates": sum(r.interest_score >= 75 for r in results),
+        "duplicate_groups": len({r.duplicate_group for r in results if r.duplicate_group}),
         "processing_seconds": round(processing_seconds, 3),
     }
