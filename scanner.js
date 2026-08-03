@@ -1,4 +1,4 @@
-import { createRecord, exportRows, partitionPhotoFiles, photoNumber, toCsv } from "./scanner-core.mjs";
+import { createRecord, exportRows, nextRecordId, partitionPhotoFiles, photoNumber, toCsv } from "./scanner-core.mjs";
 
 const MAX_FILES = 20;
 const STORAGE_KEY = "stampScannerBetaV1";
@@ -65,6 +65,7 @@ async function restoreState() {
 }
 
 function showMessage(message = "") { $("#messages").textContent = message; }
+function newId() { return globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(16).slice(2)}`; }
 
 async function addFiles(fileList) {
   const {accepted, unsupported, overLimit} = partitionPhotoFiles(fileList, photos.length, MAX_FILES);
@@ -72,7 +73,7 @@ async function addFiles(fileList) {
   else if (overLimit) showMessage(`This Beta supports up to ${MAX_FILES} photos per inventory.`);
   else showMessage("");
   for (const file of accepted) {
-    const id = crypto.randomUUID();
+    const id = newId();
     const photo = {id, number: photoNumber(photos.length), name: file.name, type: file.type, size: file.size, blob: file};
     photos.push(photo);
     try { await storePhoto(photo); }
@@ -83,12 +84,13 @@ async function addFiles(fileList) {
 }
 
 function imageUrl(photo) { return URL.createObjectURL(photo.blob); }
+function revokeImageUrl(image, url) { image.onload = image.onerror = () => URL.revokeObjectURL(url); }
 
 function renderPhotos() {
   $("#photo-grid").innerHTML = photos.map(photo => `<article class="photo-card"><img data-photo="${photo.id}" alt="Preview of ${escapeHtml(photo.name)}"><div><strong>${photo.number}</strong><small title="${escapeHtml(photo.name)}">${escapeHtml(photo.name)}</small></div></article>`).join("");
   document.querySelectorAll("[data-photo]").forEach(image => {
     const photo = photos.find(item => item.id === image.dataset.photo);
-    const url = imageUrl(photo); image.src = url; image.onload = () => URL.revokeObjectURL(url);
+    const url = imageUrl(photo); image.src = url; revokeImageUrl(image, url);
   });
 }
 
@@ -114,7 +116,7 @@ function renderRecords() {
     const photo = photos.find(item => item.id === record.photoId);
     if (!photo) continue;
     const card = $("#record-template").content.firstElementChild.cloneNode(true); card.dataset.id = record.id;
-    const image = new Image(); image.alt = "Source photo thumbnail"; const url = imageUrl(photo); image.src = url; image.onload = () => URL.revokeObjectURL(url);
+    const image = new Image(); image.alt = `${photo.number}: ${photo.name}`; const url = imageUrl(photo); image.src = url; revokeImageUrl(image, url);
     card.querySelector(".record-photo").append(image); card.querySelector(".record-id").textContent = record.id;
     const sourceSelect = card.querySelector(".record-photo-select");
     for (const optionPhoto of photos) sourceSelect.add(new Option(`${optionPhoto.number} · ${optionPhoto.name}`, optionPhoto.id, false, optionPhoto.id === record.photoId));
@@ -158,11 +160,13 @@ function download(name, type, data) {
 
 function exportExcel() {
   if (!globalThis.XLSX) return showMessage("Excel export could not load. CSV export remains available.");
-  const rows = exportRows(records); const sheet = XLSX.utils.json_to_sheet(rows); sheet["!freeze"] = {xSplit: 0, ySplit: 1};
-  sheet["!cols"] = Object.keys(rows[0]).map(key => ({wch: Math.min(42, Math.max(12, key.length + 2))}));
-  const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, sheet, "Inventory");
-  XLSX.writeFile(workbook, "AI-Stamp-Inventory-Beta-v1.xlsx");
-  globalThis.gtag?.("event", "inventory_export", {format: "xlsx", record_count: records.length});
+  try {
+    const rows = exportRows(records); const sheet = XLSX.utils.json_to_sheet(rows); sheet["!freeze"] = {xSplit: 0, ySplit: 1};
+    sheet["!cols"] = Object.keys(rows[0]).map(key => ({wch: Math.min(42, Math.max(12, key.length + 2))}));
+    const workbook = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(workbook, sheet, "Inventory");
+    XLSX.writeFile(workbook, "AI-Stamp-Inventory-Beta-v1.xlsx");
+    globalThis.gtag?.("event", "inventory_export", {format: "xlsx", record_count: records.length});
+  } catch { showMessage("Excel export failed. Your inventory is unchanged; use CSV export or try again."); }
 }
 
 function escapeHtml(value) { return String(value).replace(/[&<>"']/g, character => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[character])); }
@@ -173,8 +177,8 @@ $("#create-inventory").onclick = createInventory;
 $("#add-row").onclick = () => addRecord();
 $("#export-xlsx").onclick = exportExcel;
 $("#export-csv").onclick = () => { download("AI-Stamp-Inventory-Beta-v1.csv", "text/csv;charset=utf-8", toCsv(records)); globalThis.gtag?.("event", "inventory_export", {format: "csv", record_count: records.length}); };
-$("#clear-all").onclick = async () => { if (!photos.length || confirm("Clear all photos and inventory records from this browser?")) { photos = []; records = []; localStorage.removeItem(STORAGE_KEY); await removeStoredPhotos(); render(); showMessage("Inventory cleared."); } };
-$("#records").addEventListener("input", event => { const card = event.target.closest(".record-card"), record = records.find(item => item.id === card?.dataset.id), field = event.target.dataset.field; if (!record || !field) return; if (field === "photoId") { const photo = photos.find(item => item.id === event.target.value); if (!photo) return; record.photoId = photo.id; record.photoNumber = photo.number; record.filename = photo.name; record.imageReference = `${photo.number} — ${photo.name}`; saveState(); render(); return; } record[field] = event.target.value; saveState(); });
+$("#clear-all").onclick = async () => { if (!photos.length || confirm("Clear all photos and inventory records from this browser?")) { photos = []; records = []; localStorage.removeItem(STORAGE_KEY); let recoveryCleared = true; try { await removeStoredPhotos(); } catch { recoveryCleared = false; } render(); showMessage(recoveryCleared ? "Inventory cleared." : "Inventory cleared from this session, but browser recovery storage could not be cleared."); } };
+$("#records").addEventListener("input", event => { const card = event.target.closest(".record-card"), record = records.find(item => item.id === card?.dataset.id), field = event.target.dataset.field; if (!record || !field) return; if (field === "photoId") { const photo = photos.find(item => item.id === event.target.value); if (!photo || photo.id === record.photoId) return; record.id = nextRecordId(photo, records); record.photoId = photo.id; record.photoNumber = photo.number; record.filename = photo.name; record.imageReference = `${photo.number} — ${photo.name}`; saveState(); render(); return; } record[field] = event.target.value; saveState(); });
 $("#records").addEventListener("click", event => { const button = event.target.closest("button[data-action]"); if (!button) return; const id = button.closest(".record-card").dataset.id; if (button.dataset.action === "duplicate") duplicateRecord(id); else { records = records.filter(record => record.id !== id); saveState(); render(); } });
 
 restoreState().then(render);

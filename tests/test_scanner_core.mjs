@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {createRecord, exportRows, partitionPhotoFiles, photoNumber, toCsv} from "../scanner-core.mjs";
+import {createRecord, exportRows, nextRecordId, partitionPhotoFiles, photoNumber, toCsv} from "../scanner-core.mjs";
 
 test("photo numbering is stable and zero padded", () => {
   assert.equal(photoNumber(0), "Photo 001");
@@ -25,6 +25,13 @@ test("twenty photos produce independent source-linked rows", () => {
   });
   assert.equal(new Set(records.map(row => row.photoNumber)).size, 20);
   assert.equal(exportRows(records).length, 20);
+});
+
+test("moving a record to another source photo creates a matching unique ID", () => {
+  const first = {id: "a", number: "Photo 001", name: "one.jpg"};
+  const second = {id: "b", number: "Photo 002", name: "two.jpg"};
+  const records = [createRecord(first, 1), createRecord(second, 1)];
+  assert.equal(nextRecordId(second, records), "P002-002");
 });
 
 test("file selection accepts supported formats and rejects unsupported or excess files", () => {
