@@ -1,12 +1,22 @@
 # AI Stamp Collection Scanner
 
-**AI-Assisted Inventory & Research Toolkit**
+**AI-Assisted Stamp Inventory**
 
-Turn photos of a stamp collection into a structured inventory and identify which items may need further research.
+Turn your stamp collection into a clear digital inventory. Upload collection photos, create structured and photo-linked records, keep track of every item and organise stamps that may deserve further research. The Browser Beta runs locally in your browser, and you remain in control of every detail.
 
 ![AI Stamp Collection Scanner](assets/marketing/premium/README-Banner-1600x500.jpg)
 
 ## What it does
+
+- Runs as a private Browser Beta at [AI Stamp Collection Scanner](https://vid567.github.io/ai-stamp-collection-scanner/beta/).
+- Accepts one or more photos and creates an editable, photo-linked inventory workflow.
+- Keeps photos and inventory details local to the browser.
+- Exports the reviewed inventory to Excel or CSV.
+- Marks unknown details for review instead of presenting uncertain information as fact.
+
+The Browser Beta does not determine rarity, value, authenticity or an exact catalogue identity. It supports collector judgement; it does not replace it.
+
+## Optional local toolkit
 
 - Uses a photo-first workflow for album and stockbook pages.
 - Produces structured, paste-ready Inventory rows with an AI helper prompt.
@@ -47,7 +57,7 @@ Version 2.1 keeps the original prompt-to-Excel workflow and adds an optional loc
 
 See [the Phase 1 guide](docs/PHASE-1-GUIDE.md). This feature requires Python and Pillow; it does not add or replace an AI model.
 
-## Optional research workflow
+## Optional collection review workflow
 
 Phase 2 builds on the same processor and workbook. The external vision-AI supplies cautious identification suggestions; local code measures crop quality, reports visually similar candidates, applies conservative recommendations and produces collection statistics. See [the Phase 2 guide](docs/PHASE-2-GUIDE.md).
 

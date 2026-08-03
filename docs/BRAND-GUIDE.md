@@ -3,8 +3,8 @@
 ## Brand
 
 - Product: **AI Stamp Collection Scanner**
-- Descriptor: **AI-Assisted Inventory & Research Toolkit**
-- Promise: Turn collection photos into an organized inventory and discover which stamps may need further research.
+- Descriptor: **AI-Assisted Stamp Inventory**
+- Promise: Turn your stamp collection into a clear digital inventory and organise items that may deserve further research.
 
 ## Visual identity
 
@@ -28,4 +28,3 @@ Typography uses a modern system sans-serif stack. Headings are bold with tight t
 ## Voice
 
 Clear, calm, careful and evidence-aware. Never imply certainty that the product cannot provide.
-
