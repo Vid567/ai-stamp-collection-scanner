@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js); no photo names or inventory fields are sent. -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MDGNZMY7BQ"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-MDGNZMY7BQ');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#14365e">
+  <meta name="description" content="Create an editable stamp inventory from collection photos and export it to Excel.">
+  <title>Stamp Scanner — Beta v1.0</title>
+  <link rel="canonical" href="https://vid567.github.io/ai-stamp-collection-scanner/beta/scanner.html">
+  <link rel="icon" href="assets/branding/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="scanner.css">
+  <style>.source-label{display:grid;gap:3px;font-size:11px;color:#607087}.record-photo-select{max-width:320px;border:1px solid #d7e0ea;border-radius:7px;padding:5px;background:white}.app-header nav{display:flex;align-items:center;gap:16px}.app-header nav a{color:#14365e;font-weight:700;text-decoration:none}.app-header nav a:hover{text-decoration:underline}@media(max-width:560px){.app-header{align-items:flex-start;gap:10px}.brand{max-width:190px}.app-header nav{gap:8px;flex-wrap:wrap;justify-content:flex-end}.app-header nav a,.beta{font-size:12px}}</style>
+</head>
+<body>
+  <header class="app-header">
+    <a href="./" class="brand"><img src="assets/branding/logo-mark.svg" alt="">AI Stamp Collection Scanner</a>
+    <nav aria-label="Help"><a href="docs/quick-start-beta.html">Quick Start</a><a href="docs/user-guide-beta.html">User Guide</a><span class="beta">Beta v1.0</span></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">Local, editable inventory</p>
+      <h1>Turn stamp photos into an inventory you control.</h1>
+      <p>Select photos, create traceable rows, review every detail and export to Excel. Automatic AI analysis is not connected in this Beta, so unknown details remain clearly marked for review.</p>
+      <div class="privacy">🔒 Photos stay in this browser. No files or inventory details are uploaded by this version.</div>
+    </section>
+
+    <section class="panel" aria-labelledby="photos-title">
+      <div class="section-head"><div><span>Step 1</span><h2 id="photos-title">Select stamp photos</h2></div><strong id="photo-count">0 photos</strong></div>
+      <div class="upload-actions">
+        <label class="button primary" for="photo-input">Choose photos</label>
+        <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+        <label class="button secondary" for="camera-input">Use camera</label>
+        <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
+        <button class="button ghost" id="clear-all" type="button">Clear all</button>
+      </div>
+      <p class="help">JPG, JPEG, PNG and WebP. Each accepted photo receives a permanent number in selection order.</p>
+      <div id="messages" role="status" aria-live="polite"></div>
+      <div id="photo-grid" class="photo-grid"></div>
+      <button class="button primary wide" id="create-inventory" type="button" disabled>Create inventory</button>
+    </section>
+
+    <section class="panel" aria-labelledby="inventory-title">
+      <div class="section-head"><div><span>Steps 2–3</span><h2 id="inventory-title">Review and correct inventory</h2></div><strong id="row-count">0 records</strong></div>
+      <p class="help">Every field is editable. Suggestions marked “Needs review” have not been confirmed by you.</p>
+      <div class="toolbar">
+        <button class="button secondary" id="add-row" type="button" disabled>Add record</button>
+        <button class="button primary" id="export-xlsx" type="button" disabled>Export to Excel</button>
+        <button class="button secondary" id="export-csv" type="button" disabled>Export to CSV</button>
+      </div>
+      <div id="empty-state" class="empty">Select at least one photo and choose “Create inventory”.</div>
+      <div id="records" class="records"></div>
+    </section>
+
+    <section class="limits">
+      <h2>What this Beta does—and does not do</h2>
+      <p>It creates a private, photo-linked inventory workflow. You make the final corrections. It does not determine rarity, value, authenticity, watermark, exact perforation or catalogue identity.</p>
+    </section>
+  </main>
+  <template id="record-template">
+    <article class="record-card">
+      <div class="record-top"><div class="record-photo"></div><div><strong class="record-id"></strong><label class="source-label">Source photo<select class="record-photo-select" data-field="photoId"></select></label></div><div class="record-actions"><button data-action="duplicate">Duplicate</button><button data-action="delete" class="danger">Delete</button></div></div>
+      <div class="fields"></div>
+    </article>
+  </template>
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script type="module" src="scanner.js"></script>
+</body>
+</html>
