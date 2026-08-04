@@ -34,7 +34,7 @@
   <header class="top">
     <div class="wrap">
       <div class="top-row"><div><div class="eyebrow">Owner content tool</div><h1>AI Stamp Scanner Content Creator</h1><p class="subtitle">Plan, copy and track your Threads posts.</p></div><a class="back" href="./">← Main website</a></div>
-      <div class="stats"><div class="stat"><b id="totalStat">25</b>Total posts</div><div class="stat"><b id="plannedStat">0</b>Planned</div><div class="stat"><b id="postedStat">0</b>Posted</div><div class="stat"><b id="availableStat">25</b>Available</div></div>
+      <div class="stats"><div class="stat"><b id="totalStat">50</b>Total posts</div><div class="stat"><b id="plannedStat">0</b>Planned</div><div class="stat"><b id="postedStat">0</b>Posted</div><div class="stat"><b id="availableStat">50</b>Available</div></div>
       <div class="notice">Planning data is stored only in this browser. This tool does not post automatically to Threads.</div>
     </div>
   </header>
@@ -48,10 +48,11 @@
         <div class="field"><label for="sort">Sort</label><select id="sort"><option value="number">Post number</option><option value="date">Planned date</option></select></div>
         <div class="field"><label for="undated">Date filter</label><select id="undated"><option value="all">All posts</option><option value="undated">Without planned date</option></select></div>
       </div>
-      <div class="actions"><button class="btn secondary" id="clearFilters">Clear filters</button><button class="btn" id="scheduleOpen">Create schedule</button><button class="btn secondary" id="csv">Download CSV</button><button class="btn secondary" id="jsonExport">Export JSON</button><button class="btn secondary" id="jsonImport">Import JSON</button><button class="btn danger" id="reset">Reset planning</button><input class="hidden" id="jsonFile" type="file" accept="application/json,.json"></div>
+      <div class="actions" aria-label="Post number filters"><button class="btn range-filter" data-range="all">All</button><button class="btn secondary range-filter" data-range="1-10">1–10</button><button class="btn secondary range-filter" data-range="11-20">11–20</button><button class="btn secondary range-filter" data-range="21-30">21–30</button><button class="btn secondary range-filter" data-range="31-40">31–40</button><button class="btn secondary range-filter" data-range="41-50">41–50</button></div>
+      <div class="actions"><button class="btn secondary" id="clearFilters">Clear filters</button><button class="btn" id="copyAll">Copy All Posts</button><button class="btn" id="scheduleOpen">Create schedule</button><button class="btn secondary" id="csv">Download CSV</button><button class="btn secondary" id="jsonExport">Export JSON</button><button class="btn secondary" id="jsonImport">Import JSON</button><button class="btn danger" id="reset">Reset planning</button><input class="hidden" id="jsonFile" type="file" accept="application/json,.json"></div>
     </section>
     <section class="panel" aria-labelledby="calendarTitle"><h2 id="calendarTitle">Upcoming plan</h2><div id="calendar" class="calendar-list"></div></section>
-    <div class="list-head"><h2>Threads posts</h2><span id="shown">25 shown</span></div>
+    <div class="list-head"><h2>Threads posts</h2><span id="shown">50 shown</span></div>
     <section id="cards" class="cards" aria-live="polite"></section>
   </main>
   <dialog id="scheduleDialog">
@@ -70,34 +71,60 @@
   <script>
     const URL='https://bit.ly/AIStampScannerApp', MARKETING_URL=URL, KEY='aiStampScannerContentCreatorV1';
     const raw=[
-      ["Collection Problems",`Most stamp collectors enjoy collecting.\n\nNot cataloging.\n\n→ Hours of sorting\n→ Building an overview\n→ Deciding what needs a closer look\n\nUpload collection photos and create a structured first inventory in your browser.\n\n${MARKETING_URL}\n\nDM me with your feedback.`],
-      ["Collection Problems",`Ever inherited a stamp collection?\n\nThe first question is usually:\n\nWhat do I have?\n\nUpload photos and create a clear digital inventory you can review and export.\n\n${MARKETING_URL}\n\nDM me with your feedback.`],
-      ["Collection Problems",`Many stamp tools expect you to enter every stamp manually.\n\nHundreds of stamps.\n\nSometimes thousands.\n\nThe Browser Beta turns collection photos into a structured, editable first inventory.\n\n${MARKETING_URL}\n\nDM me with your feedback.`],
-      ["Collection Problems",`A collection is difficult to study when you do not know what is inside.\n\n→ Albums\n→ Boxes\n→ Envelopes\n→ Loose stamps\n\nStart with a clear digital inventory.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Collection Problems",`Collectors do not need AI to make every decision.\n\nThey need a useful first step.\n\n→ Upload collection photos\n→ Create a structured inventory\n→ Mark stamps for further research\n\nYou stay in control.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Collection Problems",`Have you ever thought:\n\nI know I already own this stamp.\n\nBut you could not remember where it was?\n\nA clear, exportable inventory can help you keep track.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Collection Problems",`Collectors can spend years building a collection.\n\nBut the inventory may still live on paper.\n\nOr only in memory.\n\nCreate a clearer digital overview from photos of your collection.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Collection Problems",`One of the hardest questions is:\n\nWhere do I start?\n\nBegin with clear collection photos.\n\nThe Browser Beta creates a structured first inventory.\n\nYou review it from there.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Collection Problems",`Not every stamp will be rare.\n\nBut every collection benefits from a clear inventory.\n\nThe Browser Beta helps you organise the first draft locally in your browser.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Collection Problems",`Researching every stamp first can take hours.\n\nTry this order:\n\n→ Upload collection photos\n→ Create an inventory\n→ Mark items that deserve a closer look\n\n${URL}\n\nDM me with your feedback.`],
-      ["AI as an Assistant",`AI-assisted does not mean replacing stamp collectors.\n\nThe Browser Beta helps structure the first inventory.\n\nYou review every detail and decide what deserves more research.\n\n${URL}\n\nDM me with your feedback.`],
-      ["AI as an Assistant",`Imagine uploading photos of an album page instead of starting with a blank spreadsheet.\n\nThe Browser Beta creates an editable inventory you can review and export.\n\n${URL}\n\nDM me with your feedback.`],
-      ["AI as an Assistant",`Good AI assistance does not replace experience.\n\nIt supports the first stage of organising a collection.\n\nThe collector still reviews the inventory and makes the final decisions.\n\n${URL}\n\nDM me with your feedback.`],
-      ["AI as an Assistant",`Your stamps remain the focus.\n\nThe Browser Beta helps organise photos into a structured inventory while you remain in control of every detail.\n\n${URL}\n\nDM me with your feedback.`],
-      ["AI as an Assistant",`Some collections contain hundreds of stamps.\n\nOthers contain thousands.\n\nThe first challenge is still the same:\n\nGetting organised.\n\nStart with photos and build a digital inventory.\n\n${URL}\n\nDM me with your feedback.`],
-      ["AI as an Assistant",`Instead of starting with:\n\nWhat is my rarest stamp?\n\nStart with:\n\nWhat exactly is in my collection?\n\nA structured inventory gives you an honest first overview.\n\n${URL}\n\nDM me with your feedback.`],
-      ["AI as an Assistant",`An organised collection is easier to:\n\n→ Study\n→ Share\n→ Insure\n→ Sell\n→ Pass on\n\nCreate and export your inventory in the browser.\n\n${URL}\n\nDM me with your feedback.`],
-      ["AI as an Assistant",`AI should not promise an exact identity or value for every stamp.\n\nA better starting point is a structured inventory that helps you decide what may deserve further research.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Practical Tips",`Photo quality matters.\n\nSharp, well-lit collection photos make the inventory easier for you to review.\n\nNatural daylight often works better than a dark room.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Practical Tips",`You may not need to photograph every stamp separately.\n\nStart with a clear photo of the complete album page.\n\nThe Browser Beta keeps each inventory record linked to its source photo.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Practical Tips",`Before checking prices for individual stamps, create an overview of the collection.\n\nA structured inventory can save time and show what may deserve further research.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Practical Tips",`Many inherited collections remain untouched for years.\n\nNot because people are uninterested.\n\nThey simply do not know where to begin.\n\nStart with photos and a clear digital inventory.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Practical Tips",`Stamp catalogues and expert judgement remain valuable.\n\nUse the Browser Beta to organise your collection first, then decide which stamps may deserve a closer look.\n\n${URL}\n\nDM me with your feedback.`],
-      ["Conversation and Feedback",`I am building an AI-assisted inventory tool for stamp collectors.\n\nUpload collection photos, create a structured inventory and export it from your browser.\n\nWhich feature would save you the most time?\n\n${URL}\n\nDM me with your feedback.`],
-      ["Conversation and Feedback",`Question for stamp collectors:\n\nWhat is the most frustrating part of organising a collection?\n\n→ Creating an overview\n→ Keeping track\n→ Choosing what to research\n→ Something else\n\n${URL}\n\nDM me with your feedback.`]
+      ["Collection Problems",`Upload photos of your stamp collection and create a structured stamp inventory directly in your browser.\n\nNo installation.\n\nJust upload, review and organize.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Collection Problems",`Turn stamp collection photos into a clear digital stamp inventory you can review, edit and export.\n\nSimple. Fast. Practical.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Collection Problems",`The Browser Beta helps collectors transform stamp collection photos into a structured, editable stamp inventory.\n\nYour collection deserves better organization.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Collection Problems",`Boxes full of stamps?\n\nStart with a digital stamp inventory before sorting everything by hand.\n\nThe Browser Beta makes getting started easier.\n\n${URL}`],
+      ["Collection Problems",`Every stamp collection begins with knowing what you have.\n\nCreate your first stamp inventory in minutes.\n\n${URL}`],
+      ["Collection Problems",`Stop guessing what's in your stamp collection.\n\nUpload your photos and build a searchable stamp inventory.\n\n${URL}`],
+      ["Collection Problems",`Your stamps deserve more than a shoebox.\n\nOrganize your collection with a simple browser-based stamp inventory.\n\n${URL}`],
+      ["Collection Problems",`Whether you have 100 stamps or 100,000, every collection starts with a good inventory.\n\n${URL}`],
+      ["Collection Problems",`Photograph your stamp collection once.\n\nCreate a stamp inventory you can improve over time.\n\n${URL}`],
+      ["Collection Problems",`A well-organized stamp inventory makes collecting more enjoyable.\n\nThe Browser Beta helps you get there.\n\n${URL}`],
+      ["Collection Problems",`Have you ever bought stamps you already owned?\n\nA stamp inventory helps prevent duplicates.\n\n${URL}`],
+      ["Collection Problems",`Finding one specific stamp shouldn't take an hour.\n\nA digital stamp inventory makes searching much easier.\n\n${URL}`],
+      ["Collection Problems",`Many stamp collections grow for decades.\n\nKeeping track shouldn't become harder every year.\n\n${URL}`],
+      ["Collection Problems",`Loose albums. Stock books. Boxes. Envelopes.\n\nBring your stamp collection together in one inventory.\n\n${URL}`],
+      ["Collection Problems",`Your stamp collection tells a story.\n\nA good stamp inventory helps preserve it.\n\n${URL}`],
+      ["Collection Problems",`Collectors spend years building stamp collections.\n\nCreating the inventory shouldn't take years too.\n\n${URL}`],
+      ["Collection Problems",`Digital organization doesn't replace collecting.\n\nIt simply makes your stamps easier to manage.\n\n${URL}`],
+      ["Collection Problems",`Know exactly where every stamp belongs.\n\nA structured stamp inventory makes organizing easier.\n\n${URL}`],
+      ["Collection Problems",`Old collections deserve modern tools.\n\nStart with a browser-based stamp inventory.\n\n${URL}`],
+      ["Collection Problems",`Every organized stamp collection starts with one simple step: creating an inventory.\n\n${URL}`],
+      ["Practical Tips",`A digital stamp inventory is easier to update than handwritten notes.\n\nKeep everything in one place.\n\n${URL}`],
+      ["Practical Tips",`Review your stamps.\n\nEdit your inventory.\n\nExport when you're ready.\n\nSimple.\n\n${URL}`],
+      ["Practical Tips",`Your stamp inventory grows with your collection.\n\nNo need to start over every time.\n\n${URL}`],
+      ["Practical Tips",`Organized stamps save time.\n\nOrganized collectors enjoy the hobby even more.\n\n${URL}`],
+      ["Practical Tips",`The goal isn't perfection.\n\nThe goal is knowing what stamps you already own.\n\n${URL}`],
+      ["Practical Tips",`Create your stamp inventory first.\n\nImprove it whenever you want.\n\nThe Browser Beta keeps things simple.\n\n${URL}`],
+      ["Practical Tips",`Every collector organizes stamps differently.\n\nA flexible stamp inventory supports your own workflow.\n\n${URL}`],
+      ["Practical Tips",`A digital stamp inventory is a great starting point for future research.\n\n${URL}`],
+      ["Practical Tips",`Don't let your stamp collection become harder to manage as it grows.\n\nStart organizing today.\n\n${URL}`],
+      ["Practical Tips",`Your stamp collection is unique.\n\nYour inventory should be easy to update whenever needed.\n\n${URL}`],
+      ["Practical Tips",`Tip for collectors:\n\nPhotograph your stamps in good lighting before creating your inventory.\n\nBetter photos make reviewing easier.\n\n${URL}`],
+      ["Practical Tips",`Group similar stamps together before taking photos.\n\nIt helps create a cleaner inventory.\n\n${URL}`],
+      ["Practical Tips",`One clear photo is often better than several blurry ones.\n\nGood images help build a better stamp inventory.\n\n${URL}`],
+      ["Practical Tips",`Take your time when photographing stamps.\n\nA few extra seconds can save hours later.\n\n${URL}`],
+      ["Practical Tips",`Keep your stamp collection organized from the very beginning.\n\nFuture you will be grateful.\n\n${URL}`],
+      ["Practical Tips",`A stamp inventory isn't only for experts.\n\nIt's useful for every collector.\n\n${URL}`],
+      ["Practical Tips",`Every organized collection starts with one photo, then another.\n\nBuild your stamp inventory step by step.\n\n${URL}`],
+      ["Practical Tips",`Don't wait until your collection becomes overwhelming.\n\nStart your stamp inventory while it's still manageable.\n\n${URL}`],
+      ["Practical Tips",`A good stamp inventory helps you spend more time collecting and less time searching.\n\n${URL}`],
+      ["Practical Tips",`Collecting stamps should be relaxing.\n\nOrganizing them should be simple too.\n\n${URL}`],
+      ["Conversation and Feedback",`The Browser Beta is ready for collectors who want to organize their stamp collection digitally.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Conversation and Feedback",`I'm improving the Browser Beta with feedback from real stamp collectors.\n\nYour ideas matter.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Conversation and Feedback",`Tried the Browser Beta?\n\nTell me what works well and what could be improved.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Conversation and Feedback",`Every suggestion helps make the Browser Beta better for stamp collectors.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Conversation and Feedback",`Looking for beta testers who enjoy organizing stamps.\n\nYour feedback is welcome.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Conversation and Feedback",`This Browser Beta is built for stamp collectors, together with stamp collectors.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Conversation and Feedback",`What feature would help you organize your stamp collection faster?\n\nI'd love to hear your ideas.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Conversation and Feedback",`Every update starts with collector feedback.\n\nHelp shape the Browser Beta.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Conversation and Feedback",`Thank you to everyone testing the Browser Beta.\n\nYour feedback is making the stamp inventory better every week.\n\nDM me with your feedback.\n\n${URL}`],
+      ["Conversation and Feedback",`If you collect stamps, I'd love your opinion.\n\nTry the Browser Beta and tell me what you think.\n\nDM me with your feedback.\n\n${URL}`]
     ];
     const posts=raw.map((p,i)=>({id:i+1,category:p[0],text:p[1]}));
     let data=load();
+    let activeRange="all";
     const $=s=>document.querySelector(s), esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
     function defaults(){return {posts:{},prefs:{days:[1,2,3,4,5],perWeek:5,time:"10:00"}}}
     function load(){try{return Object.assign(defaults(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch{return defaults()}}
@@ -106,7 +133,7 @@
     function card(p){const d=item(p.id);return `<article class="card" data-id="${p.id}" data-status="${d.status}"><div class="card-head"><span class="number">Post ${p.id}</span><span class="badge">${esc(p.category)}</span></div><div class="post">${esc(p.text)}</div><div class="meta"><span>${[...p.text].length} characters</span><span>${esc(d.status)}</span></div><div class="actions"><button class="btn copy" data-copy="${p.id}">Copy post</button></div><div class="card-fields"><div class="field"><label>Status<select data-field="status"><option${d.status==="Available"?" selected":""}>Available</option><option${d.status==="Planned"?" selected":""}>Planned</option><option${d.status==="Posted"?" selected":""}>Posted</option><option${d.status==="Skipped"?" selected":""}>Skipped</option></select></label></div><div class="field"><label>Planned date<input data-field="planned" type="datetime-local" value="${esc(d.planned)}"></label></div><div class="field notes"><label>Notes<textarea data-field="notes" placeholder="Optional notes">${esc(d.notes)}</textarea></label></div></div>${d.posted?`<div class="posted-at">Posted: ${esc(new Date(d.posted).toLocaleString())}</div>`:""}</article>`}
     function render(){
       const q=$("#search").value.toLowerCase(),cat=$("#category").value,st=$("#statusFilter").value,undated=$("#undated").value;
-      let shown=posts.filter(p=>{const d=item(p.id);return(!q||(p.text+" "+d.notes).toLowerCase().includes(q))&&(cat==="All"||p.category===cat)&&(st==="All"||d.status===st)&&(undated==="all"||!d.planned)});
+      let shown=posts.filter(p=>{const d=item(p.id),[start,end]=activeRange==="all"?[1,50]:activeRange.split("-").map(Number);return p.id>=start&&p.id<=end&&(!q||(p.text+" "+d.notes).toLowerCase().includes(q))&&(cat==="All"||p.category===cat)&&(st==="All"||d.status===st)&&(undated==="all"||!d.planned)});
       shown.sort($("#sort").value==="date"?(a,b)=>(item(a.id).planned||"9999").localeCompare(item(b.id).planned||"9999"):(a,b)=>a.id-b.id);
       $("#cards").innerHTML=shown.map(card).join("");$("#shown").textContent=`${shown.length} shown`;
       const counts={Available:0,Planned:0,Posted:0,Skipped:0};posts.forEach(p=>counts[item(p.id).status]++);
@@ -118,11 +145,14 @@
       const planned=posts.filter(p=>item(p.id).planned&&item(p.id).status!=="Posted"&&item(p.id).status!=="Skipped").sort((a,b)=>item(a.id).planned.localeCompare(item(b.id).planned));
       $("#calendar").innerHTML=planned.length?planned.slice(0,10).map((p,i)=>{const d=item(p.id),day=d.planned.slice(0,10),cls=day<today?"overdue":day===today?"today":i===0?"next":"";return `<div class="calendar-item ${cls}"><strong>${esc(new Date(d.planned).toLocaleString([], {dateStyle:"medium",timeStyle:"short"}))}</strong><span>#${p.id}</span><span>${esc(p.text.slice(0,90))}…</span><span class="badge">${day<today?"Overdue":day===today?"Today":i===0?"Next":esc(d.status)}</span></div>`}).join(""):'<p class="empty">No posts are planned yet.</p>';
     }
-    $("#cards").addEventListener("click",async e=>{const b=e.target.closest(".copy");if(!b)return;const p=posts.find(x=>x.id===+b.dataset.copy);try{await navigator.clipboard.writeText(p.text)}catch{const t=document.createElement("textarea");t.value=p.text;document.body.append(t);t.select();document.execCommand("copy");t.remove()}b.textContent="Copied";setTimeout(()=>b.textContent="Copy post",1200)});
+    async function copyText(text){try{await navigator.clipboard.writeText(text)}catch{const t=document.createElement("textarea");t.value=text;document.body.append(t);t.select();document.execCommand("copy");t.remove()}}
+    $("#cards").addEventListener("click",async e=>{const b=e.target.closest(".copy");if(!b)return;const p=posts.find(x=>x.id===+b.dataset.copy);await copyText(p.text);b.textContent="Copied";setTimeout(()=>b.textContent="Copy post",1200)});
     $("#cards").addEventListener("change",e=>{const f=e.target.dataset.field;if(!f)return;const id=+e.target.closest(".card").dataset.id,d=item(id),old=d.status;d[f]=e.target.value;if(f==="planned"&&d.planned&&d.status==="Available")d.status="Planned";if(f==="status"&&d.status==="Posted"&&old!=="Posted")d.posted=new Date().toISOString();if(f==="status"&&d.status!=="Posted")d.posted="";save()});
     $("#cards").addEventListener("input",e=>{if(e.target.dataset.field!=="notes")return;item(+e.target.closest(".card").dataset.id).notes=e.target.value;localStorage.setItem(KEY,JSON.stringify(data))});
     ["search","category","statusFilter","sort","undated"].forEach(id=>$("#"+id).addEventListener(id==="search"?"input":"change",render));
-    $("#clearFilters").onclick=()=>{$("#search").value="";$("#category").value=$("#statusFilter").value="All";$("#sort").value="number";$("#undated").value="all";render()};
+    document.querySelectorAll(".range-filter").forEach(button=>button.addEventListener("click",()=>{activeRange=button.dataset.range;document.querySelectorAll(".range-filter").forEach(item=>item.classList.toggle("secondary",item!==button));render()}));
+    $("#clearFilters").onclick=()=>{$("#search").value="";$("#category").value=$("#statusFilter").value="All";$("#sort").value="number";$("#undated").value="all";activeRange="all";document.querySelectorAll(".range-filter").forEach(item=>item.classList.toggle("secondary",item.dataset.range!=="all"));render()};
+    $("#copyAll").onclick=async()=>{await copyText(posts.map(post=>post.text).join("\n\n"));$("#copyAll").textContent="All posts copied";setTimeout(()=>$("#copyAll").textContent="Copy All Posts",1400)};
     const download=(name,type,text)=>{const a=document.createElement("a");a.href=globalThis.URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>globalThis.URL.revokeObjectURL(a.href),1000)};
     const csvCell=v=>`"${String(v??"").replace(/"/g,'""')}"`;
     $("#csv").onclick=()=>{const rows=[["Post Number","Category","Post Text","Character Count","Status","Planned Date","Posted Date","Notes","Marketing URL"],...posts.map(p=>{const d=item(p.id);return[p.id,p.category,p.text,[...p.text].length,d.status,d.planned,d.posted,d.notes,URL]})];download("AI-Stamp-Scanner-Threads-Content.csv","text/csv;charset=utf-8","\ufeff"+rows.map(r=>r.map(csvCell).join(",")).join("\r\n"))};
