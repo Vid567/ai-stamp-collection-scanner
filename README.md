@@ -16,56 +16,23 @@ Turn your stamp collection into a clear digital inventory. Upload collection pho
 
 The Browser Beta does not determine rarity, value, authenticity or an exact catalogue identity. It supports collector judgement; it does not replace it.
 
-## Optional local toolkit
+## Browser Beta v1.0 scope
 
-- Uses a photo-first workflow for album and stockbook pages.
-- Produces structured, paste-ready Inventory rows with an AI helper prompt.
-- Keeps every populated row linked through a static Record ID, Photo Number and Original Filename.
-- Includes an Images worksheet for a stamp crop or source-photo thumbnail, with a clear filename fallback when no image can be embedded.
-- Records suggested identification and confidence level.
-- Reconciles visible photo counts against captured quantities.
-- Optionally creates traceable crops and embedded Excel thumbnails locally.
-- Keeps every enriched row linked to its numbered source photograph and filename.
-- Flags classics, overprints, uncertain IDs and physical checks for research.
-- Calculates collection totals from estimated per-stamp values.
+- Browser-only; no Python, terminal or installation required.
+- No embedded AI key and no external AI analysis in this Beta.
+- Lightweight Excel and CSV exports.
+- No photographs or thumbnails embedded in spreadsheets.
+- Photo traceability through Record ID, Photo Number, Original Filename and Image Reference.
 
-AI output is a starting point—not authentication, guaranteed identification or professional valuation.
+## Start
 
-## Download
-
-[Download the complete Version 2.2 toolkit](downloads/AI-Stamp-Collection-Scanner-v2.2.zip)
-
-## Included
-
-- Reusable Excel inventory workbook
-- Filled sample workbook
-- AI Photo-ID prompt
-- Photo Linking & Images addendum
-- User Guide
-- Country and inscription cheat-sheet
-- Quick Start Card
-- Google Sheets notes
-- Optional local Phase 1 traceability processor
-- Crop, thumbnail and Excel-image validation
-- AI-assisted research fields with independent confidence scores
-- Local image-quality analysis and duplicate candidates
-- Collection Summary worksheet
-
-## Optional traceability workflow
-
-Version 2.1 keeps the original prompt-to-Excel workflow and adds an optional local processor. The Phase 1 prompt requests normalized stamp boxes. The processor then retains source photos locally, creates lossless crops and 256 x 256 thumbnails, embeds one thumbnail per Inventory row and writes a validation report.
-
-See [the Phase 1 guide](docs/PHASE-1-GUIDE.md). This feature requires Python and Pillow; it does not add or replace an AI model.
-
-## Optional collection review workflow
-
-Phase 2 builds on the same processor and workbook. The external vision-AI supplies cautious identification suggestions; local code measures crop quality, reports visually similar candidates, applies conservative recommendations and produces collection statistics. See [the Phase 2 guide](docs/PHASE-2-GUIDE.md).
+[Open the Browser Beta](https://vid567.github.io/ai-stamp-collection-scanner/beta/) or read the [Quick Start](beta/docs/quick-start-beta.html) and [User Guide](beta/docs/user-guide-beta.html).
 
 ## Website
 
 The repository is ready for GitHub Pages. Publish from the `main` branch and repository root.
 
-The core workflow remains a static Excel-and-prompt toolkit. Visual references can still be supplied by the AI tool or pasted manually. The optional local processor automates crops, thumbnails and workbook embedding when normalized bounding boxes are available.
+The public Browser Beta is served from `/beta/`. Its export remains intentionally lightweight and uses text-based photo traceability rather than embedded images.
 
 ## Product language
 
