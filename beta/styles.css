@@ -3,3 +3,5 @@
 @media(max-width:850px){.nav nav{display:none}.hero,.split{grid-template-columns:1fr}.hero{text-align:center;padding-top:55px}.hero-copy{margin:auto}.actions,.proof{justify-content:center}.hero-visual img{max-width:340px}.steps,.trust-grid{grid-template-columns:1fr 1fr}.split{gap:40px}.square{margin:auto}.cta{margin:20px;border-radius:24px;padding:55px 24px}}
 @media(max-width:560px){h1{font-size:44px}.hero-copy>p{font-size:17px}.actions{flex-direction:column}.steps,.trust-grid{grid-template-columns:1fr}.section{padding:75px 20px}.nav{height:66px;padding:0 18px}.brand{font-size:14px}.hero{padding-left:20px;padding-right:20px}.cta{margin:12px 12px 70px}}
 
+
+:focus-visible{outline:3px solid rgba(65,182,230,.65);outline-offset:3px}
