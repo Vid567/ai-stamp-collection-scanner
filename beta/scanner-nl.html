@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MDGNZMY7BQ"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-MDGNZMY7BQ');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#14365e">
+  <meta name="description" content="Maak in je browser een bewerkbare postzegelinventaris van foto's van je verzameling.">
+  <title>AI Stamp Scanner — Browser Beta v1.0</title>
+  <link rel="icon" href="assets/branding/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="scanner.css">
+  <style>.source-label{display:grid;gap:3px;font-size:11px;color:#607087}.record-photo-select{max-width:320px;border:1px solid #d7e0ea;border-radius:7px;padding:5px;background:white}.app-header nav{display:flex;align-items:center;gap:16px}.app-header nav a{color:#14365e;font-weight:700;text-decoration:none}.app-header nav a:hover{text-decoration:underline}@media(max-width:560px){.app-header{align-items:flex-start;gap:10px}.brand{max-width:190px}.app-header nav{gap:8px;flex-wrap:wrap;justify-content:flex-end}.app-header nav a,.beta{font-size:12px}}</style>
+</head>
+<body>
+  <header class="app-header">
+    <a href="../beta-test-nl.html" class="brand"><img src="assets/branding/logo-mark.svg" alt="">AI Stamp Collection Scanner</a>
+    <nav aria-label="Hulp"><a href="docs/nl/snel-starten.html">Snel starten</a><a href="docs/nl/gebruikershandleiding.html">Gebruikershandleiding</a><a href="docs/nl/veelgestelde-vragen.html">Veelgestelde vragen</a><span class="beta">Beta v1.0</span></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">AI-ONDERSTEUNDE POSTZEGELINVENTARIS</p>
+      <h1>Maak een duidelijke digitale inventaris van je postzegelverzameling.</h1>
+      <p>Upload foto's van je verzameling, maak een overzichtelijke inventaris, pas gegevens aan en sla je inventaris op. Alles gebeurt lokaal in je browser.</p>
+      <div class="privacy">🔒 Foto's blijven in deze browser. Deze versie uploadt geen foto's of inventarisgegevens.</div>
+    </section>
+
+    <section class="panel" aria-labelledby="photos-title">
+      <div class="section-head"><div><span>Stap 1</span><h2 id="photos-title">Kies foto's van postzegels</h2></div><strong id="photo-count">0 foto's</strong></div>
+      <div class="upload-actions">
+        <label class="button primary" for="photo-input">Foto's kiezen</label>
+        <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+        <label class="button secondary" for="camera-input">Camera gebruiken</label>
+        <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
+        <button class="button ghost" id="clear-all" type="button">Alles wissen</button>
+      </div>
+      <p class="help">JPG, JPEG, PNG en WebP. Iedere geaccepteerde foto krijgt automatisch een vast fotonummer.</p>
+      <div id="messages" role="status" aria-live="polite"></div>
+      <div id="photo-grid" class="photo-grid"></div>
+      <button class="button primary wide" id="create-inventory" type="button" disabled>Inventaris maken</button>
+    </section>
+
+    <section class="panel" aria-labelledby="inventory-title">
+      <div class="section-head"><div><span>Stap 2–3</span><h2 id="inventory-title">Inventaris bekijken en aanpassen</h2></div><strong id="row-count">0 regels</strong></div>
+      <p class="help">Alle velden zijn bewerkbaar. Controleer of alle postzegels op de foto in de inventaris zijn opgenomen.</p>
+      <div class="toolbar">
+        <button class="button secondary" id="add-row" type="button" disabled>Regel toevoegen</button>
+        <button class="button primary" id="export-xlsx" type="button" disabled>Opslaan als Excel</button>
+        <button class="button secondary" id="export-csv" type="button" disabled>Opslaan als CSV</button>
+      </div>
+      <div id="empty-state" class="empty">Kies minstens één foto en klik op “Inventaris maken”.</div>
+      <div id="records" class="records"></div>
+    </section>
+
+    <section class="limits">
+      <h2>Wat deze Browser Beta wel en niet doet</h2>
+      <p>De scanner helpt je een postzegelverzameling te inventariseren en geeft aan welke postzegels mogelijk interessant zijn om verder te onderzoeken. De scanner bepaalt geen waarde, zeldzaamheid of echtheid.</p>
+    </section>
+  </main>
+  <template id="record-template">
+    <article class="record-card">
+      <div class="record-top"><div class="record-photo"></div><div><strong class="record-id"></strong><label class="source-label">Bronfoto<select class="record-photo-select" data-field="photoId"></select></label></div><div class="record-actions"><button data-action="duplicate">Dupliceren</button><button data-action="delete" class="danger">Verwijderen</button></div></div>
+      <div class="fields"></div>
+    </article>
+  </template>
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script type="module" src="scanner-nl.js"></script>
+</body>
+</html>
