@@ -9,10 +9,10 @@
   <style>
     :root{--ink:#172033;--brand:#14365e;--brand2:#1f5f99;--soft:#eef5fb;--line:#d8e1ea;--ok:#176b45;--bg:#f7f9fc;--white:#fff}
     *{box-sizing:border-box}body{margin:0;font:17px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
-    .wrap{max-width:980px;margin:auto;padding:28px 20px 56px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:34px}.brand{font-weight:750;color:var(--brand);text-decoration:none}.badge{display:inline-flex;align-items:center;gap:7px;background:#e8f1fb;color:var(--brand);border:1px solid #c7d9ec;border-radius:999px;padding:7px 12px;font-weight:750;font-size:14px}
-    .hero{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:42px;box-shadow:0 12px 35px rgba(20,54,94,.08)}h1{font-size:clamp(34px,6vw,58px);line-height:1.05;margin:16px 0 16px;color:#102541}h2{font-size:28px;line-height:1.2;color:#102541;margin-top:0}.lead{font-size:20px;max-width:760px;color:#45546a}
+    .wrap{max-width:980px;margin:auto;padding:28px 20px 56px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:34px}.brand{font-weight:750;color:var(--brand);text-decoration:none}.badge{display:inline-flex;align-items:center;gap:7px;background:#e8f1fb;color:var(--brand);border:1px solid #c7d9ec;border-radius:999px;padding:7px 12px;font-weight:750;font-size:14px}.badge.time{background:#eef7ee;color:#245c38;border-color:#cfe5d5}
+    .hero{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:42px;box-shadow:0 12px 35px rgba(20,54,94,.08)}h1{font-size:clamp(34px,6vw,58px);line-height:1.05;margin:16px 0 16px;color:#102541}h2{font-size:28px;line-height:1.2;color:#102541;margin-top:0}.lead{font-size:20px;max-width:760px;color:#45546a}.badges{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
     .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0 4px}.btn{display:block;text-align:center;text-decoration:none;font-weight:750;border-radius:12px;padding:15px 18px;border:1px solid var(--brand);transition:.15s}.primary{background:var(--brand);color:white}.secondary{background:white;color:var(--brand)}.btn:hover{transform:translateY(-1px)}
-    .section{background:white;border:1px solid var(--line);border-radius:18px;padding:30px;margin-top:22px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--soft);border-radius:14px;padding:18px}.card strong{display:block;color:#102541;margin-bottom:5px}.check{list-style:none;padding:0;margin:0}.check li{padding:10px 0 10px 36px;position:relative;border-bottom:1px solid #edf1f5}.check li:last-child{border-bottom:0}.check li:before{content:"☐";position:absolute;left:2px;top:8px;font-size:22px;color:var(--brand)}.note{background:#fff8df;border:1px solid #efdda2;border-radius:12px;padding:16px;margin-top:18px}.footer{text-align:center;color:#67758a;margin-top:28px;font-size:14px}
+    .section{background:white;border:1px solid var(--line);border-radius:18px;padding:30px;margin-top:22px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{background:var(--soft);border-radius:14px;padding:18px}.card strong{display:block;color:#102541;margin-bottom:5px}.goal{background:#eef5fb;border:1px solid #cfe0f1;border-radius:16px;padding:22px}.goal ul{margin:12px 0 0;padding-left:22px}.goal li{margin:6px 0}.steps{list-style:none;padding:0;margin:0;counter-reset:teststep}.steps li{counter-increment:teststep;padding:14px 14px 14px 54px;position:relative;border-bottom:1px solid #edf1f5}.steps li:last-child{border-bottom:0}.steps li:before{content:counter(teststep);position:absolute;left:4px;top:11px;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#e8f1fb;color:var(--brand);font-weight:800}.steps li.done:before{content:"✓";background:#e8f5ec;color:var(--ok)}.finish{margin-top:14px;background:#eef7ee;border:1px solid #cfe5d5;border-radius:12px;padding:14px 16px;font-weight:700;color:#245c38}.note{background:#fff8df;border:1px solid #efdda2;border-radius:12px;padding:16px;margin-top:18px}.feedback-list{margin:10px 0 0;padding-left:22px}.feedback-list li{margin:7px 0}.footer{text-align:center;color:#67758a;margin-top:28px;font-size:14px}
     @media(max-width:700px){.hero{padding:28px 22px}.actions,.grid{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}.section{padding:24px 20px}}
   </style>
 </head>
@@ -24,20 +24,36 @@
       <span class="badge">Nederlandse test</span>
       <h1>Help AI Stamp Scanner testen</h1>
       <p class="lead">Bedankt dat je wilt helpen. Lees eerst de testchecklist, test daarna de scanner met een paar foto's van postzegels en laat weten wat duidelijk is en wat beter kan.</p>
+      <div class="badges"><span class="badge time">⏱ Geschatte testduur: 10 minuten</span></div>
+    </section>
+
+    <section class="section">
+      <div class="goal">
+        <h2>🎯 Doel van deze test</h2>
+        <p>Met jouw feedback verbeteren we de AI Stamp Scanner Browser Beta. Je hoeft geen postzegelexpert te zijn om mee te testen.</p>
+        <p><strong>We zijn vooral benieuwd naar:</strong></p>
+        <ul>
+          <li>Is de app eenvoudig te gebruiken?</li>
+          <li>Zijn alle stappen duidelijk?</li>
+          <li>Ontbrak er informatie?</li>
+          <li>Ging er iets fout?</li>
+          <li>Welke functie vond je het handigst?</li>
+          <li>Zou je deze app gebruiken voor je eigen verzameling?</li>
+        </ul>
+      </div>
     </section>
 
     <section class="section">
       <h2>Testchecklist</h2>
-      <p>De volledige test duurt ongeveer 10 minuten.</p>
-      <ul class="check">
-        <li>Open <strong>Snel starten</strong> en kijk of de uitleg duidelijk is.</li>
-        <li>Upload één of meer foto's van een postzegelverzameling.</li>
-        <li>Maak de postzegelinventaris en controleer de regels.</li>
-        <li>Bewerk een paar gegevens in de inventaris.</li>
-        <li>Exporteer de inventaris naar Excel.</li>
-        <li>Exporteer de inventaris naar CSV.</li>
-        <li>Noteer fouten, onduidelijke stappen en verbeterideeën.</li>
-      </ul>
+      <ol class="steps">
+        <li class="done"><strong>Lees de testchecklist.</strong></li>
+        <li><strong>Upload foto's.</strong> Upload één of meer foto's van een postzegelverzameling.</li>
+        <li><strong>Maak de postzegelinventaris.</strong> Controleer de aangemaakte regels.</li>
+        <li><strong>Controleer en bewerk.</strong> Pas enkele gegevens in de inventaris aan.</li>
+        <li><strong>Exporteer naar Excel.</strong></li>
+        <li><strong>Exporteer naar CSV.</strong></li>
+      </ol>
+      <div class="finish">🏁 Klaar? Stuur je feedback via WhatsApp.</div>
       <div class="actions">
         <a class="btn secondary" href="beta/docs/nl/snel-starten.html">1. Snel starten</a>
         <a class="btn primary" href="beta/scanner.html">2. Test AI Stamp Scanner</a>
@@ -59,7 +75,16 @@
 
     <section class="section" id="feedback">
       <h2>Feedback geven</h2>
-      <p>Vertel vooral wat er gebeurde, wat je verwachtte en op welk apparaat/browser je testte. Een screenshot bij een fout is extra handig.</p>
+      <p>Vertel vooral wat er gebeurde, wat je verwachtte en op welk apparaat/browser je testte.</p>
+      <p><strong>Vertel me bijvoorbeeld:</strong></p>
+      <ul class="feedback-list">
+        <li>Wat vond je eenvoudig?</li>
+        <li>Welke stap was onduidelijk?</li>
+        <li>Ging er iets mis?</li>
+        <li>Welke functie mis je?</li>
+        <li>Zou je de AI Stamp Scanner aanbevelen aan andere verzamelaars?</li>
+      </ul>
+      <p>Een screenshot bij een fout is extra handig.</p>
       <p><strong>Stuur me je feedback via WhatsApp.</strong></p>
     </section>
 
