@@ -1,0 +1,46 @@
+name: Import stamp training source
+
+on:
+  workflow_dispatch:
+    inputs:
+      archive_path:
+        description: 'ZIP path in repository'
+        required: true
+        default: 'training/stamp-detector/source-upload.zip'
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate archive
+        run: test -f "${{ inputs.archive_path }}"
+      - name: Extract source photos
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p training/stamp-detector/source
+          tmp="$(mktemp -d)"
+          unzip -q "${{ inputs.archive_path }}" -d "$tmp"
+          n=0
+          while IFS= read -r -d '' f; do
+            n=$((n+1))
+            printf -v target 'training/stamp-detector/source/stamp-source-%02d.jpg' "$n"
+            cp "$f" "$target"
+          done < <(find "$tmp" -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) -print0 | sort -z)
+          test "$n" -gt 0
+          echo "Imported $n source photos"
+          rm -f "${{ inputs.archive_path }}"
+      - name: Commit imported photos
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add training/stamp-detector/source "${{ inputs.archive_path }}" || true
+          git diff --cached --quiet && exit 0
+          git commit -m 'Import stamp detector training photos'
+          git push
