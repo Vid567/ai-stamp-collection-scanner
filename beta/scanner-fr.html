@@ -1,1 +1,70 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI Stamp Scanner — Browser Beta v1.0</title><link rel="stylesheet" href="scanner.css"><style>.ai-badge{background:#eef5fb;border:1px solid #cbdceb;border-radius:999px;padding:5px 10px;font-weight:700;color:#14365e}.app-header nav{display:flex;gap:12px;align-items:center;flex-wrap:wrap}</style></head><body><header class="app-header"><a href="../beta-test-fr.html" class="brand">AI Stamp Collection Scanner</a><nav><a href="docs/fr/quick-start.html">Démarrage rapide</a><a href="docs/fr/user-guide.html">Guide</a><a href="docs/fr/faq.html">FAQ</a><a href="docs/fr/troubleshooting.html">Dépannage</a><span class="ai-badge">Traduit par IA</span></nav></header><main><section class="intro"><h1>Créez un inventaire numérique clair de votre collection de timbres.</h1><p>Ajoutez des photos, créez un inventaire structuré, modifiez les informations et enregistrez votre travail. Tout fonctionne localement dans votre navigateur.</p><div class="privacy">🔒 Les photos restent dans ce navigateur.</div></section><section class="panel"><div class="section-head"><div><span>Étape 1</span><h2>Choisir des photos de timbres</h2></div><strong id="photo-count">0 photo</strong></div><div class="upload-actions"><label class="button primary" for="photo-input">Choisir des photos</label><input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden><label class="button secondary" for="camera-input">Utiliser l’appareil photo</label><input id="camera-input" type="file" accept="image/*" capture="environment" hidden><button class="button ghost" id="clear-all">Tout effacer</button></div><div id="messages"></div><div id="photo-grid" class="photo-grid"></div><button class="button primary wide" id="create-inventory" disabled>Créer l’inventaire</button></section><section class="panel"><div class="section-head"><div><span>Étapes 2–3</span><h2>Vérifier et modifier l’inventaire</h2></div><strong id="row-count">0 enregistrement</strong></div><div class="toolbar"><button class="button secondary" id="add-row" disabled>Ajouter un enregistrement</button><button class="button primary" id="export-xlsx" disabled>Enregistrer en Excel</button><button class="button secondary" id="export-csv" disabled>Enregistrer en CSV</button></div><div id="empty-state" class="empty">Choisissez au moins une photo puis cliquez sur « Créer l’inventaire ».</div><div id="records" class="records"></div></section></main><template id="record-template"><article class="record-card"><div class="record-top"><div class="record-photo"></div><div><strong class="record-id"></strong><label>Photo source<select class="record-photo-select" data-field="photoId"></select></label></div><div class="record-actions"><button data-action="duplicate">Dupliquer</button><button data-action="delete" class="danger">Supprimer</button></div></div><div class="fields"></div></article></template><script src="vendor/xlsx.full.min.js"></script><script type="module" src="scanner-fr.js"></script></body></html>
+<!doctype html>
+<html lang="fr">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MDGNZMY7BQ"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-MDGNZMY7BQ');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#14365e">
+  <meta name="description" content="Créez dans votre navigateur un inventaire de timbres modifiable à partir des photos de votre collection.">
+  <title>AI Stamp Scanner — Browser Beta v1.0</title>
+  <link rel="icon" href="assets/branding/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="scanner.css">
+  <style>.source-label{display:grid;gap:3px;font-size:11px;color:#607087}.record-photo-select{max-width:320px;border:1px solid #d7e0ea;border-radius:7px;padding:5px;background:white}.app-header nav{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.app-header nav a{color:#14365e;font-weight:700;text-decoration:none}.app-header nav a:hover{text-decoration:underline}.ai-badge{display:inline-block;background:#eef5fb;border:1px solid #cbdceb;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;color:#14365e}@media(max-width:560px){.app-header{align-items:flex-start;gap:10px}.brand{max-width:190px}.app-header nav{gap:8px;flex-wrap:wrap;justify-content:flex-end}.app-header nav a,.beta,.ai-badge{font-size:12px}}</style>
+</head>
+<body>
+  <header class="app-header">
+    <a href="../beta-test-fr.html" class="brand"><img src="assets/branding/logo-mark.svg" alt="">AI Stamp Collection Scanner</a>
+    <nav aria-label="Aide"><a href="docs/fr/quick-start.html">Démarrage rapide</a><a href="docs/fr/user-guide.html">Guide de l’utilisateur</a><a href="docs/fr/faq.html">FAQ</a><a href="docs/fr/troubleshooting.html">Dépannage</a><span class="ai-badge">Traduit par IA</span><span class="beta">Beta v1.0</span></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">INVENTAIRE DE TIMBRES ASSISTÉ PAR IA</p>
+      <h1>Créez un inventaire numérique clair de votre collection de timbres.</h1>
+      <p>Ajoutez des photos de votre collection, créez un inventaire structuré, modifiez les informations et enregistrez votre inventaire. Tout fonctionne localement dans votre navigateur.</p>
+      <div class="privacy">🔒 Les photos restent dans ce navigateur. Cette version ne téléverse ni les photos ni les données de l’inventaire.</div>
+    </section>
+
+    <section class="panel" aria-labelledby="photos-title">
+      <div class="section-head"><div><span>Étape 1</span><h2 id="photos-title">Choisir des photos de timbres</h2></div><strong id="photo-count">0 photo</strong></div>
+      <div class="upload-actions">
+        <label class="button primary" for="photo-input">Choisir des photos</label>
+        <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+        <label class="button secondary" for="camera-input">Utiliser l’appareil photo</label>
+        <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
+        <button class="button ghost" id="clear-all" type="button">Tout effacer</button>
+      </div>
+      <p class="help">JPG, JPEG, PNG et WebP. Chaque photo acceptée reçoit automatiquement un numéro de photo permanent.</p>
+      <div id="messages" role="status" aria-live="polite"></div>
+      <div id="photo-grid" class="photo-grid"></div>
+      <button class="button primary wide" id="create-inventory" type="button" disabled>Créer l’inventaire</button>
+    </section>
+
+    <section class="panel" aria-labelledby="inventory-title">
+      <div class="section-head"><div><span>Étapes 2–3</span><h2 id="inventory-title">Vérifier et modifier l’inventaire</h2></div><strong id="row-count">0 enregistrement</strong></div>
+      <p class="help">Tous les champs sont modifiables. Vérifiez que tous les timbres visibles sur la photo figurent dans l’inventaire.</p>
+      <div class="toolbar">
+        <button class="button secondary" id="add-row" type="button" disabled>Ajouter un enregistrement</button>
+        <button class="button primary" id="export-xlsx" type="button" disabled>Enregistrer en Excel</button>
+        <button class="button secondary" id="export-csv" type="button" disabled>Enregistrer en CSV</button>
+      </div>
+      <div id="empty-state" class="empty">Choisissez au moins une photo puis cliquez sur « Créer l’inventaire ».</div>
+      <div id="records" class="records"></div>
+    </section>
+
+    <section class="limits">
+      <h2>Ce que cette Browser Beta fait et ne fait pas</h2>
+      <p>Le scanner vous aide à inventorier une collection de timbres et signale les timbres qui peuvent être intéressants à rechercher davantage. Il ne détermine ni la valeur, ni la rareté, ni l’authenticité.</p>
+    </section>
+  </main>
+  <template id="record-template">
+    <article class="record-card">
+      <div class="record-top"><div class="record-photo"></div><div><strong class="record-id"></strong><label class="source-label">Photo source<select class="record-photo-select" data-field="photoId"></select></label></div><div class="record-actions"><button data-action="duplicate">Dupliquer</button><button data-action="delete" class="danger">Supprimer</button></div></div>
+      <div class="fields"></div>
+    </article>
+  </template>
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script type="module" src="scanner-fr.js"></script>
+</body>
+</html>

@@ -1,1 +1,70 @@
-<!doctype html><html lang="es-ES"><head><script async src="https://www.googletagmanager.com/gtag/js?id=G-MDGNZMY7BQ"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-MDGNZMY7BQ');</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#14365e"><meta name="description" content="Crea en tu navegador un inventario editable de sellos a partir de fotos de tu colección."><title>AI Stamp Scanner — Browser Beta v1.0</title><link rel="icon" href="assets/branding/favicon.svg" type="image/svg+xml"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="scanner.css"><style>.source-label{display:grid;gap:3px;font-size:11px;color:#607087}.record-photo-select{max-width:320px;border:1px solid #d7e0ea;border-radius:7px;padding:5px;background:white}.app-header nav{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.app-header nav a{color:#14365e;font-weight:700;text-decoration:none}.ai-badge{display:inline-block;background:#eef5fb;border:1px solid #cbdceb;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;color:#14365e}</style></head><body><header class="app-header"><a href="../beta-test-es.html" class="brand"><img src="assets/branding/logo-mark.svg" alt="">AI Stamp Collection Scanner</a><nav aria-label="Ayuda"><a href="docs/es/quick-start.html">Inicio rápido</a><a href="docs/es/user-guide.html">Guía del usuario</a><a href="docs/es/faq.html">Preguntas frecuentes</a><a href="docs/es/troubleshooting.html">Solución de problemas</a><span class="ai-badge">Traducido por IA</span><span class="beta">Beta v1.0</span></nav></header><main><section class="intro"><p class="eyebrow">INVENTARIO DE SELLOS ASISTIDO POR IA</p><h1>Crea un inventario digital claro de tu colección de sellos.</h1><p>Sube fotos de tu colección, crea un inventario estructurado, edita los datos y guarda tu inventario. Todo funciona localmente en tu navegador.</p><div class="privacy">🔒 Las fotos permanecen en este navegador. Esta versión no sube fotos ni datos del inventario.</div></section><section class="panel" aria-labelledby="photos-title"><div class="section-head"><div><span>Paso 1</span><h2 id="photos-title">Elige fotos de sellos</h2></div><strong id="photo-count">0 fotos</strong></div><div class="upload-actions"><label class="button primary" for="photo-input">Elegir fotos</label><input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden><label class="button secondary" for="camera-input">Usar cámara</label><input id="camera-input" type="file" accept="image/*" capture="environment" hidden><button class="button ghost" id="clear-all" type="button">Borrar todo</button></div><p class="help">JPG, JPEG, PNG y WebP. Cada foto aceptada recibe automáticamente un número de foto permanente.</p><div id="messages" role="status" aria-live="polite"></div><div id="photo-grid" class="photo-grid"></div><button class="button primary wide" id="create-inventory" type="button" disabled>Crear inventario</button></section><section class="panel" aria-labelledby="inventory-title"><div class="section-head"><div><span>Pasos 2–3</span><h2 id="inventory-title">Revisar y editar el inventario</h2></div><strong id="row-count">0 registros</strong></div><p class="help">Todos los campos se pueden editar. Comprueba que todos los sellos de la foto estén incluidos en el inventario.</p><div class="toolbar"><button class="button secondary" id="add-row" type="button" disabled>Añadir registro</button><button class="button primary" id="export-xlsx" type="button" disabled>Guardar como Excel</button><button class="button secondary" id="export-csv" type="button" disabled>Guardar como CSV</button></div><div id="empty-state" class="empty">Elige al menos una foto y pulsa «Crear inventario».</div><div id="records" class="records"></div></section><section class="limits"><h2>Qué hace y qué no hace esta Browser Beta</h2><p>El escáner te ayuda a inventariar una colección de sellos y señala los sellos que podrían ser interesantes para investigar más. No determina el valor, la rareza ni la autenticidad.</p></section></main><template id="record-template"><article class="record-card"><div class="record-top"><div class="record-photo"></div><div><strong class="record-id"></strong><label class="source-label">Foto de origen<select class="record-photo-select" data-field="photoId"></select></label></div><div class="record-actions"><button data-action="duplicate">Duplicar</button><button data-action="delete" class="danger">Eliminar</button></div></div><div class="fields"></div></article></template><script src="vendor/xlsx.full.min.js"></script><script type="module" src="scanner-es.js"></script></body></html>
+<!doctype html>
+<html lang="es-ES">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MDGNZMY7BQ"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-MDGNZMY7BQ');</script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#14365e">
+  <meta name="description" content="Crea en tu navegador un inventario editable de sellos a partir de fotos de tu colección.">
+  <title>AI Stamp Scanner — Browser Beta v1.0</title>
+  <link rel="icon" href="assets/branding/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="scanner.css">
+  <style>.source-label{display:grid;gap:3px;font-size:11px;color:#607087}.record-photo-select{max-width:320px;border:1px solid #d7e0ea;border-radius:7px;padding:5px;background:white}.app-header nav{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.app-header nav a{color:#14365e;font-weight:700;text-decoration:none}.app-header nav a:hover{text-decoration:underline}.ai-badge{display:inline-block;background:#eef5fb;border:1px solid #cbdceb;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:700;color:#14365e}@media(max-width:560px){.app-header{align-items:flex-start;gap:10px}.brand{max-width:190px}.app-header nav{gap:8px;flex-wrap:wrap;justify-content:flex-end}.app-header nav a,.beta,.ai-badge{font-size:12px}}</style>
+</head>
+<body>
+  <header class="app-header">
+    <a href="../beta-test-es.html" class="brand"><img src="assets/branding/logo-mark.svg" alt="">AI Stamp Collection Scanner</a>
+    <nav aria-label="Ayuda"><a href="docs/es/quick-start.html">Inicio rápido</a><a href="docs/es/user-guide.html">Guía del usuario</a><a href="docs/es/faq.html">Preguntas frecuentes</a><a href="docs/es/troubleshooting.html">Solución de problemas</a><span class="ai-badge">Traducido por IA</span><span class="beta">Beta v1.0</span></nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">INVENTARIO DE SELLOS ASISTIDO POR IA</p>
+      <h1>Crea un inventario digital claro de tu colección de sellos.</h1>
+      <p>Sube fotos de tu colección, crea un inventario estructurado, edita los datos y guarda tu inventario. Todo funciona localmente en tu navegador.</p>
+      <div class="privacy">🔒 Las fotos permanecen en este navegador. Esta versión no sube fotos ni datos del inventario.</div>
+    </section>
+
+    <section class="panel" aria-labelledby="photos-title">
+      <div class="section-head"><div><span>Paso 1</span><h2 id="photos-title">Elige fotos de sellos</h2></div><strong id="photo-count">0 fotos</strong></div>
+      <div class="upload-actions">
+        <label class="button primary" for="photo-input">Elegir fotos</label>
+        <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+        <label class="button secondary" for="camera-input">Usar cámara</label>
+        <input id="camera-input" type="file" accept="image/*" capture="environment" hidden>
+        <button class="button ghost" id="clear-all" type="button">Borrar todo</button>
+      </div>
+      <p class="help">JPG, JPEG, PNG y WebP. Cada foto aceptada recibe automáticamente un número de foto permanente.</p>
+      <div id="messages" role="status" aria-live="polite"></div>
+      <div id="photo-grid" class="photo-grid"></div>
+      <button class="button primary wide" id="create-inventory" type="button" disabled>Crear inventario</button>
+    </section>
+
+    <section class="panel" aria-labelledby="inventory-title">
+      <div class="section-head"><div><span>Pasos 2–3</span><h2 id="inventory-title">Revisar y editar el inventario</h2></div><strong id="row-count">0 registros</strong></div>
+      <p class="help">Todos los campos se pueden editar. Comprueba que todos los sellos de la foto estén incluidos en el inventario.</p>
+      <div class="toolbar">
+        <button class="button secondary" id="add-row" type="button" disabled>Añadir registro</button>
+        <button class="button primary" id="export-xlsx" type="button" disabled>Guardar como Excel</button>
+        <button class="button secondary" id="export-csv" type="button" disabled>Guardar como CSV</button>
+      </div>
+      <div id="empty-state" class="empty">Elige al menos una foto y pulsa «Crear inventario».</div>
+      <div id="records" class="records"></div>
+    </section>
+
+    <section class="limits">
+      <h2>Qué hace y qué no hace esta Browser Beta</h2>
+      <p>El escáner te ayuda a inventariar una colección de sellos y señala los sellos que podrían ser interesantes para investigar más. No determina el valor, la rareza ni la autenticidad.</p>
+    </section>
+  </main>
+  <template id="record-template">
+    <article class="record-card">
+      <div class="record-top"><div class="record-photo"></div><div><strong class="record-id"></strong><label class="source-label">Foto de origen<select class="record-photo-select" data-field="photoId"></select></label></div><div class="record-actions"><button data-action="duplicate">Duplicar</button><button data-action="delete" class="danger">Eliminar</button></div></div>
+      <div class="fields"></div>
+    </article>
+  </template>
+  <script src="vendor/xlsx.full.min.js"></script>
+  <script type="module" src="scanner-es.js"></script>
+</body>
+</html>
