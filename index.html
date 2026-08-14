@@ -8,7 +8,7 @@
   <title>AI Stamp Collection Scanner — Choose your language</title>
   <meta name="description" content="Choose your language and test the AI Stamp Collection Scanner Browser Beta v1.0.">
   <meta property="og:title" content="AI Stamp Collection Scanner — Browser Beta v1.0">
-  <meta property="og:description" content="Create a structured stamp inventory from collection photos. Choose English or Dutch.">
+  <meta property="og:description" content="Create a structured stamp inventory from collection photos in your preferred language.">
   <meta property="og:image" content="https://vid567.github.io/ai-stamp-collection-scanner/assets/marketing/premium/Open-Graph-1200x630.jpg">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://vid567.github.io/ai-stamp-collection-scanner/">
@@ -16,60 +16,31 @@
   <meta name="theme-color" content="#14365e">
   <link rel="icon" href="assets/branding/favicon.svg" type="image/svg+xml">
   <style>
-    :root{--brand:#14365e;--brand2:#1f5f99;--ink:#172033;--muted:#5e6b7e;--bg:#f5f8fc;--white:#fff;--line:#d8e2ec;--soft:#eef5fb;--ok:#176b45}
-    *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#f8fbff 0%,var(--bg) 100%);color:var(--ink);font:17px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1060px;margin:auto;padding:28px 20px 56px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:34px}.brand{display:flex;align-items:center;gap:10px;color:var(--brand);text-decoration:none;font-weight:800}.brand img{width:34px;height:34px}.badge{display:inline-flex;align-items:center;gap:7px;background:#e8f1fb;color:var(--brand);border:1px solid #c7d9ec;border-radius:999px;padding:7px 12px;font-weight:750;font-size:14px}.hero{background:var(--white);border:1px solid var(--line);border-radius:24px;padding:48px;box-shadow:0 16px 40px rgba(20,54,94,.08);text-align:center}.eyebrow{display:inline-block;text-transform:uppercase;letter-spacing:.08em;color:var(--brand2);font-weight:800;font-size:13px}.hero h1{font-size:clamp(38px,6vw,64px);line-height:1.04;margin:14px auto 18px;max-width:850px;color:#102541}.lead{font-size:20px;color:var(--muted);max-width:780px;margin:0 auto}.lang-title{margin:34px 0 14px;font-size:25px;color:#102541}.languages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:760px;margin:0 auto}.language-card{display:block;text-decoration:none;background:var(--soft);border:1px solid #cedeed;border-radius:18px;padding:26px;color:var(--ink);transition:.16s;text-align:left}.language-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(20,54,94,.10);border-color:#a9c5df}.flag{font-size:32px}.language-card h2{margin:8px 0 3px;font-size:25px;color:#102541}.language-card p{margin:0;color:var(--muted)}.arrow{display:block;margin-top:14px;color:var(--brand);font-weight:800}.proof{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:28px 0 0}.proof span{background:#f7fafc;border:1px solid var(--line);padding:8px 12px;border-radius:999px;font-size:14px;color:#405069}.section{margin-top:22px;background:white;border:1px solid var(--line);border-radius:18px;padding:28px}.section h2{margin-top:0;color:#102541}.features{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.feature{background:#f8fafc;border-radius:14px;padding:17px}.feature strong{display:block;color:#102541;margin-bottom:4px}.note{margin-top:18px;background:#fff8df;border:1px solid #efdda2;border-radius:12px;padding:16px}.footer{text-align:center;color:#69778a;margin-top:28px;font-size:14px}
-    @media(max-width:760px){.hero{padding:32px 22px}.languages{grid-template-columns:1fr}.features{grid-template-columns:repeat(2,minmax(0,1fr))}.top{align-items:flex-start;flex-direction:column}}
-    @media(max-width:480px){.features{grid-template-columns:1fr}.brand{align-items:flex-start}}
+    :root{--brand:#14365e;--brand2:#1f5f99;--ink:#172033;--muted:#5e6b7e;--bg:#f5f8fc;--white:#fff;--line:#d8e2ec;--soft:#eef5fb}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(180deg,#f8fbff 0%,var(--bg) 100%);color:var(--ink);font:17px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.wrap{max-width:1120px;margin:auto;padding:28px 20px 56px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:34px}.brand{display:flex;align-items:center;gap:10px;color:var(--brand);text-decoration:none;font-weight:800}.brand img{width:34px;height:34px}.badge{display:inline-flex;align-items:center;gap:7px;background:#e8f1fb;color:var(--brand);border:1px solid #c7d9ec;border-radius:999px;padding:7px 12px;font-weight:750;font-size:14px}.hero{background:var(--white);border:1px solid var(--line);border-radius:24px;padding:48px;box-shadow:0 16px 40px rgba(20,54,94,.08);text-align:center}.eyebrow{display:inline-block;text-transform:uppercase;letter-spacing:.08em;color:var(--brand2);font-weight:800;font-size:13px}.hero h1{font-size:clamp(38px,6vw,64px);line-height:1.04;margin:14px auto 18px;max-width:850px;color:#102541}.lead{font-size:20px;color:var(--muted);max-width:780px;margin:0 auto}.lang-title{margin:34px 0 14px;font-size:25px;color:#102541}.languages{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;max-width:1000px;margin:0 auto}.language-card{display:block;text-decoration:none;background:var(--soft);border:1px solid #cedeed;border-radius:18px;padding:22px;color:var(--ink);transition:.16s;text-align:left}.language-card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(20,54,94,.10);border-color:#a9c5df}.flag{font-size:30px}.language-card h2{margin:8px 0 3px;font-size:21px;color:#102541}.language-card p{margin:0;color:var(--muted);font-size:15px}.arrow{display:block;margin-top:14px;color:var(--brand);font-weight:800}.proof{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:28px 0 0}.proof span{background:#f7fafc;border:1px solid var(--line);padding:8px 12px;border-radius:999px;font-size:14px;color:#405069}.section{margin-top:22px;background:white;border:1px solid var(--line);border-radius:18px;padding:28px}.section h2{margin-top:0;color:#102541}.features{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.feature{background:#f8fafc;border-radius:14px;padding:17px}.feature strong{display:block;color:#102541;margin-bottom:4px}.note{margin-top:18px;background:#fff8df;border:1px solid #efdda2;border-radius:12px;padding:16px}.footer{text-align:center;color:#69778a;margin-top:28px;font-size:14px}@media(max-width:980px){.languages{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:760px){.hero{padding:32px 22px}.features{grid-template-columns:repeat(2,minmax(0,1fr))}.top{align-items:flex-start;flex-direction:column}}@media(max-width:520px){.languages,.features{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
   <main class="wrap">
-    <div class="top">
-      <a class="brand" href="./"><img src="assets/branding/logo-mark.svg" alt="">AI Stamp Collection Scanner</a>
-      <span class="badge">🧪 Browser Beta v1.0</span>
-    </div>
-
+    <div class="top"><a class="brand" href="./"><img src="assets/branding/logo-mark.svg" alt="">AI Stamp Collection Scanner</a><span class="badge">🧪 Browser Beta v1.0</span></div>
     <section class="hero">
       <span class="eyebrow">AI-assisted stamp inventory</span>
       <h1>Create a structured digital inventory of your stamp collection.</h1>
-      <p class="lead">Upload collection photos, create an editable stamp inventory and save it as Excel or CSV. The Browser Beta also helps flag stamps that may be interesting to research further. Everything runs locally in your browser.</p>
-
-      <h2 class="lang-title">Choose your language / Kies je taal</h2>
+      <p class="lead">Upload collection photos, create an editable stamp inventory and save it as Excel or CSV. Choose the language or region you want to use.</p>
+      <h2 class="lang-title">Choose your language</h2>
       <div class="languages">
-        <a class="language-card" href="beta-test-en.html" hreflang="en">
-          <span class="flag">🇬🇧</span>
-          <h2>English</h2>
-          <p>Open the English Browser Beta test.</p>
-          <span class="arrow">Continue in English →</span>
-        </a>
-        <a class="language-card" href="beta-test-nl.html" hreflang="nl">
-          <span class="flag">🇳🇱</span>
-          <h2>Nederlands</h2>
-          <p>Open de Nederlandse Browser Beta-test.</p>
-          <span class="arrow">Verder in het Nederlands →</span>
-        </a>
+        <a class="language-card" href="beta-test-en.html" hreflang="en"><span class="flag">🇬🇧</span><h2>English</h2><p>English Browser Beta test.</p><span class="arrow">Continue →</span></a>
+        <a class="language-card" href="beta-test-nl.html" hreflang="nl"><span class="flag">🇳🇱</span><h2>Nederlands</h2><p>Nederlandse Browser Beta-test.</p><span class="arrow">Verder →</span></a>
+        <a class="language-card" href="beta-test-es.html" hreflang="es-ES"><span class="flag">🇪🇸</span><h2>Español — España</h2><p>Prueba en español de España.</p><span class="arrow">Continuar →</span></a>
+        <a class="language-card" href="beta-test-es-us.html" hreflang="es-US"><span class="flag">🇺🇸</span><h2>Español — Estados Unidos</h2><p>Prueba en español de Estados Unidos.</p><span class="arrow">Continuar →</span></a>
+        <a class="language-card" href="beta-test-fr.html" hreflang="fr"><span class="flag">🇫🇷</span><h2>Français</h2><p>Test de la Browser Beta en français.</p><span class="arrow">Continuer →</span></a>
+        <a class="language-card" href="beta-test-de.html" hreflang="de"><span class="flag">🇩🇪</span><h2>Deutsch</h2><p>Deutscher Browser-Beta-Test.</p><span class="arrow">Weiter →</span></a>
+        <a class="language-card" href="beta-test-pt-br.html" hreflang="pt-BR"><span class="flag">🇧🇷</span><h2>Português — Brasil</h2><p>Teste da Browser Beta em português do Brasil.</p><span class="arrow">Continuar →</span></a>
+        <a class="language-card" href="beta-test-zh-cn.html" hreflang="zh-CN"><span class="flag">🇨🇳</span><h2>简体中文</h2><p>简体中文 Browser Beta 测试。</p><span class="arrow">继续 →</span></a>
       </div>
-
-      <div class="proof">
-        <span>✓ Browser based</span>
-        <span>✓ Free Beta</span>
-        <span>✓ Save as Excel</span>
-        <span>✓ Save as CSV</span>
-        <span>✓ No installation</span>
-      </div>
+      <div class="proof"><span>✓ Browser based</span><span>✓ Free Beta</span><span>✓ Save as Excel</span><span>✓ Save as CSV</span><span>✓ No installation</span></div>
     </section>
-
-    <section class="section">
-      <h2>What the Browser Beta does</h2>
-      <div class="features">
-        <div class="feature"><strong>Upload photos</strong>Add photos of your stamp collection.</div>
-        <div class="feature"><strong>Create inventory</strong>Build a structured, editable stamp inventory.</div>
-        <div class="feature"><strong>Further research</strong>See which stamps may deserve more research.</div>
-        <div class="feature"><strong>Save your work</strong>Save the inventory as Excel or CSV.</div>
-      </div>
-      <div class="note"><strong>Browser Beta:</strong> the scanner helps you organise and research a stamp collection. It does not determine value, rarity or authenticity.</div>
-    </section>
-
+    <section class="section"><h2>What the Browser Beta does</h2><div class="features"><div class="feature"><strong>Upload photos</strong>Add photos of your stamp collection.</div><div class="feature"><strong>Create inventory</strong>Build a structured, editable stamp inventory.</div><div class="feature"><strong>Further research</strong>See which stamps may deserve more research.</div><div class="feature"><strong>Save your work</strong>Save the inventory as Excel or CSV.</div></div><div class="note"><strong>Browser Beta:</strong> the scanner helps you organise and research a stamp collection. It does not determine value, rarity or authenticity.</div></section>
     <p class="footer">AI Stamp Collection Scanner — Browser Beta v1.0</p>
   </main>
 </body>
