@@ -1,38 +1,35 @@
-# AI Stamp Collection Scanner
+# AI Stamp Collection Scanner — Browser Beta v1.0
 
-**AI-Assisted Stamp Inventory**
+Turn stamp collection photos into a structured, editable inventory in a modern browser. The current product line is the hosted **Browser Beta v1.0**.
 
-Turn your stamp collection into a clear digital inventory. Upload collection photos, create structured and photo-linked records, keep track of every item and organise stamps that may deserve further research. The Browser Beta runs locally in your browser, and you remain in control of every detail.
+[Open the Browser Beta](https://vid567.github.io/ai-stamp-collection-scanner/)
 
 ![AI Stamp Collection Scanner](assets/marketing/premium/README-Banner-1600x500.jpg)
 
-## What it does
+## Current production behavior
 
-- Runs as a private Browser Beta at [AI Stamp Collection Scanner](https://vid567.github.io/ai-stamp-collection-scanner/).
-- Offers separate English and Dutch Browser Beta experiences.
-- Accepts one or more photos and creates an editable, photo-linked inventory workflow.
-- Keeps photos and inventory details local to the browser.
-- Exports the reviewed inventory to Excel or CSV.
-- Marks unknown details for review instead of presenting uncertain information as fact.
+- Browser-only: no Python, terminal, installation, account or AI key is required.
+- Uses local photo-based detection to propose one inventory record for each detected physical stamp region.
+- Keeps separately visible stamps as separate records, including visually identical stamps.
+- Supports JPG/JPEG, PNG and WebP, up to 20 photos per inventory.
+- Keeps photo blobs and draft inventory data in browser storage and supports reload recovery while that storage remains available.
+- Exports the reviewed 16-column inventory to Excel or CSV; photos are referenced by text and are not embedded.
+- Preserves manual add, edit, duplicate, delete and source-photo reassignment controls.
 
-The Browser Beta does not determine rarity, value, authenticity or an exact catalogue identity. It supports collector judgement; it does not replace it.
+The production build currently uses the validated **heuristic fallback detector**. The repository contains an ONNX adapter, but no production ONNX model or ONNX Runtime bundle is deployed. Do not describe model-based identification as active.
 
-## Browser Beta v1.0 scope
+The scanner does not guarantee that every stamp will be found. It does not automatically identify countries or catalogue numbers, and it does not determine value, rarity or authenticity. Automatic results require manual review.
 
-- Browser-only; no Python, terminal or installation required.
-- No embedded AI key and no external AI analysis in this Beta.
-- Lightweight Excel and CSV exports.
-- No photographs or thumbnails embedded in spreadsheets.
-- Photo traceability through Record ID, Photo Number, Original Filename and Image Reference.
+## Privacy and analytics
 
-## Start
+Stamp photos and inventory data are processed locally in the browser and are not uploaded for stamp identification. Anonymous usage analytics may be collected through the existing project GA4 configuration to help improve the beta.
 
-[Choose English or Dutch](https://vid567.github.io/ai-stamp-collection-scanner/).
+## Start and documentation
 
 ### English
 
 - [English test page](https://vid567.github.io/ai-stamp-collection-scanner/beta-test-en.html)
-- [Open the English scanner](https://vid567.github.io/ai-stamp-collection-scanner/beta/scanner-en.html)
+- [English scanner](https://vid567.github.io/ai-stamp-collection-scanner/beta/scanner-en.html)
 - [Quick Start](beta/docs/en/quick-start.html)
 - [User Guide](beta/docs/en/user-guide.html)
 - [FAQ](beta/docs/en/faq.html)
@@ -41,28 +38,26 @@ The Browser Beta does not determine rarity, value, authenticity or an exact cata
 ### Nederlands
 
 - [Nederlandse testpagina](https://vid567.github.io/ai-stamp-collection-scanner/beta-test-nl.html)
-- [Open de Nederlandse scanner](https://vid567.github.io/ai-stamp-collection-scanner/beta/scanner-nl.html)
+- [Nederlandse scanner](https://vid567.github.io/ai-stamp-collection-scanner/beta/scanner-nl.html)
 - [Snel starten](beta/docs/nl/snel-starten.html)
 - [Gebruikershandleiding](beta/docs/nl/gebruikershandleiding.html)
 - [Veelgestelde vragen](beta/docs/nl/veelgestelde-vragen.html)
 - [Problemen oplossen](beta/docs/nl/problemen-oplossen.html)
 
-## Website
+The language chooser also links to Spain Spanish, US Spanish, French, German, Brazilian Portuguese and Simplified Chinese versions.
 
-The repository is ready for GitHub Pages. Publish from the `main` branch and repository root.
+## Detector validation status
 
-The public homepage is the language chooser. English and Dutch Browser Beta pages, scanners and documentation are kept separate. The export remains intentionally lightweight and uses text-based photo traceability rather than embedded images.
+The repository currently contains 245 reviewed bounding boxes across nine annotated source images. Dense pages remain underrepresented and several source pages are still pending or in review. In particular, stamp-source-10 has not completed review. This is not sufficient evidence to promote an ONNX model.
 
-## Product language
+See [training/stamp-detector/README.md](training/stamp-detector/README.md) and [annotation-status.csv](training/stamp-detector/annotation-status.csv).
 
-Use: **AI-assisted**, **suggested identification**, **confidence level**, **needs research**, **potentially interesting**.
+## Legacy / pre-Browser-Beta toolkit
 
-Do not claim guaranteed identification, rarity, valuation or selling price.
+The root-level workbook, Python tools, Phase 1/Phase 2 prompts, PDFs and downloads/AI-Stamp-Collection-Scanner-v2.x.zip belong to an earlier toolkit product line. Toolkit versions 2.0–2.2 are historical and are **not** Browser Beta releases or current Gumroad delivery files.
 
-## Content Creator
+See [LEGACY-TOOLKIT.md](LEGACY-TOOLKIT.md) before using any of that material. The obsolete Stamp-Inventory-Toolkit_v1.0.zip is not a release source for this application.
 
-Use the [AI Stamp Scanner Content Creator](https://vid567.github.io/ai-stamp-collection-scanner/content-creator.html) to plan, copy and track the prepared Threads posts. Planning data stays in the browser; the tool does not automatically publish to Threads.
+## Release identity
 
-## Licence
-
-The downloadable toolkit is licensed for personal use. See `LICENSE.txt` inside the release package.
+The canonical product is the hosted Browser Beta. A GitHub tag or release named browser-beta-v1.0 may document the tested hosted release, but it must not attach or present historical toolkit ZIPs as the browser application.

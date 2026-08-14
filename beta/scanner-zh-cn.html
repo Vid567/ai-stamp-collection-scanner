@@ -20,10 +20,10 @@
   </header>
   <main>
     <section class="intro">
-      <p class="eyebrow">AI 辅助邮票清单</p>
+      <p class="eyebrow">基于照片的邮票检测</p>
       <h1>为您的邮票收藏建立清晰的数字清单。</h1>
       <p>上传收藏照片，创建结构化清单，编辑信息并保存清单。所有操作都在您的浏览器本地完成。</p>
-      <div class="privacy">🔒 照片保留在此浏览器中。此版本不会上传照片或清单数据。</div>
+      <div class="privacy">🔒 邮票照片和清单数据会在浏览器本地处理，不会上传用于邮票识别。为改进测试版，可能会收集匿名使用统计信息。</div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">
@@ -53,10 +53,7 @@
       <div id="records" class="records"></div>
     </section>
 
-    <section class="limits">
-      <h2>此 Browser Beta 能做什么、不能做什么</h2>
-      <p>扫描器可帮助您整理邮票收藏，并标记可能值得进一步研究的邮票。它不会判断价值、稀有程度或真伪。</p>
-    </section>
+    <section class="limits"><h2>Browser Beta 的功能和限制</h2><p>扫描器使用本地照片检测，为可见的邮票区域创建可编辑的清单记录。自动结果必须人工复核。它不会识别目录编号，也不会判断价值、稀有程度或真伪。</p></section>
   </main>
   <template id="record-template">
     <article class="record-card">
