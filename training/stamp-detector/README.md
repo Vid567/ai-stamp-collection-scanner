@@ -6,7 +6,7 @@ Browser Beta uses a one-class object detector (`stamp`) when `beta/models/stamp-
 
 Use varied real collection photos: single stamps, dense album pages, cancellations, handwritten notes, overlapping material, different backgrounds, rotations, colours and duplicate stamps.
 
-Annotate **every visible physical stamp** with one bounding box and class `stamp`. Do not box handwritten notes, album lines, hinges or empty spaces.
+Annotate **every visible physical stamp** with one bounding box and class `stamp`. Do not box handwritten notes, album lines, hinges, envelope areas or empty spaces. Separately visible identical stamps remain separate boxes and separate inventory records; similarity must never merge physical detections.
 
 Recommended split: 70% train / 20% validation / 10% test. Keep near-duplicate photos in the same split to avoid leakage.
 
@@ -60,3 +60,7 @@ Before replacing the fallback as the default quality path, test at least:
 - duplicate grouping is evaluated separately after object detection.
 
 Keep the heuristic fallback until the ONNX model passes these gates.
+
+## Current reviewed ground truth
+
+`annotation-status.csv` currently records 245 reviewed boxes across nine images. Dense source pages remain incomplete, including `stamp-source-10` in review. No ONNX model may be promoted from this repository state alone.
