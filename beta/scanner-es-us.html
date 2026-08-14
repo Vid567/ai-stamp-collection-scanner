@@ -20,10 +20,10 @@
   </header>
   <main>
     <section class="intro">
-      <p class="eyebrow">INVENTARIO DE ESTAMPILLAS ASISTIDO POR IA</p>
+      <p class="eyebrow">DETECCIÓN DE ESTAMPILLAS BASADA EN FOTOS</p>
       <h1>Crea un inventario digital claro de tu colección de estampillas.</h1>
       <p>Sube fotos de tu colección, crea un inventario estructurado, edita los datos y guarda tu inventario. Todo funciona localmente en tu navegador.</p>
-      <div class="privacy">🔒 Las fotos permanecen en este navegador. Esta versión no sube fotos ni datos del inventario.</div>
+      <div class="privacy">🔒 Tus fotos de estampillas y los datos del inventario se procesan localmente en el navegador y no se suben para identificar estampillas. Se pueden recopilar estadísticas de uso anónimas para mejorar la beta.</div>
     </section>
     <section class="panel" aria-labelledby="photos-title">
       <div class="section-head"><div><span>Paso 1</span><h2 id="photos-title">Selecciona fotos de estampillas</h2></div><strong id="photo-count">0 fotos</strong></div>
@@ -50,10 +50,7 @@
       <div id="empty-state" class="empty">Selecciona al menos una foto y pulsa “Crear inventario”.</div>
       <div id="records" class="records"></div>
     </section>
-    <section class="limits">
-      <h2>Qué hace y qué no hace esta Browser Beta</h2>
-      <p>El escáner te ayuda a inventariar una colección de estampillas y señala las que podrían ser interesantes para investigar más. No determina el valor, la rareza ni la autenticidad.</p>
-    </section>
+    <section class="limits"><h2>Lo que esta Browser Beta hace y no hace</h2><p>El escáner usa detección fotográfica local para crear registros editables de las zonas de estampillas visibles. Los resultados automáticos deben revisarse manualmente. No identifica números de catálogo ni determina valor, rareza o autenticidad.</p></section>
   </main>
   <template id="record-template">
     <article class="record-card">

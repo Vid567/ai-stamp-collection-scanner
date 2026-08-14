@@ -20,10 +20,10 @@
   </header>
   <main>
     <section class="intro">
-      <p class="eyebrow">INVENTAIRE DE TIMBRES ASSISTÉ PAR IA</p>
+      <p class="eyebrow">DÉTECTION DE TIMBRES À PARTIR DE PHOTOS</p>
       <h1>Créez un inventaire numérique clair de votre collection de timbres.</h1>
       <p>Ajoutez des photos de votre collection, créez un inventaire structuré, modifiez les informations et enregistrez votre inventaire. Tout fonctionne localement dans votre navigateur.</p>
-      <div class="privacy">🔒 Les photos restent dans ce navigateur. Cette version ne téléverse ni les photos ni les données de l’inventaire.</div>
+      <div class="privacy">🔒 Vos photos de timbres et les données de l’inventaire sont traitées localement dans le navigateur et ne sont pas téléversées pour identifier les timbres. Des statistiques d’utilisation anonymes peuvent être recueillies afin d’améliorer la bêta.</div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">
@@ -53,10 +53,7 @@
       <div id="records" class="records"></div>
     </section>
 
-    <section class="limits">
-      <h2>Ce que cette Browser Beta fait et ne fait pas</h2>
-      <p>Le scanner vous aide à inventorier une collection de timbres et signale les timbres qui peuvent être intéressants à rechercher davantage. Il ne détermine ni la valeur, ni la rareté, ni l’authenticité.</p>
-    </section>
+    <section class="limits"><h2>Ce que cette Browser Beta fait et ne fait pas</h2><p>Le scanner utilise une détection locale basée sur les photos pour créer des fiches modifiables pour les zones de timbres visibles. Les résultats automatiques doivent être vérifiés manuellement. Il n’identifie pas les numéros de catalogue et ne détermine ni la valeur, ni la rareté, ni l’authenticité.</p></section>
   </main>
   <template id="record-template">
     <article class="record-card">
