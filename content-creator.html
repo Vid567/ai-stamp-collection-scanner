@@ -1,168 +1,27 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MDGNZMY7BQ"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'G-MDGNZMY7BQ');
-  </script>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>AI Stamp Scanner Content Creator</title>
-  <meta name="description" content="Plan, copy and track AI Stamp Collection Scanner Threads posts.">
-  <meta name="theme-color" content="#14365e">
-  <link rel="icon" href="assets/branding/favicon.svg" type="image/svg+xml">
-  <style>
-    :root{--navy:#14365e;--blue:#245c91;--cream:#f7f2e8;--paper:#fffdf8;--ink:#17212b;--muted:#566472;--line:#d8d2c6;--green:#247047;--amber:#a65d00;--red:#a13b35;--shadow:0 8px 24px rgba(20,54,94,.10)}
-    *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select,textarea{font:inherit}a{color:var(--blue)}
-    .wrap{width:min(1180px,calc(100% - 32px));margin:auto}.top{background:var(--navy);color:white;padding:28px 0}.top a{color:white}.top-row{display:flex;justify-content:space-between;gap:20px;align-items:start}.eyebrow{font-weight:700;letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;opacity:.8}h1{font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.12;margin:.35rem 0}.subtitle{margin:0;opacity:.86}.back{font-weight:700;white-space:nowrap}
-    .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:22px 0}.stat{background:rgba(255,255,255,.1);padding:13px;border:1px solid rgba(255,255,255,.18);border-radius:12px}.stat b{display:block;font-size:1.45rem}.notice{font-size:.94rem;opacity:.78}
-    main{padding:24px 0 56px}.panel,.card{background:var(--paper);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}.panel{padding:18px;margin-bottom:20px}h2{margin:0 0 14px;font-size:1.35rem}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-weight:700;font-size:.9rem}.field.wide{grid-column:span 2}input,select,textarea{width:100%;min-height:46px;border:1px solid #9aa6b1;border-radius:9px;padding:9px 11px;background:white;color:var(--ink)}textarea{min-height:76px;resize:vertical}:focus-visible{outline:3px solid #65a9ee;outline-offset:2px}
-    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}.btn{border:0;border-radius:9px;min-height:46px;padding:10px 15px;background:var(--blue);color:white;font-weight:750;cursor:pointer}.btn.secondary{background:white;color:var(--navy);border:1px solid var(--navy)}.btn.danger{background:var(--red)}.btn:hover{filter:brightness(.95)}
-    .calendar-list{display:grid;gap:8px}.calendar-item{border-left:5px solid var(--blue);background:white;border-radius:8px;padding:10px 12px;display:grid;grid-template-columns:105px 65px 1fr auto;gap:10px;align-items:center}.calendar-item.today{border-color:var(--green)}.calendar-item.overdue{border-color:var(--red)}.calendar-item.next{background:#eef6ff}.empty{color:var(--muted);margin:0}
-    .list-head{display:flex;justify-content:space-between;align-items:center;margin:24px 0 12px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{padding:18px;border-top:6px solid var(--blue)}.card[data-status="Posted"]{border-top-color:var(--green)}.card[data-status="Planned"]{border-top-color:var(--amber)}.card[data-status="Skipped"]{border-top-color:#777}.card-head{display:flex;justify-content:space-between;gap:10px;align-items:center}.number{font-size:1.15rem;font-weight:800}.badge{border-radius:999px;padding:4px 9px;font-size:.78rem;font-weight:800;background:#e6edf5;color:var(--navy)}.post{white-space:pre-wrap;background:#f8f6f0;border-radius:10px;padding:14px;margin:12px 0;min-height:190px}.meta{display:flex;justify-content:space-between;color:var(--muted);font-size:.88rem}.card-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.card-fields .notes{grid-column:1/-1}.posted-at{font-size:.87rem;color:var(--muted);margin-top:8px}.hidden{display:none!important}
-    dialog{border:0;border-radius:14px;padding:0;max-width:520px;width:calc(100% - 32px);box-shadow:0 20px 70px #0008}dialog::backdrop{background:#10233a99}.dialog-body{padding:22px}.days{display:flex;flex-wrap:wrap;gap:8px}.day{display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:8px;padding:7px 9px}.day input{min-height:auto;width:auto}
-    @media(max-width:850px){.cards{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.calendar-item{grid-template-columns:90px 55px 1fr}.calendar-item .badge{display:none}}
-    @media(max-width:560px){body{font-size:16px}.wrap{width:min(100% - 20px,1180px)}.top-row{display:block}.back{display:inline-block;margin-top:12px}.stats{grid-template-columns:1fr 1fr}.grid,.card-fields{grid-template-columns:1fr}.field.wide,.card-fields .notes{grid-column:auto}.post{min-height:0}.calendar-item{grid-template-columns:1fr 48px}.calendar-item span:nth-child(3){grid-column:1/-1}.actions .btn{flex:1 1 145px}}
-  </style>
-</head>
-<body>
-  <header class="top">
-    <div class="wrap">
-      <div class="top-row"><div><div class="eyebrow">Owner content tool</div><h1>AI Stamp Scanner Content Creator</h1><p class="subtitle">Plan, copy and track your Threads posts.</p></div><a class="back" href="./">← Main website</a></div>
-      <div class="stats"><div class="stat"><b id="totalStat">50</b>Total posts</div><div class="stat"><b id="plannedStat">0</b>Planned</div><div class="stat"><b id="postedStat">0</b>Posted</div><div class="stat"><b id="availableStat">50</b>Available</div></div>
-      <div class="notice">Planning data is stored only in this browser. This tool does not post automatically to Threads.</div>
-    </div>
-  </header>
-  <main class="wrap">
-    <section class="panel" aria-labelledby="filterTitle">
-      <h2 id="filterTitle">Find and manage posts</h2>
-      <div class="grid">
-        <div class="field wide"><label for="search">Search</label><input id="search" type="search" placeholder="Search post text or notes"></div>
-        <div class="field"><label for="category">Category</label><select id="category"><option>All</option><option>Collection Problems</option><option>AI as an Assistant</option><option>Practical Tips</option><option>Conversation and Feedback</option></select></div>
-        <div class="field"><label for="statusFilter">Status</label><select id="statusFilter"><option>All</option><option>Available</option><option>Planned</option><option>Posted</option><option>Skipped</option></select></div>
-        <div class="field"><label for="sort">Sort</label><select id="sort"><option value="number">Post number</option><option value="date">Planned date</option></select></div>
-        <div class="field"><label for="undated">Date filter</label><select id="undated"><option value="all">All posts</option><option value="undated">Without planned date</option></select></div>
-      </div>
-      <div class="actions" aria-label="Post number filters"><button class="btn range-filter" data-range="all">All</button><button class="btn secondary range-filter" data-range="1-10">1–10</button><button class="btn secondary range-filter" data-range="11-20">11–20</button><button class="btn secondary range-filter" data-range="21-30">21–30</button><button class="btn secondary range-filter" data-range="31-40">31–40</button><button class="btn secondary range-filter" data-range="41-50">41–50</button></div>
-      <div class="actions"><button class="btn secondary" id="clearFilters">Clear filters</button><button class="btn" id="copyAll">Copy All Posts</button><button class="btn" id="scheduleOpen">Create schedule</button><button class="btn secondary" id="csv">Download CSV</button><button class="btn secondary" id="jsonExport">Export JSON</button><button class="btn secondary" id="jsonImport">Import JSON</button><button class="btn danger" id="reset">Reset planning</button><input class="hidden" id="jsonFile" type="file" accept="application/json,.json"></div>
-    </section>
-    <section class="panel" aria-labelledby="calendarTitle"><h2 id="calendarTitle">Upcoming plan</h2><div id="calendar" class="calendar-list"></div></section>
-    <div class="list-head"><h2>Threads posts</h2><span id="shown">50 shown</span></div>
-    <section id="cards" class="cards" aria-live="polite"></section>
-  </main>
-  <dialog id="scheduleDialog">
-    <form method="dialog" class="dialog-body" id="scheduleForm">
-      <h2>Create schedule</h2>
-      <div class="grid">
-        <div class="field"><label for="startDate">Starting date</label><input id="startDate" type="date" required></div>
-        <div class="field"><label for="perWeek">Posts per week</label><input id="perWeek" type="number" min="1" max="7" value="5" required></div>
-        <div class="field"><label for="postTime">Default time</label><input id="postTime" type="time" value="10:00"></div>
-        <div class="field wide"><label>Preferred days</label><div class="days" id="days"></div></div>
-      </div>
-      <p class="notice" style="color:var(--muted)">Only posts without a planned date are scheduled. Existing dates are preserved.</p>
-      <div class="actions"><button class="btn" value="default" id="scheduleApply">Apply schedule</button><button class="btn secondary" value="cancel">Cancel</button></div>
-    </form>
-  </dialog>
-  <script>
-    const URL='https://bit.ly/AIStampScannerApp', MARKETING_URL=URL, KEY='aiStampScannerContentCreatorV1';
-    const raw=[
-      ["Collection Problems",`🧪 Browser Beta v1.0 is now live.\n\nUpload photos of your stamp collection and create your first structured stamp inventory directly in your browser.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Collection Problems",`Try the free Browser Beta.\n\nTurn photos of your stamp collection into a clear digital stamp inventory you can review, edit and export.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Collection Problems",`The Browser Beta helps stamp collectors create a structured, editable stamp inventory from collection photos.\n\nHelp improve the Beta.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Collection Problems",`Still storing your stamps in albums and boxes?\n\nThe Browser Beta helps you create your first digital stamp inventory in minutes.\n\n${URL}`],
-      ["Collection Problems",`Every stamp collection deserves a good inventory.\n\nStart with the free Browser Beta and organize your stamps faster.\n\n${URL}`],
-      ["Collection Problems",`The Browser Beta makes it easy to build a searchable stamp inventory from photos of your stamp collection.\n\n${URL}`],
-      ["Collection Problems",`Your stamps deserve more than a shoebox.\n\nTry the Browser Beta and organize your collection digitally.\n\n${URL}`],
-      ["Collection Problems",`Whether you collect 100 stamps or 100,000, the Browser Beta helps you build a structured stamp inventory.\n\n${URL}`],
-      ["Collection Problems",`Take photos of your stamp collection once.\n\nThe Browser Beta helps you create a stamp inventory you can continue improving.\n\n${URL}`],
-      ["Collection Problems",`A well-organized stamp inventory makes collecting more enjoyable.\n\nStart today with the free Browser Beta.\n\n${URL}`],
-      ["Collection Problems",`Ever bought stamps you already owned?\n\nThe Browser Beta helps you build a stamp inventory that makes duplicates easier to spot.\n\n${URL}`],
-      ["Collection Problems",`Finding one specific stamp shouldn't take an hour.\n\nThe Browser Beta helps you organize your stamp collection digitally.\n\n${URL}`],
-      ["Collection Problems",`Many stamp collections grow over decades.\n\nThe Browser Beta helps you keep your stamp inventory organized as your collection grows.\n\n${URL}`],
-      ["Collection Problems",`Albums. Stock books. Boxes.\n\nBring your entire stamp collection together with the Browser Beta.\n\n${URL}`],
-      ["Collection Problems",`Your stamp collection tells a story.\n\nThe Browser Beta helps you create the inventory it deserves.\n\n${URL}`],
-      ["Collection Problems",`Collectors spend years building stamp collections.\n\nThe Browser Beta helps you organize them much faster.\n\n${URL}`],
-      ["Collection Problems",`The Browser Beta doesn't replace collecting.\n\nIt simply makes your stamps easier to organize and review.\n\n${URL}`],
-      ["Collection Problems",`Know exactly where every stamp belongs.\n\nThe Browser Beta helps you create a structured stamp inventory.\n\n${URL}`],
-      ["Collection Problems",`Old stamp collections deserve modern tools.\n\nTry the free Browser Beta today.\n\n${URL}`],
-      ["Collection Problems",`Every organized stamp collection starts with one simple step.\n\nCreate your first stamp inventory with the Browser Beta.\n\n${URL}`],
-      ["Practical Tips",`Paper notes are difficult to maintain.\n\nThe Browser Beta helps you build a digital stamp inventory that's easy to update.\n\n${URL}`],
-      ["Practical Tips",`Review your stamps.\n\nEdit your inventory.\n\nExport whenever you want.\n\nThat's the Browser Beta.\n\n${URL}`],
-      ["Practical Tips",`Your stamp inventory grows together with your stamp collection.\n\nThe Browser Beta makes updating easy.\n\n${URL}`],
-      ["Practical Tips",`Organized stamps save time.\n\nThe Browser Beta helps collectors spend more time enjoying the hobby.\n\n${URL}`],
-      ["Practical Tips",`The goal isn't perfection.\n\nThe goal is knowing which stamps you own.\n\nStart today with the free Browser Beta.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Practical Tips",`The Browser Beta is designed to make organizing your stamp collection simple.\n\nStart your stamp inventory today.\n\n${URL}`],
-      ["Practical Tips",`Every stamp collector has a different way of organizing stamps.\n\nThe Browser Beta gives you a flexible starting point.\n\n${URL}`],
-      ["Practical Tips",`A good stamp inventory is the foundation of every well-organized stamp collection.\n\nBuild yours with the Browser Beta.\n\n${URL}`],
-      ["Practical Tips",`The bigger your stamp collection becomes, the more valuable a good stamp inventory is.\n\nTry the Browser Beta.\n\n${URL}`],
-      ["Practical Tips",`Your stamp collection is unique.\n\nThe Browser Beta helps you build an inventory that grows with your collection.\n\n${URL}`],
-      ["Practical Tips",`Tip for stamp collectors:\n\nTake clear photos of your stamps before uploading them to the Browser Beta.\n\nBetter photos create a better inventory.\n\n${URL}`],
-      ["Practical Tips",`Group similar stamps together before taking photos.\n\nThe Browser Beta works best with well-organized stamp collection photos.\n\n${URL}`],
-      ["Practical Tips",`One sharp photo is often better than several blurry ones.\n\nHelp the Browser Beta create a clearer stamp inventory.\n\n${URL}`],
-      ["Practical Tips",`Good stamp photos save time later.\n\nThe Browser Beta starts with the photos you upload.\n\n${URL}`],
-      ["Practical Tips",`The best time to organize your stamp collection is before it becomes overwhelming.\n\nThe Browser Beta makes that first step easy.\n\n${URL}`],
-      ["Practical Tips",`You don't need to be an expert.\n\nThe Browser Beta is built for every stamp collector.\n\n${URL}`],
-      ["Practical Tips",`Every organized stamp collection starts with one photo.\n\nThen another.\n\nThe Browser Beta helps you build your inventory step by step.\n\n${URL}`],
-      ["Practical Tips",`Don't wait until you lose track of your stamps.\n\nStart building your digital stamp inventory with the Browser Beta today.\n\n${URL}`],
-      ["Practical Tips",`Spend less time searching through albums.\n\nSpend more time enjoying your stamps.\n\nThat's what the Browser Beta is for.\n\n${URL}`],
-      ["Practical Tips",`Stamp collecting should be relaxing.\n\nThe Browser Beta helps keep your collection organized.\n\n${URL}`],
-      ["Conversation and Feedback",`🧪 Browser Beta testers wanted.\n\nHelp improve the AI Stamp Collection Scanner with your feedback.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Conversation and Feedback",`Every Browser Beta update is based on feedback from real stamp collectors.\n\nYour ideas can shape the next version.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Conversation and Feedback",`Have you tried the Browser Beta yet?\n\nI'd love to hear what works well and what can be improved.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Conversation and Feedback",`The Browser Beta is improving every week thanks to collector feedback.\n\nJoin the Beta community.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Conversation and Feedback",`Looking for stamp collectors to test the Browser Beta.\n\nEvery suggestion helps improve the project.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Conversation and Feedback",`The Browser Beta is being built together with stamp collectors around the world.\n\nYour feedback matters.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Conversation and Feedback",`What would make organizing your stamp collection easier?\n\nTell me what you'd like to see in the Browser Beta.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Conversation and Feedback",`Every great product starts with great feedback.\n\nHelp shape the future of the Browser Beta.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Conversation and Feedback",`Thank you to everyone testing the Browser Beta.\n\nTogether we're building a better stamp inventory tool for collectors.\n\nDM me with your feedback.\n\n${URL}`],
-      ["Conversation and Feedback",`If you collect stamps, I'd love your opinion.\n\nTry the free Browser Beta today and help shape the future of the AI Stamp Collection Scanner.\n\nDM me with your feedback.\n\n${URL}`]
-    ];
-    const posts=raw.map((p,i)=>({id:i+1,category:p[0],text:p[1]}));
-    let data=load();
-    let activeRange="all";
-    const $=s=>document.querySelector(s), esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-    function defaults(){return {posts:{},prefs:{days:[1,2,3,4,5],perWeek:5,time:"10:00"}}}
-    function load(){try{return Object.assign(defaults(),JSON.parse(localStorage.getItem(KEY)||'{}'))}catch{return defaults()}}
-    function item(id){return data.posts[id]||(data.posts[id]={status:"Available",planned:"",posted:"",notes:""})}
-    function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
-    function card(p){const d=item(p.id);return `<article class="card" data-id="${p.id}" data-status="${d.status}"><div class="card-head"><span class="number">Post ${p.id}</span><span class="badge">${esc(p.category)}</span></div><div class="post">${esc(p.text)}</div><div class="meta"><span>${[...p.text].length} characters</span><span>${esc(d.status)}</span></div><div class="actions"><button class="btn copy" data-copy="${p.id}">Copy post</button></div><div class="card-fields"><div class="field"><label>Status<select data-field="status"><option${d.status==="Available"?" selected":""}>Available</option><option${d.status==="Planned"?" selected":""}>Planned</option><option${d.status==="Posted"?" selected":""}>Posted</option><option${d.status==="Skipped"?" selected":""}>Skipped</option></select></label></div><div class="field"><label>Planned date<input data-field="planned" type="datetime-local" value="${esc(d.planned)}"></label></div><div class="field notes"><label>Notes<textarea data-field="notes" placeholder="Optional notes">${esc(d.notes)}</textarea></label></div></div>${d.posted?`<div class="posted-at">Posted: ${esc(new Date(d.posted).toLocaleString())}</div>`:""}</article>`}
-    function render(){
-      const q=$("#search").value.toLowerCase(),cat=$("#category").value,st=$("#statusFilter").value,undated=$("#undated").value;
-      let shown=posts.filter(p=>{const d=item(p.id),[start,end]=activeRange==="all"?[1,50]:activeRange.split("-").map(Number);return p.id>=start&&p.id<=end&&(!q||(p.text+" "+d.notes).toLowerCase().includes(q))&&(cat==="All"||p.category===cat)&&(st==="All"||d.status===st)&&(undated==="all"||!d.planned)});
-      shown.sort($("#sort").value==="date"?(a,b)=>(item(a.id).planned||"9999").localeCompare(item(b.id).planned||"9999"):(a,b)=>a.id-b.id);
-      $("#cards").innerHTML=shown.map(card).join("");$("#shown").textContent=`${shown.length} shown`;
-      const counts={Available:0,Planned:0,Posted:0,Skipped:0};posts.forEach(p=>counts[item(p.id).status]++);
-      $("#plannedStat").textContent=counts.Planned;$("#postedStat").textContent=counts.Posted;$("#availableStat").textContent=counts.Available;
-      renderCalendar();
-    }
-    function renderCalendar(){
-      const now=new Date(), today=now.toISOString().slice(0,10);
-      const planned=posts.filter(p=>item(p.id).planned&&item(p.id).status!=="Posted"&&item(p.id).status!=="Skipped").sort((a,b)=>item(a.id).planned.localeCompare(item(b.id).planned));
-      $("#calendar").innerHTML=planned.length?planned.slice(0,10).map((p,i)=>{const d=item(p.id),day=d.planned.slice(0,10),cls=day<today?"overdue":day===today?"today":i===0?"next":"";return `<div class="calendar-item ${cls}"><strong>${esc(new Date(d.planned).toLocaleString([], {dateStyle:"medium",timeStyle:"short"}))}</strong><span>#${p.id}</span><span>${esc(p.text.slice(0,90))}…</span><span class="badge">${day<today?"Overdue":day===today?"Today":i===0?"Next":esc(d.status)}</span></div>`}).join(""):'<p class="empty">No posts are planned yet.</p>';
-    }
-    async function copyText(text){try{await navigator.clipboard.writeText(text)}catch{const t=document.createElement("textarea");t.value=text;document.body.append(t);t.select();document.execCommand("copy");t.remove()}}
-    $("#cards").addEventListener("click",async e=>{const b=e.target.closest(".copy");if(!b)return;const p=posts.find(x=>x.id===+b.dataset.copy);await copyText(p.text);b.textContent="Copied";setTimeout(()=>b.textContent="Copy post",1200)});
-    $("#cards").addEventListener("change",e=>{const f=e.target.dataset.field;if(!f)return;const id=+e.target.closest(".card").dataset.id,d=item(id),old=d.status;d[f]=e.target.value;if(f==="planned"&&d.planned&&d.status==="Available")d.status="Planned";if(f==="status"&&d.status==="Posted"&&old!=="Posted")d.posted=new Date().toISOString();if(f==="status"&&d.status!=="Posted")d.posted="";save()});
-    $("#cards").addEventListener("input",e=>{if(e.target.dataset.field!=="notes")return;item(+e.target.closest(".card").dataset.id).notes=e.target.value;localStorage.setItem(KEY,JSON.stringify(data))});
-    ["search","category","statusFilter","sort","undated"].forEach(id=>$("#"+id).addEventListener(id==="search"?"input":"change",render));
-    document.querySelectorAll(".range-filter").forEach(button=>button.addEventListener("click",()=>{activeRange=button.dataset.range;document.querySelectorAll(".range-filter").forEach(item=>item.classList.toggle("secondary",item!==button));render()}));
-    $("#clearFilters").onclick=()=>{$("#search").value="";$("#category").value=$("#statusFilter").value="All";$("#sort").value="number";$("#undated").value="all";activeRange="all";document.querySelectorAll(".range-filter").forEach(item=>item.classList.toggle("secondary",item.dataset.range!=="all"));render()};
-    $("#copyAll").onclick=async()=>{await copyText(posts.map(post=>post.text).join("\n\n"));$("#copyAll").textContent="All posts copied";setTimeout(()=>$("#copyAll").textContent="Copy All Posts",1400)};
-    const download=(name,type,text)=>{const a=document.createElement("a");a.href=globalThis.URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>globalThis.URL.revokeObjectURL(a.href),1000)};
-    const csvCell=v=>`"${String(v??"").replace(/"/g,'""')}"`;
-    $("#csv").onclick=()=>{const rows=[["Post Number","Category","Post Text","Character Count","Status","Planned Date","Posted Date","Notes","Marketing URL"],...posts.map(p=>{const d=item(p.id);return[p.id,p.category,p.text,[...p.text].length,d.status,d.planned,d.posted,d.notes,URL]})];download("AI-Stamp-Scanner-Threads-Content.csv","text/csv;charset=utf-8","\ufeff"+rows.map(r=>r.map(csvCell).join(",")).join("\r\n"))};
-    $("#jsonExport").onclick=()=>download("AI-Stamp-Scanner-Planning.json","application/json",JSON.stringify({version:1,exported:new Date().toISOString(),data},null,2));
-    $("#jsonImport").onclick=()=>$("#jsonFile").click();$("#jsonFile").onchange=async e=>{try{const parsed=JSON.parse(await e.target.files[0].text());if(!parsed.data||!parsed.data.posts)throw Error();data=parsed.data;save();alert("Planning data imported.")}catch{alert("This is not a valid planning backup.")}e.target.value=""};
-    $("#reset").onclick=()=>{if(confirm("Reset all statuses, dates and notes? This cannot be undone.")){data=defaults();localStorage.removeItem(KEY);save()}};
-    const dlg=$("#scheduleDialog"),dayNames=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];$("#days").innerHTML=dayNames.map((n,i)=>`<label class="day"><input type="checkbox" value="${i}" ${i>0&&i<6?"checked":""}>${n}</label>`).join("");
-    $("#scheduleOpen").onclick=()=>{$("#startDate").value=new Date().toISOString().slice(0,10);dlg.showModal()};
-    $("#scheduleApply").onclick=e=>{e.preventDefault();const chosen=[...$("#days input:checked")].map(x=>+x.value),limit=Math.min(+$("#perWeek").value,chosen.length);if(!chosen.length||!limit)return alert("Select at least one posting day.");const available=posts.filter(p=>!item(p.id).planned&&item(p.id).status!=="Posted"&&item(p.id).status!=="Skipped");let date=new Date($("#startDate").value+"T12:00:00"),weekKey="",used=0;for(const p of available){while(true){const monday=new Date(date);monday.setDate(date.getDate()-((date.getDay()+6)%7));const key=monday.toISOString().slice(0,10);if(key!==weekKey){weekKey=key;used=0}if(chosen.includes(date.getDay())&&used<limit)break;date.setDate(date.getDate()+1)}const d=item(p.id);d.planned=date.toISOString().slice(0,10)+"T"+($("#postTime").value||"10:00");d.status="Planned";used++;date.setDate(date.getDate()+1)}data.prefs={days:chosen,perWeek:limit,time:$("#postTime").value};save();dlg.close()};
-    render();
-  </script>
-</body>
-</html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI Stamp Scanner — Content Creator</title><meta name="description" content="Plan, copy and track 25 English AI Stamp Collection Scanner marketing posts."><script async src="https://www.googletagmanager.com/gtag/js?id=G-MDGNZMY7BQ"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-MDGNZMY7BQ');</script><style>:root{--navy:#14365e;--blue:#245c91;--bg:#f7f9fc;--card:#fff;--ink:#172033;--muted:#5d6977;--line:#d8e2ec;--green:#176b45}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}.wrap{width:min(1080px,calc(100% - 28px));margin:auto}.top{background:var(--navy);color:#fff;padding:28px 0}.top h1{margin:0 0 5px}.top p{margin:0;opacity:.86}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}.toolbar input,.toolbar select,.toolbar button{min-height:44px;border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:#fff}.toolbar input{flex:1 1 260px}.toolbar button{cursor:pointer;font-weight:750;color:var(--navy)}.stats{display:flex;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:.92rem}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding-bottom:50px}.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:17px}.meta{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:.85rem}.post{white-space:pre-wrap;margin:12px 0;min-height:220px}.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.actions button,.actions select{min-height:40px;border-radius:8px;border:1px solid var(--line);background:#fff;padding:8px 10px}.copy{background:var(--blue)!important;color:#fff!important;border:0!important;font-weight:800}.posted{border-top:5px solid var(--green)}@media(max-width:760px){.cards{grid-template-columns:1fr}.post{min-height:0}}</style></head><body><header class="top"><div class="wrap"><h1>📮 AI Stamp Scanner Content Creator</h1><p>25 updated English posts for the current Browser Beta positioning.</p><div class="stats"><span><b id="total">25</b> total</span><span><b id="available">25</b> available</span><span><b id="posted">0</b> posted</span></div></div></header><main class="wrap"><div class="toolbar"><input id="search" type="search" placeholder="Search posts"><select id="category"><option>All categories</option><option>Collection Problems</option><option>AI as an Assistant</option><option>Practical Tips</option><option>Conversation and Feedback</option></select><button id="copyAll">Copy all</button><button id="csv">Download CSV</button></div><section id="cards" class="cards"></section></main><script>const URL='https://bit.ly/AIStampScannerApp';const KEY='stampMarketing25v2';const raw=[
+['Collection Problems',`Inherited a stamp collection and not sure where to start?\n\nStart with an overview. Turn clear collection photos into an editable inventory you can review at your own pace.`],
+['Collection Problems',`A stamp collection is easier to explore when you can see what is actually there.\n\nStart with photos, build an inventory and decide what you want to research next.`],
+['Collection Problems',`Albums, stock books, envelopes and loose stamps can become one clearer overview.\n\nThe Browser Beta helps you build an editable stamp inventory from collection photos.`],
+['Collection Problems',`You do not need to identify every stamp before you begin.\n\nCreate the inventory first. Research the interesting records afterwards.`],
+['Collection Problems',`A folder full of stamp photos is useful.\n\nA structured inventory is easier to review, search and continue building.`],
+['Collection Problems',`Collected for years but never made a full inventory?\n\nStart small. A few clear photos are enough to begin organizing what you have.`],
+['Collection Problems',`Received a collection from someone else?\n\nA clear inventory gives you a practical first look before you decide what deserves more research.`],
+['AI as an Assistant',`AI works best here as an assistant, not as the final authority.\n\nUse it to help create a first inventory, then review and edit the records yourself.`],
+['AI as an Assistant',`The goal is not to guess a value for every stamp.\n\nThe goal is to organize the collection and make the next research step clearer.`],
+['AI as an Assistant',`Good collection software should keep you in control.\n\nReview the generated records, correct details and add your own notes before exporting.`],
+['AI as an Assistant',`Not every stamp needs deep research.\n\nAn organized inventory helps you focus attention on the stamps that raise useful questions.`],
+['AI as an Assistant',`A useful result can be simple: a clear record, a photo reference and a note that something deserves a closer look.`],
+['AI as an Assistant',`AI suggestions can help with the first pass.\n\nCatalogue checks and specialist knowledge still matter when exact identification is important.`],
+['Practical Tips',`Photo tip: keep stamps fully visible whenever possible.\n\nOverlap hides details and makes recognition harder.`],
+['Practical Tips',`Photo tip: use even light and keep the camera reasonably straight above the page.\n\nClearer photos give you better inventory records to review.`],
+['Practical Tips',`Dense album page? Photograph smaller sections if individual stamps become too small to see clearly.`],
+['Practical Tips',`Keep the original collection photos.\n\nThey remain useful when you want to check a detail again later.`],
+['Practical Tips',`Start with a manageable batch of photos.\n\nBuild, review and export the inventory before moving on to the next part of the collection.`],
+['Practical Tips',`Use the Browser Beta to organize first.\n\nThen use catalogues and reliable references for the records you want to investigate further.`],
+['Practical Tips',`Your inventory is editable.\n\nIf a suggested detail is uncertain, correct it, leave it open or mark it for further research.`],
+['Conversation and Feedback',`Stamp collectors: what takes the most time when you organize a collection?\n\nIdentifying stamps, keeping an inventory, finding duplicates or deciding what to research?`],
+['Conversation and Feedback',`If you inherited a stamp collection, what was your first question?\n\nI am building this Browser Beta around the real first steps people actually need.`],
+['Conversation and Feedback',`What would make a stamp inventory genuinely more useful to you?\n\nBetter photo handling, easier editing, stronger research support or richer exports?`],
+['Conversation and Feedback',`I am testing AI Stamp Collection Scanner with real collection photos.\n\nThe aim is simple: make the first inventory easier without pretending AI knows everything.`],
+['Conversation and Feedback',`Have a few stamps or an entire inherited collection?\n\nTry the free Browser Beta and tell me which part of the workflow should be improved next.`]
+];const saved=JSON.parse(localStorage.getItem(KEY)||'{}');const posts=raw.map((p,i)=>({id:`STAMP-${String(i+1).padStart(3,'0')}`,category:p[0],text:`${p[1]}\n\n🌍 English Browser Beta\n${URL}\n\nDM me with your feedback.`}));function save(){localStorage.setItem(KEY,JSON.stringify(saved))}function render(){const q=document.getElementById('search').value.toLowerCase();const cat=document.getElementById('category').value;const root=document.getElementById('cards');root.innerHTML='';posts.filter(p=>(cat==='All categories'||p.category===cat)&&p.text.toLowerCase().includes(q)).forEach(p=>{const status=saved[p.id]||'Available';const el=document.createElement('article');el.className='card '+(status==='Posted'?'posted':'');el.innerHTML=`<div class="meta"><b>${p.id}</b><span>${p.category}</span></div><div class="post"></div><div class="meta"><span>${p.text.length}/500</span><span>${status}</span></div><div class="actions"><button class="copy">Copy</button><select><option>Available</option><option>Planned</option><option>Posted</option><option>Skipped</option></select></div>`;el.querySelector('.post').textContent=p.text;const sel=el.querySelector('select');sel.value=status;sel.onchange=()=>{saved[p.id]=sel.value;save();render();updateStats()};el.querySelector('.copy').onclick=()=>navigator.clipboard.writeText(p.text);root.appendChild(el)});updateStats()}function updateStats(){const posted=posts.filter(p=>(saved[p.id]||'Available')==='Posted').length;document.getElementById('posted').textContent=posted;document.getElementById('available').textContent=posts.length-posted}document.getElementById('search').oninput=render;document.getElementById('category').onchange=render;document.getElementById('copyAll').onclick=()=>navigator.clipboard.writeText(posts.map(p=>p.text).join('\n\n---\n\n'));document.getElementById('csv').onclick=()=>{const q=v=>'"'+String(v).replaceAll('"','""')+'"';const csv='\ufeff'+[['id','category','text','status'],...posts.map(p=>[p.id,p.category,p.text,saved[p.id]||'Available'])].map(r=>r.map(q).join(',')).join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='ai-stamp-marketing-25-en.csv';a.click()};if(posts.length!==25||posts.some(p=>p.text.length>500))throw new Error('Content QA failed');render();</script></body></html>
