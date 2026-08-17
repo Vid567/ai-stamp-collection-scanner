@@ -23,7 +23,14 @@
       <p class="eyebrow">DÉTECTION DE TIMBRES À PARTIR DE PHOTOS</p>
       <h1>Créez un inventaire numérique clair de votre collection de timbres.</h1>
       <p>Ajoutez des photos de votre collection, créez un inventaire structuré, modifiez les informations et enregistrez votre inventaire. Tout fonctionne localement dans votre navigateur.</p>
-      <div class="privacy">🔒 Vos photos de timbres et les données de l’inventaire sont traitées localement dans le navigateur et ne sont pas téléversées pour identifier les timbres. Des statistiques d’utilisation anonymes peuvent être recueillies afin d’améliorer la bêta.</div>
+      <div class="privacy">🔒 Vos photos de timbres et les données de l’inventaire sont traitées localement dans le navigateur et ne sont pas téléversées pour identifier les timbres, sauf si vous saisissez ci-dessous votre propre clé IA gratuite. Des statistiques d’utilisation anonymes peuvent être recueillies afin d’améliorer la bêta.</div>
+    </section>
+
+    <section class="panel" aria-labelledby="ai-key-title">
+      <div class="section-head"><div><span>Optionnel</span><h2 id="ai-key-title">Identification IA des timbres</h2></div></div>
+      <p class="help">Collez votre propre clé API Google Gemini gratuite pour laisser l’IA remplir automatiquement le pays, la période, la valeur, etc. lors de la création d’un inventaire. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Obtenir une clé API Gemini gratuite</a> — aucune carte bancaire requise. La clé reste uniquement dans ce navigateur ; l’utilisation par d’autres visiteurs n’affecte jamais la vôtre.</p>
+      <div class="field" style="max-width:420px"><label for="gemini-api-key">Clé API Gemini</label><input id="gemini-api-key" type="password" placeholder="Collez votre clé API Gemini" autocomplete="off"></div>
+      <div class="upload-actions"><button class="button ghost" id="clear-api-key" type="button">Supprimer la clé</button></div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">

@@ -18,11 +18,19 @@ Turn stamp collection photos into a structured, editable inventory in a modern b
 
 The production build currently uses the validated **heuristic fallback detector**. The repository contains an ONNX adapter, but no production ONNX model or ONNX Runtime bundle is deployed. Do not describe model-based identification as active.
 
-The scanner does not guarantee that every stamp will be found. It does not automatically identify countries or catalogue numbers, and it does not determine value, rarity or authenticity. Automatic results require manual review.
+The scanner does not guarantee that every stamp will be found, and it does not determine value, rarity or authenticity. Automatic results (both region detection and, if enabled, AI identification) always require manual review — nothing is ever auto-confirmed.
+
+## Optional: real AI identification (bring your own free key)
+
+By default the scanner only proposes *where* stamps are on a photo; country, period, denomination etc. are left as "Unknown" for manual entry, same as always. As an **opt-in** addition, each language page now has an "AI stamp identification" box where a visitor can paste their own free Google Gemini API key (https://aistudio.google.com/apikey — no credit card required). If they do, `beta/ai-identify.mjs` fills those fields in automatically via a small, secret-free Cloudflare Worker relay (`worker/gemini-relay.js`).
+
+This is deliberately **bring-your-own-key**, not a site-wide AI feature paid for by the site owner: every visitor's usage draws only on their own free Gemini quota, so no amount of traffic ever costs the person running this site anything, and one visitor's use can never exhaust another's. The relay worker exists only because Gemini's API doesn't support being called directly from a browser (no CORS headers) — it holds no API key of its own and needs no secret configuration, just `wrangler deploy`. See [worker/README.md](worker/README.md) for the one-time setup, then set `AI_RELAY_ENDPOINT` in `beta/ai-identify.mjs`.
+
+Until a visitor enters their own key (and the relay is deployed), every language page behaves exactly as documented above — local detection only, nothing sent anywhere. Once a key is entered, "Create inventory" also calls the relay (one request per uploaded photo, using that visitor's key) and fills country/period/denomination/currency/colour/subject/usage/confidence from the AI's reading of each detected region, marked with status "AI suggestion" for review; it also flags regions that turn out to be empty pre-printed album slots rather than mounted stamps.
 
 ## Privacy and analytics
 
-Stamp photos and inventory data are processed locally in the browser and are not uploaded for stamp identification. Anonymous usage analytics may be collected through the existing project GA4 configuration to help improve the beta.
+Stamp photos and inventory data are processed locally in the browser. They are not uploaded anywhere for stamp identification unless a visitor pastes their own Gemini API key into the optional AI box, in which case a resized copy of each uploaded photo is sent (via the relay worker) to Google's Gemini API using that visitor's own key, for that identification request only. The key itself is stored only in that visitor's own browser. Anonymous usage analytics may be collected through the existing project GA4 configuration to help improve the beta.
 
 ## Start and documentation
 

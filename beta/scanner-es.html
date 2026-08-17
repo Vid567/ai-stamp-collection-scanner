@@ -23,7 +23,14 @@
       <p class="eyebrow">DETECCIÓN DE SELLOS BASADA EN FOTOS</p>
       <h1>Crea un inventario digital claro de tu colección de sellos.</h1>
       <p>Sube fotos de tu colección, crea un inventario estructurado, edita los datos y guarda tu inventario. Todo funciona localmente en tu navegador.</p>
-      <div class="privacy">🔒 Tus fotos de sellos y los datos del inventario se procesan localmente en el navegador y no se suben para identificar sellos. Se pueden recopilar estadísticas de uso anónimas para mejorar la beta.</div>
+      <div class="privacy">🔒 Tus fotos de sellos y los datos del inventario se procesan localmente en el navegador y no se suben para identificar sellos, salvo que introduzcas abajo tu propia clave de IA gratuita. Se pueden recopilar estadísticas de uso anónimas para mejorar la beta.</div>
+    </section>
+
+    <section class="panel" aria-labelledby="ai-key-title">
+      <div class="section-head"><div><span>Opcional</span><h2 id="ai-key-title">Identificación de sellos con IA</h2></div></div>
+      <p class="help">Pega tu propia clave API de Google Gemini gratuita para que la IA complete automáticamente el país, el periodo, el valor y más al crear un inventario. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Obtener una clave API de Gemini gratuita</a> — no se necesita tarjeta de crédito. La clave permanece solo en este navegador; el uso de otras personas nunca afecta al tuyo.</p>
+      <div class="field" style="max-width:420px"><label for="gemini-api-key">Clave API de Gemini</label><input id="gemini-api-key" type="password" placeholder="Pega tu clave API de Gemini" autocomplete="off"></div>
+      <div class="upload-actions"><button class="button ghost" id="clear-api-key" type="button">Eliminar clave</button></div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">

@@ -23,7 +23,14 @@
       <p class="eyebrow">PHOTO-BASED STAMP DETECTION</p>
       <h1>Build a clear digital inventory of your stamp collection.</h1>
       <p>Upload photos of your collection, create a structured inventory, edit details and save your inventory. Everything runs locally in your browser.</p>
-      <div class="privacy">🔒 Your stamp photos and inventory data are processed locally in your browser and are not uploaded for stamp identification. Anonymous usage analytics may be collected to help improve the beta.</div>
+      <div class="privacy">🔒 Your stamp photos and inventory data are processed locally in your browser and are not uploaded for stamp identification, unless you enter your own free AI key below. Anonymous usage analytics may be collected to help improve the beta.</div>
+    </section>
+
+    <section class="panel" aria-labelledby="ai-key-title">
+      <div class="section-head"><div><span>Optional</span><h2 id="ai-key-title">AI stamp identification</h2></div></div>
+      <p class="help">Paste your own free Google Gemini API key to have AI fill in country, period, value and more automatically when you create an inventory. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get a free Gemini API key</a> — no credit card required. The key stays only in this browser; other visitors' usage never affects yours.</p>
+      <div class="field" style="max-width:420px"><label for="gemini-api-key">Gemini API key</label><input id="gemini-api-key" type="password" placeholder="Paste your Gemini API key" autocomplete="off"></div>
+      <div class="upload-actions"><button class="button ghost" id="clear-api-key" type="button">Remove key</button></div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">

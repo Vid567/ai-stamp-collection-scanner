@@ -23,7 +23,14 @@
       <p class="eyebrow">基于照片的邮票检测</p>
       <h1>为您的邮票收藏建立清晰的数字清单。</h1>
       <p>上传收藏照片，创建结构化清单，编辑信息并保存清单。所有操作都在您的浏览器本地完成。</p>
-      <div class="privacy">🔒 邮票照片和清单数据会在浏览器本地处理，不会上传用于邮票识别。为改进测试版，可能会收集匿名使用统计信息。</div>
+      <div class="privacy">🔒 邮票照片和清单数据会在浏览器本地处理，不会上传用于邮票识别——除非您在下方填写自己的免费 AI 密钥。为改进测试版，可能会收集匿名使用统计信息。</div>
+    </section>
+
+    <section class="panel" aria-labelledby="ai-key-title">
+      <div class="section-head"><div><span>可选</span><h2 id="ai-key-title">AI 邮票识别</h2></div></div>
+      <p class="help">粘贴您自己的免费 Google Gemini API 密钥，即可在创建清单时让 AI 自动填写国家、年代、面值等信息。<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">获取免费的 Gemini API 密钥</a>——无需信用卡。密钥仅保存在您自己的浏览器中；其他访客的使用不会影响您的额度。</p>
+      <div class="field" style="max-width:420px"><label for="gemini-api-key">Gemini API 密钥</label><input id="gemini-api-key" type="password" placeholder="粘贴您的 Gemini API 密钥" autocomplete="off"></div>
+      <div class="upload-actions"><button class="button ghost" id="clear-api-key" type="button">移除密钥</button></div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">
