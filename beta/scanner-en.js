@@ -1,7 +1,7 @@
 import { createRecord, exportRows, nextRecordId, partitionPhotoFiles, photoNumber, toCsv } from "./scanner-core.mjs";
 import { detectStampGroups } from "./stamp-detector.mjs";
 
-const MAX_FILES=20, STORAGE_KEY="stampScannerBetaV1", PHOTO_SEQUENCE_KEY="stampScannerBetaPhotoSequence";
+const MAX_FILES=100, STORAGE_KEY="stampScannerBetaV1", PHOTO_SEQUENCE_KEY="stampScannerBetaPhotoSequence";
 const dbPromise=openDatabase(); let photos=[], records=[], nextPhotoSequence=readPhotoSequence();
 const $=s=>document.querySelector(s);
 const fields=[["country","Country / Possible Country"],["period","Approximate Period"],["denomination","Denomination"],["currency","Currency"],["colour","Main Colour"],["subject","Subject / Design"],["usage","Used / Unused",["Uncertain","Used","Unused"]],["quantity","Quantity","number"],["confidence","Confidence",["Needs review","Low","Medium","High","User confirmed"]],["furtherResearch","Further Research",["No","Yes"]],["notes","Collector Notes","textarea"],["status","Information Status",["Local detection — manual review","AI not connected — manual review","AI suggestion","User confirmed"]]];

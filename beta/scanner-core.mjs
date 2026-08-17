@@ -17,7 +17,7 @@ export function nextRecordId(photo, records) {
   return `${prefix}-${String(Math.max(0, ...used) + 1).padStart(3, "0")}`;
 }
 
-export function partitionPhotoFiles(files, currentCount = 0, maximum = 20) {
+export function partitionPhotoFiles(files, currentCount = 0, maximum = 100) {
   const acceptedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
   const available = Math.max(0, maximum - currentCount);
   const supported = [...files].filter(file => acceptedTypes.has(file.type));
