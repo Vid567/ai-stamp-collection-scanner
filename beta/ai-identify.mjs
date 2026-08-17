@@ -13,7 +13,7 @@
 // identifyStampGroups() returns null immediately and every locale scanner falls
 // back to exactly the local-detection-only behaviour it had before this feature
 // existed. See worker/README.md for the (secret-free) deploy walkthrough.
-export const AI_RELAY_ENDPOINT = "https://YOUR-WORKER-SUBDOMAIN.workers.dev";
+export const AI_RELAY_ENDPOINT = "https://ai-stamp-scanner-gemini-relay.vidcas567.workers.dev";
 
 const API_KEY_STORAGE_KEY = "stampScannerGeminiApiKey";
 const MAX_SIDE = 1400;
