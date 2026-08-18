@@ -5,7 +5,7 @@ const USAGE_LABELS={used:"Used",unused:"Unused",uncertain:"Uncertain"};
 const CONFIDENCE_LABELS={high:"High",medium:"Medium",low:"Low"};
 function aiFieldsFor(ai){return Object.fromEntries(Object.entries({country:ai.country,period:ai.period,denomination:ai.denomination,currency:ai.currency,colour:ai.colour,subject:ai.subject}).filter(([,v])=>v))}
 
-const MAX_FILES=100, STORAGE_KEY="stampScannerBetaV1", PHOTO_SEQUENCE_KEY="stampScannerBetaPhotoSequence";
+const MAX_FILES=250, STORAGE_KEY="stampScannerBetaV1", PHOTO_SEQUENCE_KEY="stampScannerBetaPhotoSequence";
 const dbPromise=openDatabase(); let photos=[], records=[], nextPhotoSequence=readPhotoSequence();
 const $=s=>document.querySelector(s);
 const fields=[["country","Country / Possible Country"],["period","Approximate Period"],["denomination","Denomination"],["currency","Currency"],["colour","Main Colour"],["subject","Subject / Design"],["usage","Used / Unused",["Uncertain","Used","Unused"]],["quantity","Quantity","number"],["confidence","Confidence",["Needs review","Low","Medium","High","User confirmed"]],["furtherResearch","Further Research",["No","Yes"]],["notes","Collector Notes","textarea"],["status","Information Status",["Local detection — manual review","AI not connected — manual review","AI suggestion","User confirmed"]]];
