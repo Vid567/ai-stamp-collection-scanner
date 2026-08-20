@@ -30,7 +30,13 @@
       <div class="section-head"><div><span>可选</span><h2 id="ai-key-title">AI 邮票识别</h2></div></div>
       <p class="help">粘贴您自己的免费 Google Gemini API 密钥，即可在创建清单时让 AI 自动填写国家、年代、面值等信息。<a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">获取免费的 Gemini API 密钥</a>——无需信用卡。密钥仅保存在您自己的浏览器中；其他访客的使用不会影响您的额度。</p>
       <div class="field" style="max-width:420px"><label for="gemini-api-key">Gemini API 密钥</label><input id="gemini-api-key" type="password" placeholder="粘贴您的 Gemini API 密钥" autocomplete="off"></div>
-      <div class="upload-actions"><button class="button ghost" id="clear-api-key" type="button">移除密钥</button></div>
+            <div id="api-key-status" style="margin:12px 0;padding:8px 12px;border-radius:4px;font-size:13px;display:none;align-items:center;gap:8px">
+        <span id="api-key-status-icon">⏳</span>
+        <span id="api-key-status-text">验证密钥中...</span>
+      </div>
+      <div class="upload-actions">
+        <button class="button primary" id="validate-api-key" type="button" disabled>验证密钥</button>
+        <button class="button ghost" id="clear-api-key" type="button">移除密钥</button></div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">

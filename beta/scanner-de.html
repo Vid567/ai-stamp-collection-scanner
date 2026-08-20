@@ -30,7 +30,13 @@
       <div class="section-head"><div><span>Optional</span><h2 id="ai-key-title">KI-Briefmarkenerkennung</h2></div></div>
       <p class="help">Fügen Sie Ihren eigenen kostenlosen Google-Gemini-API-Schlüssel ein, damit die KI beim Erstellen eines Inventars automatisch Land, Zeitraum, Wert und mehr ausfüllt. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Kostenlosen Gemini-API-Schlüssel holen</a> — keine Kreditkarte nötig. Der Schlüssel bleibt nur in diesem Browser; die Nutzung anderer Besucher wirkt sich nicht auf Ihre aus.</p>
       <div class="field" style="max-width:420px"><label for="gemini-api-key">Gemini-API-Schlüssel</label><input id="gemini-api-key" type="password" placeholder="Fügen Sie Ihren Gemini-API-Schlüssel ein" autocomplete="off"></div>
-      <div class="upload-actions"><button class="button ghost" id="clear-api-key" type="button">Schlüssel entfernen</button></div>
+            <div id="api-key-status" style="margin:12px 0;padding:8px 12px;border-radius:4px;font-size:13px;display:none;align-items:center;gap:8px">
+        <span id="api-key-status-icon">⏳</span>
+        <span id="api-key-status-text">Schlüssel wird validiert...</span>
+      </div>
+      <div class="upload-actions">
+        <button class="button primary" id="validate-api-key" type="button" disabled>Schlüssel validieren</button>
+        <button class="button ghost" id="clear-api-key" type="button">Schlüssel entfernen</button></div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">

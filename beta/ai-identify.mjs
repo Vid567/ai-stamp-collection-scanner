@@ -67,6 +67,41 @@ async function toResizedJpegBase64(blob) {
  * Throws on network/parse/HTTP failure so callers can distinguish "not enabled"
  * from "tried and failed" (e.g. bad key, quota hit) and message the user.
  */
+/**
+ * Validate if a Gemini API key is valid by making a test request.
+ * Returns: true if valid, false if invalid.
+ * Throws on network errors.
+ */
+export async function validateApiKey(apiKey, {endpoint = AI_RELAY_ENDPOINT} = {}) {
+  if (!isConfigured(endpoint) || !apiKey) return false;
+  
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        apiKey,
+        image: "", // Empty test image
+        mimeType: "image/jpeg",
+        lang: "en",
+        regions: [], // No regions for test
+        isValidationTest: true // Signal that this is just a validation check
+      }),
+    });
+    
+    const payload = await response.json().catch(() => null);
+    
+    // API key is valid if relay accepts it (even if test fails for other reasons)
+    // If response is 401/403, the key itself is bad
+    if (response.status === 401 || response.status === 403) return false;
+    
+    return true;
+  } catch (error) {
+    console.error("API key validation error:", error);
+    throw error; // Network errors should bubble up
+  }
+}
+
 export async function identifyStampGroups(blob, groups, {endpoint = AI_RELAY_ENDPOINT, apiKey = getStoredApiKey(), lang = "en", signal} = {}) {
   if (!isConfigured(endpoint) || !apiKey || !groups?.length) return null;
   const image = await toResizedJpegBase64(blob);

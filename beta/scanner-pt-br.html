@@ -30,7 +30,13 @@
       <div class="section-head"><div><span>Opcional</span><h2 id="ai-key-title">Identificação de selos com IA</h2></div></div>
       <p class="help">Cole sua própria chave de API gratuita do Google Gemini para que a IA preencha automaticamente país, período, valor e mais ao criar um inventário. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Obter uma chave de API Gemini gratuita</a> — não é necessário cartão de crédito. A chave fica apenas neste navegador; o uso de outras pessoas nunca afeta o seu.</p>
       <div class="field" style="max-width:420px"><label for="gemini-api-key">Chave de API Gemini</label><input id="gemini-api-key" type="password" placeholder="Cole sua chave de API Gemini" autocomplete="off"></div>
-      <div class="upload-actions"><button class="button ghost" id="clear-api-key" type="button">Remover chave</button></div>
+            <div id="api-key-status" style="margin:12px 0;padding:8px 12px;border-radius:4px;font-size:13px;display:none;align-items:center;gap:8px">
+        <span id="api-key-status-icon">⏳</span>
+        <span id="api-key-status-text">Validando chave...</span>
+      </div>
+      <div class="upload-actions">
+        <button class="button primary" id="validate-api-key" type="button" disabled>Validar chave</button>
+        <button class="button ghost" id="clear-api-key" type="button">Remover chave</button></div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">

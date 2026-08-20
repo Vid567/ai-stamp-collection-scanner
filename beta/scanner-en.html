@@ -30,7 +30,14 @@
       <div class="section-head"><div><span>Optional</span><h2 id="ai-key-title">AI stamp identification</h2></div></div>
       <p class="help">Paste your own free Google Gemini API key to have AI fill in country, period, value and more automatically when you create an inventory. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Get a free Gemini API key</a> — no credit card required. The key stays only in this browser; other visitors' usage never affects yours.</p>
       <div class="field" style="max-width:420px"><label for="gemini-api-key">Gemini API key</label><input id="gemini-api-key" type="password" placeholder="Paste your Gemini API key" autocomplete="off"></div>
-      <div class="upload-actions"><button class="button ghost" id="clear-api-key" type="button">Remove key</button></div>
+      <div id="api-key-status" style="margin:12px 0;padding:8px 12px;border-radius:4px;font-size:13px;display:none;align-items:center;gap:8px">
+        <span id="api-key-status-icon">⏳</span>
+        <span id="api-key-status-text">Validating key...</span>
+      </div>
+      <div class="upload-actions">
+        <button class="button primary" id="validate-api-key" type="button" disabled>Validate key</button>
+        <button class="button ghost" id="clear-api-key" type="button">Remove key</button>
+      </div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">

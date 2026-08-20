@@ -30,7 +30,14 @@
       <div class="section-head"><div><span>Optioneel</span><h2 id="ai-key-title">AI-identificatie van postzegels</h2></div></div>
       <p class="help">Plak je eigen gratis Google Gemini API-sleutel om land, periode, waarde en meer automatisch te laten invullen bij het maken van een inventaris. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Gratis Gemini API-sleutel aanvragen</a> — geen creditcard nodig. De sleutel blijft alleen in deze browser; het gebruik van andere bezoekers heeft geen invloed op jouw sleutel.</p>
       <div class="field" style="max-width:420px"><label for="gemini-api-key">Gemini API-sleutel</label><input id="gemini-api-key" type="password" placeholder="Plak hier je Gemini API-sleutel" autocomplete="off"></div>
-      <div class="upload-actions"><button class="button ghost" id="clear-api-key" type="button">Sleutel verwijderen</button></div>
+      <div id="api-key-status" style="margin:12px 0;padding:8px 12px;border-radius:4px;font-size:13px;display:none;align-items:center;gap:8px">
+        <span id="api-key-status-icon">⏳</span>
+        <span id="api-key-status-text">Sleutel controleren...</span>
+      </div>
+      <div class="upload-actions">
+        <button class="button primary" id="validate-api-key" type="button" disabled>Sleutel valideren</button>
+        <button class="button ghost" id="clear-api-key" type="button">Sleutel verwijderen</button>
+      </div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">

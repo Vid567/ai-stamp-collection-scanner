@@ -30,7 +30,13 @@
       <div class="section-head"><div><span>Optionnel</span><h2 id="ai-key-title">Identification IA des timbres</h2></div></div>
       <p class="help">Collez votre propre clé API Google Gemini gratuite pour laisser l’IA remplir automatiquement le pays, la période, la valeur, etc. lors de la création d’un inventaire. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Obtenir une clé API Gemini gratuite</a> — aucune carte bancaire requise. La clé reste uniquement dans ce navigateur ; l’utilisation par d’autres visiteurs n’affecte jamais la vôtre.</p>
       <div class="field" style="max-width:420px"><label for="gemini-api-key">Clé API Gemini</label><input id="gemini-api-key" type="password" placeholder="Collez votre clé API Gemini" autocomplete="off"></div>
-      <div class="upload-actions"><button class="button ghost" id="clear-api-key" type="button">Supprimer la clé</button></div>
+            <div id="api-key-status" style="margin:12px 0;padding:8px 12px;border-radius:4px;font-size:13px;display:none;align-items:center;gap:8px">
+        <span id="api-key-status-icon">⏳</span>
+        <span id="api-key-status-text">Validation de la clé...</span>
+      </div>
+      <div class="upload-actions">
+        <button class="button primary" id="validate-api-key" type="button" disabled>Valider la clé</button>
+        <button class="button ghost" id="clear-api-key" type="button">Supprimer la clé</button></div>
     </section>
 
     <section class="panel" aria-labelledby="photos-title">
