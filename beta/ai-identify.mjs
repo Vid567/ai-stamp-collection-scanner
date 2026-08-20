@@ -68,38 +68,57 @@ async function toResizedJpegBase64(blob) {
  * from "tried and failed" (e.g. bad key, quota hit) and message the user.
  */
 /**
- * Validate if a Gemini API key is valid by making a test request.
- * Returns: true if valid, false if invalid.
- * Throws on network errors.
+ * Build a tiny throwaway JPEG so validation exercises the real code path.
+ * An empty string is rejected by the relay before the key is ever checked,
+ * which would make validation meaningless.
+ */
+function testImageBase64() {
+  const canvas = document.createElement("canvas");
+  canvas.width = canvas.height = 64;
+  const ctx = canvas.getContext("2d");
+  ctx.fillStyle = "#f0e6c8";
+  ctx.fillRect(0, 0, 64, 64);
+  ctx.strokeStyle = "#333333";
+  ctx.strokeRect(8, 8, 48, 48);
+  const dataUrl = canvas.toDataURL("image/jpeg", 0.7);
+  return dataUrl.slice(dataUrl.indexOf(",") + 1);
+}
+
+/**
+ * Check a Gemini API key by sending one real (tiny) identification request
+ * end to end: browser → relay → Gemini. Returns {ok, status, message} so the
+ * caller can show the actual reason instead of a generic failure.
  */
 export async function validateApiKey(apiKey, {endpoint = AI_RELAY_ENDPOINT} = {}) {
-  if (!isConfigured(endpoint) || !apiKey) return false;
-  
+  if (!isConfigured(endpoint)) return {ok: false, status: 0, message: "Relay endpoint is not configured."};
+  if (!apiKey) return {ok: false, status: 0, message: "No key entered."};
+
+  let response;
   try {
-    const response = await fetch(endpoint, {
+    response = await fetch(endpoint, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         apiKey,
-        image: "", // Empty test image
+        image: testImageBase64(),
         mimeType: "image/jpeg",
         lang: "en",
-        regions: [], // No regions for test
-        isValidationTest: true // Signal that this is just a validation check
+        regions: [{index: 0, x: 0, y: 0, width: 1, height: 1}],
       }),
     });
-    
-    const payload = await response.json().catch(() => null);
-    
-    // API key is valid if relay accepts it (even if test fails for other reasons)
-    // If response is 401/403, the key itself is bad
-    if (response.status === 401 || response.status === 403) return false;
-    
-    return true;
   } catch (error) {
-    console.error("API key validation error:", error);
-    throw error; // Network errors should bubble up
+    return {ok: false, status: 0, message: `Network error: ${error.message}`};
   }
+
+  const raw = await response.text().catch(() => "");
+  let payload = null;
+  try { payload = JSON.parse(raw); } catch { /* keep raw text */ }
+
+  if (response.ok && Array.isArray(payload?.identifications)) {
+    return {ok: true, status: response.status, message: "Key verified against Gemini."};
+  }
+  const detail = payload?.error || raw.slice(0, 300) || "no detail returned";
+  return {ok: false, status: response.status, message: `HTTP ${response.status}: ${detail}`};
 }
 
 export async function identifyStampGroups(blob, groups, {endpoint = AI_RELAY_ENDPOINT, apiKey = getStoredApiKey(), lang = "en", signal} = {}) {
