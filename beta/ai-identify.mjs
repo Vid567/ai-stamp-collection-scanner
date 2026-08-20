@@ -89,13 +89,13 @@ function testImageBase64() {
  * end to end: browser → relay → Gemini. Returns {ok, status, message} so the
  * caller can show the actual reason instead of a generic failure.
  */
-export async function validateApiKey(apiKey, {endpoint = AI_RELAY_ENDPOINT} = {}) {
+export async function validateApiKey(apiKey, {endpoint = AI_RELAY_ENDPOINT, retry = RETRY_DEFAULTS, onRetry} = {}) {
   if (!isConfigured(endpoint)) return {ok: false, status: 0, message: "Relay endpoint is not configured."};
   if (!apiKey) return {ok: false, status: 0, message: "No key entered."};
 
   let response;
   try {
-    response = await fetch(endpoint, {
+    response = await fetchWithRetry(endpoint, {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -105,7 +105,7 @@ export async function validateApiKey(apiKey, {endpoint = AI_RELAY_ENDPOINT} = {}
         lang: "en",
         regions: [{index: 0, x: 0, y: 0, width: 1, height: 1}],
       }),
-    });
+    }, retry, onRetry);
   } catch (error) {
     return {ok: false, status: 0, message: `Network error: ${error.message}`};
   }
@@ -121,7 +121,55 @@ export async function validateApiKey(apiKey, {endpoint = AI_RELAY_ENDPOINT} = {}
   return {ok: false, status: response.status, message: `HTTP ${response.status}: ${detail}`};
 }
 
-export async function identifyStampGroups(blob, groups, {endpoint = AI_RELAY_ENDPOINT, apiKey = getStoredApiKey(), lang = "en", signal} = {}) {
+/** Statuses worth retrying: rate limiting and transient upstream overload. */
+const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+
+export const RETRY_DEFAULTS = {attempts: 4, baseDelayMs: 1500, maxDelayMs: 20000};
+
+export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Wait time before the next attempt. Honours a Retry-After header when the
+ * server sends one, otherwise backs off exponentially with jitter so parallel
+ * clients don't retry in lockstep.
+ */
+export function backoffDelay(attempt, response, {baseDelayMs, maxDelayMs} = RETRY_DEFAULTS) {
+  const header = Number(response?.headers?.get?.("Retry-After"));
+  if (Number.isFinite(header) && header > 0) return Math.min(header * 1000, maxDelayMs);
+  const exponential = baseDelayMs * 2 ** attempt;
+  const jitter = 1 + Math.random() * 0.3;
+  return Math.min(Math.round(exponential * jitter), maxDelayMs);
+}
+
+/**
+ * POST with automatic retry on transient failures (HTTP 429/5xx and network
+ * errors). Returns the final Response. Calls onRetry({attempt, delayMs, reason})
+ * so the UI can tell the user why it's waiting instead of appearing frozen.
+ */
+export async function fetchWithRetry(endpoint, init, {attempts, baseDelayMs, maxDelayMs} = RETRY_DEFAULTS, onRetry) {
+  let lastError = null;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    let response = null;
+    try {
+      response = await fetch(endpoint, init);
+      if (!RETRYABLE_STATUS.has(response.status)) return response;
+      lastError = `HTTP ${response.status}`;
+    } catch (error) {
+      if (error?.name === "AbortError") throw error;
+      lastError = error.message;
+    }
+    if (attempt === attempts - 1) {
+      if (response) return response;
+      throw new Error(lastError || "Request failed");
+    }
+    const delayMs = backoffDelay(attempt, response, {baseDelayMs, maxDelayMs});
+    onRetry?.({attempt: attempt + 1, delayMs, reason: lastError});
+    await sleep(delayMs);
+  }
+  throw new Error(lastError || "Request failed");
+}
+
+export async function identifyStampGroups(blob, groups, {endpoint = AI_RELAY_ENDPOINT, apiKey = getStoredApiKey(), lang = "en", signal, retry = RETRY_DEFAULTS, onRetry} = {}) {
   if (!isConfigured(endpoint) || !apiKey || !groups?.length) return null;
   const image = await toResizedJpegBase64(blob);
   const regions = groups.map((group, index) => ({
@@ -131,12 +179,12 @@ export async function identifyStampGroups(blob, groups, {endpoint = AI_RELAY_END
     width: group.normalized?.width ?? 0,
     height: group.normalized?.height ?? 0,
   }));
-  const response = await fetch(endpoint, {
+  const response = await fetchWithRetry(endpoint, {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({apiKey, image, mimeType: "image/jpeg", lang, regions}),
     signal,
-  });
+  }, retry, onRetry);
   const payload = await response.json().catch(() => null);
   if (!response.ok) throw new Error(payload?.error || `AI identification failed (${response.status})`);
   if (!payload || !Array.isArray(payload.identifications)) throw new Error("AI identification returned an unexpected response");
